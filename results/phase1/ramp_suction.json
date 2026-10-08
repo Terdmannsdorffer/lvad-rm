@@ -1,0 +1,262 @@
+{
+  "combos": {
+    "emin0.05_hr60": {
+      "emin": 0.05,
+      "vtot": 281.45625,
+      "hr": 60.0,
+      "rms_rel_err": 0.022826729461600123,
+      "max_abs_rel_err": 0.03735632183908046,
+      "per_rs": {
+        "0.5": {
+          "suction_speed_envelope_peak": 16750.0,
+          "target": 17400.0,
+          "rel_err": -0.03735632183908046,
+          "qp_min_at_peak": 322.86327008093633,
+          "co_at_peak_lmin": 19.659073289472833,
+          "aop_mean_at_peak": 180.14381868677475,
+          "first_speed_with_Rk_on": 16850.0,
+          "last_speed_with_backflow": null,
+          "aortic_valve_opens_during_ramp": false
+        },
+        "1.0": {
+          "suction_speed_envelope_peak": 15150.0,
+          "target": 15500.0,
+          "rel_err": -0.02258064516129032,
+          "qp_min_at_peak": 165.51105579402793,
+          "co_at_peak_lmin": 10.208892488004103,
+          "aop_mean_at_peak": 177.76712413610474,
+          "first_speed_with_Rk_on": 15250.0,
+          "last_speed_with_backflow": null,
+          "aortic_valve_opens_during_ramp": false
+        },
+        "1.5": {
+          "suction_speed_envelope_peak": 14550.0,
+          "target": 14800.0,
+          "rel_err": -0.016891891891891893,
+          "qp_min_at_peak": 109.63918751453937,
+          "co_at_peak_lmin": 6.923959223693954,
+          "aop_mean_at_peak": 176.91298878533473,
+          "first_speed_with_Rk_on": 14550.0,
+          "last_speed_with_backflow": null,
+          "aortic_valve_opens_during_ramp": false
+        },
+        "2.0": {
+          "suction_speed_envelope_peak": 14150.0,
+          "target": 14400.0,
+          "rel_err": -0.017361111111111112,
+          "qp_min_at_peak": 80.01504007230129,
+          "co_at_peak_lmin": 5.222118674464522,
+          "aop_mean_at_peak": 175.09238391166303,
+          "first_speed_with_Rk_on": 14250.0,
+          "last_speed_with_backflow": null,
+          "aortic_valve_opens_during_ramp": false
+        },
+        "2.5": {
+          "suction_speed_envelope_peak": 13950.0,
+          "target": 14100.0,
+          "rel_err": -0.010638297872340425,
+          "qp_min_at_peak": 61.76373740161678,
+          "co_at_peak_lmin": 4.228506143025655,
+          "aop_mean_at_peak": 175.09081146384466,
+          "first_speed_with_Rk_on": 14050.0,
+          "last_speed_with_backflow": 12050.0,
+          "aortic_valve_opens_during_ramp": false
+        }
+      }
+    },
+    "emin0.05_hr75": {
+      "emin": 0.05,
+      "vtot": 281.45625,
+      "hr": 75.0,
+      "rms_rel_err": 0.022286612777616423,
+      "max_abs_rel_err": 0.0367816091954023,
+      "per_rs": {
+        "0.5": {
+          "suction_speed_envelope_peak": 16760.0,
+          "target": 17400.0,
+          "rel_err": -0.0367816091954023,
+          "qp_min_at_peak": 322.0591972154162,
+          "co_at_peak_lmin": 19.679753786734594,
+          "aop_mean_at_peak": 180.55020067049077,
+          "first_speed_with_Rk_on": 16840.0,
+          "last_speed_with_backflow": null,
+          "aortic_valve_opens_during_ramp": false
+        },
+        "1.0": {
+          "suction_speed_envelope_peak": 15160.0,
+          "target": 15500.0,
+          "rel_err": -0.02193548387096774,
+          "qp_min_at_peak": 164.70783242254697,
+          "co_at_peak_lmin": 10.21909394859236,
+          "aop_mean_at_peak": 178.18366166455434,
+          "first_speed_with_Rk_on": 15240.0,
+          "last_speed_with_backflow": null,
+          "aortic_valve_opens_during_ramp": false
+        },
+        "1.5": {
+          "suction_speed_envelope_peak": 14520.0,
+          "target": 14800.0,
+          "rel_err": -0.01891891891891892,
+          "qp_min_at_peak": 108.6428798239567,
+          "co_at_peak_lmin": 6.90603594551191,
+          "aop_mean_at_peak": 176.64519828797555,
+          "first_speed_with_Rk_on": 14600.0,
+          "last_speed_with_backflow": null,
+          "aortic_valve_opens_during_ramp": false
+        },
+        "2.0": {
+          "suction_speed_envelope_peak": 14200.0,
+          "target": 14400.0,
+          "rel_err": -0.013888888888888888,
+          "qp_min_at_peak": 79.76144615551263,
+          "co_at_peak_lmin": 5.2391435148076315,
+          "aop_mean_at_peak": 176.38776503766294,
+          "first_speed_with_Rk_on": 14200.0,
+          "last_speed_with_backflow": null,
+          "aortic_valve_opens_during_ramp": false
+        },
+        "2.5": {
+          "suction_speed_envelope_peak": 13960.0,
+          "target": 14100.0,
+          "rel_err": -0.009929078014184398,
+          "qp_min_at_peak": 60.27870275173644,
+          "co_at_peak_lmin": 4.226289613018979,
+          "aop_mean_at_peak": 175.7822222863743,
+          "first_speed_with_Rk_on": 13960.0,
+          "last_speed_with_backflow": 12040.0,
+          "aortic_valve_opens_during_ramp": false
+        }
+      }
+    },
+    "emin0.06_hr60": {
+      "emin": 0.06,
+      "vtot": 287.2875,
+      "hr": 60.0,
+      "rms_rel_err": 0.008408128397736461,
+      "max_abs_rel_err": 0.014367816091954023,
+      "per_rs": {
+        "0.5": {
+          "suction_speed_envelope_peak": 17150.0,
+          "target": 17400.0,
+          "rel_err": -0.014367816091954023,
+          "qp_min_at_peak": 339.2601640839377,
+          "co_at_peak_lmin": 20.606955945164792,
+          "aop_mean_at_peak": 188.28745753623176,
+          "first_speed_with_Rk_on": 17250.0,
+          "last_speed_with_backflow": null,
+          "aortic_valve_opens_during_ramp": false
+        },
+        "1.0": {
+          "suction_speed_envelope_peak": 15450.0,
+          "target": 15500.0,
+          "rel_err": -0.0032258064516129032,
+          "qp_min_at_peak": 172.87529114682073,
+          "co_at_peak_lmin": 10.612832912070328,
+          "aop_mean_at_peak": 184.5027996498535,
+          "first_speed_with_Rk_on": 15550.0,
+          "last_speed_with_backflow": null,
+          "aortic_valve_opens_during_ramp": false
+        },
+        "1.5": {
+          "suction_speed_envelope_peak": 14750.0,
+          "target": 14800.0,
+          "rel_err": -0.0033783783783783786,
+          "qp_min_at_peak": 114.23502768515252,
+          "co_at_peak_lmin": 7.121789740713283,
+          "aop_mean_at_peak": 181.74139832420224,
+          "first_speed_with_Rk_on": 14850.0,
+          "last_speed_with_backflow": null,
+          "aortic_valve_opens_during_ramp": false
+        },
+        "2.0": {
+          "suction_speed_envelope_peak": 14450.0,
+          "target": 14400.0,
+          "rel_err": 0.003472222222222222,
+          "qp_min_at_peak": 85.70226653286643,
+          "co_at_peak_lmin": 5.429802469734151,
+          "aop_mean_at_peak": 181.80140709106936,
+          "first_speed_with_Rk_on": 14550.0,
+          "last_speed_with_backflow": null,
+          "aortic_valve_opens_during_ramp": false
+        },
+        "2.5": {
+          "suction_speed_envelope_peak": 14250.0,
+          "target": 14100.0,
+          "rel_err": 0.010638297872340425,
+          "qp_min_at_peak": 67.60554192742211,
+          "co_at_peak_lmin": 4.394307336515289,
+          "aop_mean_at_peak": 181.66422787287084,
+          "first_speed_with_Rk_on": 14350.0,
+          "last_speed_with_backflow": 12150.0,
+          "aortic_valve_opens_during_ramp": false
+        }
+      }
+    },
+    "emin0.06_hr75": {
+      "emin": 0.06,
+      "vtot": 287.2875,
+      "hr": 75.0,
+      "rms_rel_err": 0.009053875773430375,
+      "max_abs_rel_err": 0.013793103448275862,
+      "per_rs": {
+        "0.5": {
+          "suction_speed_envelope_peak": 17160.0,
+          "target": 17400.0,
+          "rel_err": -0.013793103448275862,
+          "qp_min_at_peak": 338.8083538160171,
+          "co_at_peak_lmin": 20.60349353207112,
+          "aop_mean_at_peak": 188.5812590532583,
+          "first_speed_with_Rk_on": 17160.0,
+          "last_speed_with_backflow": null,
+          "aortic_valve_opens_during_ramp": false
+        },
+        "1.0": {
+          "suction_speed_envelope_peak": 15400.0,
+          "target": 15500.0,
+          "rel_err": -0.0064516129032258064,
+          "qp_min_at_peak": 170.65634786685948,
+          "co_at_peak_lmin": 10.541345848880788,
+          "aop_mean_at_peak": 183.6591715097113,
+          "first_speed_with_Rk_on": 15480.0,
+          "last_speed_with_backflow": null,
+          "aortic_valve_opens_during_ramp": false
+        },
+        "1.5": {
+          "suction_speed_envelope_peak": 14840.0,
+          "target": 14800.0,
+          "rel_err": 0.002702702702702703,
+          "qp_min_at_peak": 114.43819459221028,
+          "co_at_peak_lmin": 7.17476618012403,
+          "aop_mean_at_peak": 183.73155151563722,
+          "first_speed_with_Rk_on": 14840.0,
+          "last_speed_with_backflow": null,
+          "aortic_valve_opens_during_ramp": false
+        },
+        "2.0": {
+          "suction_speed_envelope_peak": 14440.0,
+          "target": 14400.0,
+          "rel_err": 0.002777777777777778,
+          "qp_min_at_peak": 84.17334236916726,
+          "co_at_peak_lmin": 5.418116521234965,
+          "aop_mean_at_peak": 181.87884765187667,
+          "first_speed_with_Rk_on": 14520.0,
+          "last_speed_with_backflow": null,
+          "aortic_valve_opens_during_ramp": false
+        },
+        "2.5": {
+          "suction_speed_envelope_peak": 14280.0,
+          "target": 14100.0,
+          "rel_err": 0.01276595744680851,
+          "qp_min_at_peak": 66.81593597113407,
+          "co_at_peak_lmin": 4.404010196289743,
+          "aop_mean_at_peak": 182.5713297382679,
+          "first_speed_with_Rk_on": 14360.0,
+          "last_speed_with_backflow": 12120.0,
+          "aortic_valve_opens_during_ramp": false
+        }
+      }
+    }
+  },
+  "best_overall": "emin0.06_hr60",
+  "chosen": "emin0.06_hr60"
+}

@@ -1,0 +1,7 @@
+__pycache__/
+*.egg-info/
+.pytest_cache/
+.venv/
+
+# reference PDFs are not redistributable (see papers/README.md)
+papers/*.pdf
