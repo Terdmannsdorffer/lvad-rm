@@ -31,6 +31,7 @@ from lvadrm.reward_machine import RMConfig, rm_rewards, sigma_from_labels
 from lvadrm.scenarios import EMAX, HR, RS, VTOT, Patient, Scenario, ScenarioConfig, sample_scenario, schedule
 
 QP_IDX = SAMPLE_NAMES.index("qp")
+PUMP_FLOW_FEATURES = 7  # the "pump" observation starts with 7 pump-flow features, then speed, HR, last actions
 
 
 @dataclass(frozen=True)
@@ -85,16 +86,17 @@ def _qp_features(key, samples, tc, cfg: EnvConfig):
 
 
 def _observation(key, state: EnvState, stats, samples, cfg: EnvConfig):
+    """Returns (observation, measured pump-flow waveform / 100). The waveform is observable in every
+    mode (it is what the AVO detectors use) but only the "pump" observation is built from it."""
+    qf, qp = _qp_features(key, samples, stats.tc, cfg)
+    speed = jnp.stack([(state.omega - 10000.0) / 2000.0, 60.0 / stats.tc / 100.0])
     if cfg.obs_mode == "pump":
-        qf, _ = _qp_features(key, samples, stats.tc, cfg)
-        speed = jnp.stack([(state.omega - 10000.0) / 2000.0, 60.0 / stats.tc / 100.0])
-        return jnp.concatenate([qf, speed, state.last_actions * 20.0])
+        return jnp.concatenate([qf, speed, state.last_actions * 20.0]), qp / 100.0
     cur = jnp.stack([stats.edp - cfg.edp_ref, stats.lvp_max - stats.aop_max]) / 10.0
     if cfg.obs_mode == "pressure":
-        return jnp.concatenate([cur, state.prev_pressure])
+        return jnp.concatenate([cur, state.prev_pressure]), qp / 100.0
     if cfg.obs_mode == "pressure_plus":  # the "pump" observation with pressures instead of flow features
-        speed = jnp.stack([(state.omega - 10000.0) / 2000.0, 60.0 / stats.tc / 100.0])
-        return jnp.concatenate([cur, state.prev_pressure, speed, state.last_actions * 20.0])
+        return jnp.concatenate([cur, state.prev_pressure, speed, state.last_actions * 20.0]), qp / 100.0
     raise ValueError(f"unknown obs_mode {cfg.obs_mode!r}")
 
 
@@ -138,7 +140,7 @@ def reset_with_scenario(key, scn: Scenario, cfg: EnvConfig, omega0=None):
     last = jax.tree.map(lambda x: x[-1], stats)
     pressure = jnp.stack([last.edp - cfg.edp_ref, last.lvp_max - last.aop_max]) / 10.0
     state = warm._replace(sched=sched, prev_pressure=pressure)
-    return _observation(k_obs, state, last, samples[-1], cfg), state
+    return _observation(k_obs, state, last, samples[-1], cfg)[0], state
 
 
 @partial(jax.jit, static_argnames=("cfg",))
@@ -175,7 +177,7 @@ def step_speed(key, state: EnvState, omega0, cfg: EnvConfig, omega_rate=0.0, ome
         last_actions=jnp.concatenate([jnp.atleast_1d(frac).astype(state.last_actions.dtype), state.last_actions[:-1]]),
         prev_pressure=state.prev_pressure,
     )
-    obs = _observation(key, new_state, stats, samples, cfg)
+    obs, qp_wave = _observation(key, new_state, stats, samples, cfg)
     new_state = new_state._replace(prev_pressure=pressure)
     v = state.sched[state.k]
     info = {
@@ -203,6 +205,7 @@ def step_speed(key, state: EnvState, omega0, cfg: EnvConfig, omega_rate=0.0, ome
         "tc": stats.tc,
         "vtot": stats.vtot,
         "params": v,
+        "qp_wave": qp_wave,  # measured (noisy) pump flow of the beat / 100, shape [n_seg]
     }
     return obs, new_state, comps.total(), done, info
 

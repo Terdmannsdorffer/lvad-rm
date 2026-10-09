@@ -1,9 +1,9 @@
 """Roll out speed-control policies on batches of scenarios and compute clinical metrics.
 
 A policy is a triple of pure functions (vmapped over environments by ``rollout``):
-    init(state, obs) -> pstate
+    init(key, state, obs) -> pstate
     act(key, state, obs, pstate) -> (omega0, omega_rate, omega_hold, pstate)
-    observe(pstate, state, info) -> pstate          (after the beat; e.g. store a minimum)
+    observe(pstate, state, info, obs_next) -> pstate   (after the beat; e.g. store a minimum, update a belief)
 """
 
 from __future__ import annotations
@@ -29,7 +29,7 @@ class Policy(NamedTuple):
     observe: Callable
 
 
-def _no_observe(ps, state, info):
+def _no_observe(ps, state, info, obs_next):
     return ps
 
 
@@ -37,7 +37,7 @@ def classical_policy(name: str, cfg: EnvConfig) -> Policy:
     """const_pop, const_clinician (speed set at reset), simaan_minflow or random."""
     acts = jnp.asarray(cfg.actions)
 
-    def init(state, obs):
+    def init(key, state, obs):
         return smf.init(state.omega.dtype)
 
     if name in ("const_pop", "const_clinician"):
@@ -48,7 +48,7 @@ def classical_policy(name: str, cfg: EnvConfig) -> Policy:
             rate = smf.speed_command(ps, st.t, c=smf.C_GAIN_FIG16, slew=smf.SLEW_RPM_S)
             return st.omega, rate, smf.DT_UPDATE, ps
 
-        def observe(ps, st, info):
+        def observe(ps, st, info, obs_next):
             return smf.push_minimum(ps, st.t + info["t_qp_min"], info["qp_min"])
 
         return Policy(init, act, observe)
@@ -75,7 +75,7 @@ def initial_speeds(name: str, scns, cfg: EnvConfig, key):
 def rollout(policy: Policy, scns, cfg: EnvConfig, key, omega0) -> dict[str, np.ndarray]:
     """Run ``cfg.episode_beats`` beats for a batch of scenarios. Returns info arrays [T, n] and rewards."""
     n = scns.base.shape[0]
-    k_reset, k_roll = jax.random.split(key)
+    k_reset, k_roll, k_init = jax.random.split(key, 3)
     obs, st = jax.vmap(reset_with_scenario, in_axes=(0, 0, None, 0))(jax.random.split(k_reset, n), scns, cfg, omega0)
 
     def one_step(carry, k):
@@ -83,11 +83,11 @@ def rollout(policy: Policy, scns, cfg: EnvConfig, key, omega0) -> dict[str, np.n
         ka, ks = jax.random.split(k)
         omega, rate, hold, ps = policy.act(ka, st, obs, ps)
         obs2, st2, r, _, info = step_speed(ks, st, omega, cfg, rate, hold)
-        return (st2, obs2, policy.observe(ps, st, info)), (r, {k_: info[k_] for k_ in INFO_KEYS})
+        return (st2, obs2, policy.observe(ps, st, info, obs2)), (r, {k_: info[k_] for k_ in INFO_KEYS})
 
     @jax.jit
     def run(st, obs, k):
-        ps = jax.vmap(policy.init)(st, obs)
+        ps = jax.vmap(policy.init)(jax.random.split(k_init, n), st, obs)
         step_v = jax.vmap(one_step)
 
         def body(carry, kk):

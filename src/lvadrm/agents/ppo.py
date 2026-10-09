@@ -18,6 +18,7 @@ import jax
 import jax.numpy as jnp
 import optax
 
+from lvadrm.agents.belief import Belief
 from lvadrm.agents.networks import ActorCritic, ActorCriticRNN
 from lvadrm.agents.specs import AgentSpec, agent_obs, agent_reward
 from lvadrm.env import EnvConfig, EnvState, reset, step
@@ -62,6 +63,7 @@ class TrainState(NamedTuple):
     env_state: EnvState
     obs: jax.Array
     h: jax.Array  # recurrent state [n_envs, hidden] (unused for the MLP)
+    belief: Any  # belief state per environment (None without a Belief module)
     key: jax.Array
     update: jax.Array
 
@@ -96,8 +98,9 @@ def make_network(spec: AgentSpec, cfg: PPOConfig):
     return ActorCritic(n_actions=len(spec.actions), hidden=cfg.hidden)
 
 
-def make_ppo(spec: AgentSpec, env_cfg: EnvConfig, cfg: PPOConfig):
-    """Returns (init, update) for this agent / environment / PPO configuration."""
+def make_ppo(spec: AgentSpec, env_cfg: EnvConfig, cfg: PPOConfig, belief: Belief | None = None):
+    """Returns (init, update, net) for this agent / environment / PPO configuration. With a ``belief``
+    the policy input is the observation plus the belief vector over RM states (instead of the true state)."""
     assert env_cfg.episode_beats % cfg.n_steps == 0, "rollout length must divide the episode length"
     net = make_network(spec, cfg)
     n = cfg.n_envs
@@ -114,23 +117,33 @@ def make_ppo(spec: AgentSpec, env_cfg: EnvConfig, cfg: PPOConfig):
         logits, v = net.apply(params, x)
         return h, logits, v
 
+    def belief_init(key):
+        return None if belief is None else jax.vmap(belief.init)(jax.random.split(key, n))
+
+    def policy_input(obs, st, bs):
+        bvec = None if belief is None else jax.vmap(belief.vector)(bs)
+        return agent_obs(spec, obs, st, env_cfg, bvec)
+
     def init(key) -> TrainState:
-        k_net, k_env, k_run = jax.random.split(key, 3)
+        k_net, k_env, k_bel, k_run = jax.random.split(key, 4)
         obs, st = reset_v(jax.random.split(k_env, n), env_cfg)
-        x = agent_obs(spec, obs, st, env_cfg)
+        bs = belief_init(k_bel)
+        x = policy_input(obs, st, bs)
         h = jnp.zeros((n, cfg.hidden), x.dtype)
         params = net.init(k_net, h[0], x[0]) if spec.recurrent else net.init(k_net, x[0])
-        return TrainState(params, tx.init(params), st, obs, h, k_run, jnp.int32(0))
+        return TrainState(params, tx.init(params), st, obs, h, bs, k_run, jnp.int32(0))
 
     def rollout(ts: TrainState):
         def env_step(carry, _):
-            st, obs, h, key = carry
-            key, k_a, k_s = jax.random.split(key, 3)
-            x = agent_obs(spec, obs, st, env_cfg)
+            st, obs, h, bs, key = carry
+            key, k_a, k_s, k_b = jax.random.split(key, 4)
+            x = policy_input(obs, st, bs)
             h2, logits, v = apply(ts.params, h, x)
             a = jax.random.categorical(k_a, logits)
             logp = jnp.take_along_axis(jax.nn.log_softmax(logits), a[:, None], axis=-1)[:, 0]
             obs2, st2, r_env, _, info = step_v(jax.random.split(k_s, n), st, a, env_cfg)
+            if belief is not None:
+                bs = jax.vmap(belief.update)(jax.random.split(k_b, n), bs, obs2, info)
             r = agent_reward(spec, r_env, obs, a, env_cfg)
             small = {
                 "violation": info["violation"],
@@ -139,11 +152,11 @@ def make_ppo(spec: AgentSpec, env_cfg: EnvConfig, cfg: PPOConfig):
                 "omega": info["omega"],
                 "r_env": r_env,
             }
-            return (st2, obs2, h2, key), Transition(x, a, logp, v, r, small)
+            return (st2, obs2, h2, bs, key), Transition(x, a, logp, v, r, small)
 
-        (st, obs, h, key), traj = jax.lax.scan(env_step, (ts.env_state, ts.obs, ts.h, ts.key), None, cfg.n_steps)
-        _, _, last_v = apply(ts.params, h, agent_obs(spec, obs, st, env_cfg))
-        return st, obs, h, key, traj, last_v
+        (st, obs, h, bs, key), traj = jax.lax.scan(env_step, (ts.env_state, ts.obs, ts.h, ts.belief, ts.key), None, cfg.n_steps)
+        _, _, last_v = apply(ts.params, h, policy_input(obs, st, bs))
+        return st, obs, h, bs, key, traj, last_v
 
     def loss_fn(params, h0, batch, adv, targets):
         x, a, old_logp, old_v = batch
@@ -176,16 +189,16 @@ def make_ppo(spec: AgentSpec, env_cfg: EnvConfig, cfg: PPOConfig):
     @jax.jit
     def update(ts: TrainState):
         # synchronized reset at episode boundaries
-        key, k_reset = jax.random.split(ts.key)
+        key, k_reset, k_bel = jax.random.split(ts.key, 3)
         need_reset = ts.env_state.k[0] >= env_cfg.episode_beats
-        obs, st, h = jax.lax.cond(
+        obs, st, h, bs = jax.lax.cond(
             need_reset,
-            lambda: (*reset_v(jax.random.split(k_reset, n), env_cfg), jnp.zeros_like(ts.h)),
-            lambda: (ts.obs, ts.env_state, ts.h),
+            lambda: (*reset_v(jax.random.split(k_reset, n), env_cfg), jnp.zeros_like(ts.h), belief_init(k_bel)),
+            lambda: (ts.obs, ts.env_state, ts.h, ts.belief),
         )
         h0 = h
-        ts = ts._replace(env_state=st, obs=obs, h=h, key=key)
-        st, obs, h, key, traj, last_v = rollout(ts)
+        ts = ts._replace(env_state=st, obs=obs, h=h, belief=bs, key=key)
+        st, obs, h, bs, key, traj, last_v = rollout(ts)
         adv, targets = gae(traj.value, traj.reward, last_v, cfg.gamma, cfg.gae_lambda)
 
         def epoch(carry, k):
@@ -227,31 +240,40 @@ def make_ppo(spec: AgentSpec, env_cfg: EnvConfig, cfg: PPOConfig):
             "omega": traj.info["omega"].mean(),
             "value": traj.value.mean(),
         }
-        new_ts = TrainState(params, opt_state, st, obs, h, key, ts.update + 1)
+        new_ts = TrainState(params, opt_state, st, obs, h, bs, key, ts.update + 1)
         return new_ts, metrics
 
     return init, update, net
 
 
-def greedy_policy(spec: AgentSpec, env_cfg: EnvConfig, net, params, hidden: int, stochastic: bool = False):
-    """Evaluation policy for ``lvadrm.evaluation.rollout`` (single environment, vmapped there)."""
+def greedy_policy(spec: AgentSpec, env_cfg: EnvConfig, net, params, hidden: int, stochastic: bool = False,
+                  belief: Belief | None = None):
+    """Evaluation policy for ``lvadrm.evaluation.rollout`` (single environment, vmapped there).
+    Policy state: (recurrent state, belief state, key for the detector)."""
     from lvadrm.evaluation import Policy
 
     acts = jnp.asarray(env_cfg.actions)
 
-    def init(state, obs):
-        return jnp.zeros((hidden,), obs.dtype)
+    def init(key, state, obs):
+        k_init, k_det = jax.random.split(key)
+        bs = None if belief is None else belief.init(k_init)
+        return jnp.zeros((hidden,), obs.dtype), bs, k_det
 
-    def act(key, st, obs, h):
-        x = agent_obs(spec, obs, st, env_cfg)
+    def act(key, st, obs, ps):
+        h, bs, k_det = ps
+        x = agent_obs(spec, obs, st, env_cfg, None if belief is None else belief.vector(bs))
         if spec.recurrent:
             h, logits, _ = net.apply(params, h, x)
         else:
             logits, _ = net.apply(params, x)
         a = jax.random.categorical(key, logits) if stochastic else jnp.argmax(logits)
-        return st.omega * (1.0 + acts[a]), 0.0, 0.0, h
+        return st.omega * (1.0 + acts[a]), 0.0, 0.0, (h, bs, k_det)
 
-    def observe(h, st, info):
-        return h
+    def observe(ps, st, info, obs_next):
+        h, bs, k_det = ps
+        if belief is not None:
+            k_det, k = jax.random.split(k_det)
+            bs = belief.update(k, bs, obs_next, info)
+        return h, bs, k_det
 
     return Policy(init, act, observe)

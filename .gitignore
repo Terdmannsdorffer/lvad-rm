@@ -5,3 +5,6 @@ __pycache__/
 
 # reference PDFs are not redistributable (see papers/README.md)
 papers/*.pdf
+
+# large generated data
+results/phase4/data/

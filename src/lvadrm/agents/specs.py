@@ -9,6 +9,9 @@ fz       Fernandez-Zapico MDP: pressures (sEDP, svalve and their previous values
          +-1 %, reward r_A + r_B                                                 (privileged replica)
 fz4      same MDP with actions {-5, -1, +1, +5} %. With a zero action the FZ reward is degenerate
          (sEDP * 0 >= 0 always earns the maximum), so the 5-level set is replaced by 4 levels.
+naive, ibu, tdm
+         pump signals + a belief over the RM state inferred from an AVO detector (``--detector``)
+         with the corresponding inference module (lvadrm.agents.belief); RM reward.
 
 During training the true RM rewards are always available; the policy only sees ``agent_obs``.
 """
@@ -33,6 +36,7 @@ class AgentSpec:
     reward: str  # "rm" or "fz"
     actions: tuple[float, ...]
     recurrent: bool
+    belief: str = "true"  # how the RM input is obtained when rm_in_obs: true, naive, ibu or tdm
 
 
 SPECS = {
@@ -42,6 +46,10 @@ SPECS = {
     "mlp": AgentSpec("mlp", "pump", False, "rm", FIVE_ACTIONS, False),
     "fz": AgentSpec("fz", "pressure", False, "fz", (0.01, -0.01), False),
     "fz4": AgentSpec("fz4", "pressure", False, "fz", (-0.05, -0.01, 0.01, 0.05), False),
+    "naive": AgentSpec("naive", "pump", True, "rm", FIVE_ACTIONS, False, belief="naive"),
+    "ibu": AgentSpec("ibu", "pump", True, "rm", FIVE_ACTIONS, False, belief="ibu"),
+    "tdm": AgentSpec("tdm", "pump", True, "rm", FIVE_ACTIONS, False, belief="tdm"),
+    "tdm_det": AgentSpec("tdm_det", "pump", True, "rm", FIVE_ACTIONS, False, belief="tdm_det"),
 }
 
 
@@ -49,8 +57,11 @@ def env_config_for(spec: AgentSpec, cfg: EnvConfig) -> EnvConfig:
     return replace(cfg, obs_mode=spec.obs_mode, actions=spec.actions)
 
 
-def agent_obs(spec: AgentSpec, obs, state: EnvState, cfg: EnvConfig):
-    """Policy input. Works for a single environment or a batch (leading axes)."""
+def agent_obs(spec: AgentSpec, obs, state: EnvState, cfg: EnvConfig, belief_vec=None):
+    """Policy input. Works for a single environment or a batch (leading axes). ``belief_vec`` (if given)
+    replaces the true RM state."""
+    if belief_vec is not None:
+        return jnp.concatenate([obs, belief_vec.astype(obs.dtype)], axis=-1)
     if spec.rm_in_obs:
         return jnp.concatenate([obs, jax.nn.one_hot(state.u, cfg.rm.n, dtype=obs.dtype)], axis=-1)
     return obs

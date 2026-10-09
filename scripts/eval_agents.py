@@ -25,6 +25,7 @@ import matplotlib.pyplot as plt  # noqa: E402
 import numpy as np  # noqa: E402
 from flax import serialization  # noqa: E402
 
+from lvadrm.agents.belief import make_belief  # noqa: E402
 from lvadrm.agents.ppo import PPOConfig, greedy_policy, make_network  # noqa: E402
 from lvadrm.agents.specs import SPECS, agent_obs, env_config_for  # noqa: E402
 from lvadrm.env import EnvConfig, reset  # noqa: E402
@@ -49,16 +50,22 @@ def load_agent(run_dir: Path):
     x = agent_obs(spec, obs, st, env_cfg)
     template = net.init(jax.random.PRNGKey(0), jnp.zeros(ppo.hidden), x) if spec.recurrent else net.init(jax.random.PRNGKey(0), x)
     params = serialization.from_bytes(template, (run_dir / "params.msgpack").read_bytes())
-    return spec, env_cfg, net, params, ppo.hidden
+    belief = make_belief(spec.belief, conf["rm_n"], conf.get("detector")) if spec.belief != "true" else None
+    return spec, env_cfg, net, params, ppo.hidden, belief
 
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--runs", nargs="*", default=None, help="run directory names (default: all)")
+    ap.add_argument("--runs", nargs="*", default=None, help="run directory names in results/phase3/runs (default: all)")
+    ap.add_argument("--dirs", nargs="*", default=None, help="explicit run directories (overrides --runs)")
+    ap.add_argument("--phase", type=int, default=3, help="where to write eval.json / summary.md")
     args = ap.parse_args()
-    run_dirs = sorted(d for d in RUNS.iterdir() if (d / "params.msgpack").exists())
-    if args.runs:
-        run_dirs = [d for d in run_dirs if d.name in args.runs]
+    if args.dirs:
+        run_dirs = [Path(d) for d in args.dirs if (Path(d) / "params.msgpack").exists()]
+    else:
+        run_dirs = sorted(d for d in RUNS.iterdir() if (d / "params.msgpack").exists())
+        if args.runs:
+            run_dirs = [d for d in run_dirs if d.name in args.runs]
 
     base_cfg = EnvConfig(patient=HF_PATIENT, episode_beats=300)
     k_scn, k_run = jax.random.split(jax.random.PRNGKey(TEST_SEED))
@@ -89,10 +96,10 @@ def main() -> None:
     for b in BASELINES:
         evaluate(b, lambda cfg, b=b: classical_policy(b, cfg), base_cfg, "base" if b == "const_pop" else "clinician")
     for d in run_dirs:
-        spec, env_cfg, net, params, hidden = load_agent(d)
-        evaluate(d.name, lambda cfg, spec=spec, net=net, params=params, hidden=hidden: greedy_policy(spec, cfg, net, params, hidden),
-                 env_cfg)
-    common.save_json("eval.json", out, phase=3)
+        spec, env_cfg, net, params, hidden, belief = load_agent(d)
+        evaluate(d.name, lambda cfg, spec=spec, net=net, params=params, hidden=hidden, belief=belief:
+                 greedy_policy(spec, cfg, net, params, hidden, belief=belief), env_cfg)
+    common.save_json("eval.json", out, phase=args.phase)
 
     # learning curves
     fig, ax = plt.subplots(1, 3, figsize=(15, 3.8))
@@ -105,11 +112,11 @@ def main() -> None:
     for a, t in zip(ax, ("RM reward per beat", "violations per 100 beats (N = 5)", "BACK fraction")):
         a.set(xlabel="training beats (M)", title=t)
     ax[0].legend(fontsize=7)
-    common.savefig(fig, "learning_curves.png", phase=3)
+    common.savefig(fig, "learning_curves.png", phase=args.phase)
     plt.close(fig)
 
     # summary table
-    L = ["# Fase 3: agentes PPO contra líneas base", "",
+    L = [f"# Fase {args.phase}: agentes PPO contra líneas base", "",
          f"{N_TEST} escenarios de prueba no vistos (semilla {TEST_SEED}), 300 latidos, RM con N = 5. Agentes con política greedy. "
          "Todas las políticas parten en la velocidad del clínico, salvo const_pop (velocidad poblacional).", "",
          "| Política | Episodios con violación (N=5) | Violaciones / 100 latidos | Ídem desde el latido 20 | AVO | BACK | SUC | LOW | Gasto medio | Retorno RM |",
@@ -125,8 +132,8 @@ def main() -> None:
         cells = [f"{out['protocols'][p][label]['N5_violations_per_100_beats']:.1f} (BACK {out['protocols'][p][label]['back_frac']:.0%}, "
                  f"gasto {out['protocols'][p][label]['co_mean']:.1f})" for p in names]
         L.append(f"| {label} | " + " | ".join(cells) + " |")
-    (common.results_dir(3) / "summary.md").write_text("\n".join(L) + "\n", encoding="utf-8")
-    print("wrote results/phase3/eval.json and summary.md")
+    (common.results_dir(args.phase) / "summary.md").write_text("\n".join(L) + "\n", encoding="utf-8")
+    print(f"wrote results/phase{args.phase}/eval.json and summary.md")
 
 
 if __name__ == "__main__":

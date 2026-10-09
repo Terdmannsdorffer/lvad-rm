@@ -1,8 +1,10 @@
 """Train one PPO agent (GPU, float32).
 
     python scripts/train_ppo.py --agent oracle --seed 0 [--beats 30e6] [--n-envs 8192] [--n-steps 25]
+    python scripts/train_ppo.py --agent tdm --detector mlp --seed 0        # belief agents (Phase 4)
 
-Writes results/phase3/runs/<agent>_s<seed>/{params.msgpack, config.json, train_log.json}.
+Writes results/phase3/runs/<agent>[_<detector>]_s<seed>/{params.msgpack, config.json, train_log.json}
+(belief agents go to results/phase4/runs).
 """
 
 from __future__ import annotations
@@ -17,6 +19,7 @@ import jax
 import numpy as np
 from flax import serialization
 
+from lvadrm.agents.belief import make_belief
 from lvadrm.agents.ppo import PPOConfig, make_ppo
 from lvadrm.agents.specs import SPECS, env_config_for
 from lvadrm.env import EnvConfig
@@ -35,20 +38,29 @@ def main() -> None:
     ap.add_argument("--n-steps", type=int, default=25)
     ap.add_argument("--rm-n", type=int, default=5)
     ap.add_argument("--tag", default="")
+    ap.add_argument("--detector", default=None, help="AVO detector for naive / ibu / tdm agents")
     args = ap.parse_args()
 
     spec = SPECS[args.agent]
+    belief = None
+    runs = RUNS
+    if spec.belief != "true":
+        assert args.detector, "belief agents need --detector"
+        belief = make_belief(spec.belief, args.rm_n, args.detector)
+        runs = Path("results/phase4/runs")
+        args.tag = f"_{args.detector}{args.tag}"
     env_cfg = env_config_for(spec, EnvConfig(patient=HF_PATIENT, episode_beats=300, rm=RMConfig(n=args.rm_n)))
     cfg = PPOConfig(n_envs=args.n_envs, n_steps=args.n_steps, total_beats=int(args.beats))
-    run_dir = RUNS / f"{args.agent}{args.tag}_s{args.seed}"
+    run_dir = runs / f"{args.agent}{args.tag}_s{args.seed}"
     run_dir.mkdir(parents=True, exist_ok=True)
     (run_dir / "config.json").write_text(json.dumps({
         "agent": dataclasses.asdict(spec), "ppo": dataclasses.asdict(cfg), "seed": args.seed, "rm_n": args.rm_n,
+        "detector": args.detector,
         "env": {"episode_beats": env_cfg.episode_beats, "snr_db": env_cfg.snr_db, "back_ml": env_cfg.back_ml,
                 "omega_min": env_cfg.omega_min, "omega_max": env_cfg.omega_max, "rm": dataclasses.asdict(env_cfg.rm)},
     }, indent=2))
 
-    init, update, _ = make_ppo(spec, env_cfg, cfg)
+    init, update, _ = make_ppo(spec, env_cfg, cfg, belief)
     t0 = time.perf_counter()
     ts = init(jax.random.PRNGKey(args.seed))
     log = []
