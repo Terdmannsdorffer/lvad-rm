@@ -1,7 +1,9 @@
 """Evaluate trained agents and the classical baselines on held-out scenarios and the protocols (GPU).
 
-Agents act greedily (argmax of the policy). All policies start every episode at the base patient's
-operating speed except the clinician baseline. Metrics use the true labels and the base RM (N = 5).
+Agents act greedily (argmax of the policy). Every policy starts each episode at the clinician's
+setting (0.97 x the highest constant speed that opens the aortic valve at t = 0), except the
+population constant speed, which by definition runs at the base patient's operating point. Metrics
+use the true labels and the base RM (N = 5).
 
 Writes results/phase3/eval.json, results/phase3/summary.md and figures.
 """
@@ -62,13 +64,20 @@ def main() -> None:
     k_scn, k_run = jax.random.split(jax.random.PRNGKey(TEST_SEED))
     scns = jax.vmap(lambda k: sample_scenario(k, HF_PATIENT, ScenarioConfig(), 300))(jax.random.split(k_scn, N_TEST))
     names, proto_scns = protocol_batch(HF_PATIENT)
-    out = {"n_test": N_TEST, "test_seed": TEST_SEED, "random_scenarios": {}, "protocols": {}}
+    out = {"n_test": N_TEST, "test_seed": TEST_SEED, "initial_speed": "clinician (const_pop: base)",
+           "random_scenarios": {}, "protocols": {}}
+    base_long = dataclasses.replace(base_cfg, episode_beats=1206)
+    starts = {
+        "clinician": (initial_speeds("const_clinician", scns, base_cfg, k_run),
+                      initial_speeds("const_clinician", proto_scns, base_long, k_run)),
+        "base": (jnp.full(N_TEST, HF_PATIENT.omega), jnp.full(len(names), HF_PATIENT.omega)),
+    }
 
-    def evaluate(label, policy_fn, cfg, omega0_fn):
-        o = rollout(policy_fn(cfg), scns, cfg, k_run, omega0_fn(scns, cfg))
+    def evaluate(label, policy_fn, cfg, start="clinician"):
+        o = rollout(policy_fn(cfg), scns, cfg, k_run, starts[start][0])
         out["random_scenarios"][label] = metrics(o, cfg)
         cfg_long = dataclasses.replace(cfg, episode_beats=1206)
-        ol = rollout(policy_fn(cfg_long), proto_scns, cfg_long, k_run, omega0_fn(proto_scns, cfg_long))
+        ol = rollout(policy_fn(cfg_long), proto_scns, cfg_long, k_run, starts[start][1])
         for i, proto in enumerate(names):
             oi = {k: (v[:, i : i + 1] if v.ndim >= 2 else v[i : i + 1]) for k, v in ol.items()}
             out["protocols"].setdefault(proto, {})[label] = metrics(oi, cfg_long)
@@ -78,12 +87,11 @@ def main() -> None:
               f"CO {m['co_mean']:.2f} return {m['return_mean_N5']:.1f}", flush=True)
 
     for b in BASELINES:
-        evaluate(b, lambda cfg, b=b: classical_policy(b, cfg), base_cfg,
-                 lambda s, cfg, b=b: initial_speeds(b, s, cfg, k_run))
+        evaluate(b, lambda cfg, b=b: classical_policy(b, cfg), base_cfg, "base" if b == "const_pop" else "clinician")
     for d in run_dirs:
         spec, env_cfg, net, params, hidden = load_agent(d)
         evaluate(d.name, lambda cfg, spec=spec, net=net, params=params, hidden=hidden: greedy_policy(spec, cfg, net, params, hidden),
-                 env_cfg, lambda s, cfg: jnp.full(s.base.shape[0], cfg.patient.omega))
+                 env_cfg)
     common.save_json("eval.json", out, phase=3)
 
     # learning curves
@@ -102,7 +110,8 @@ def main() -> None:
 
     # summary table
     L = ["# Fase 3: agentes PPO contra líneas base", "",
-         f"{N_TEST} escenarios de prueba no vistos (semilla {TEST_SEED}), 300 latidos, RM con N = 5. Agentes con política greedy.", "",
+         f"{N_TEST} escenarios de prueba no vistos (semilla {TEST_SEED}), 300 latidos, RM con N = 5. Agentes con política greedy. "
+         "Todas las políticas parten en la velocidad del clínico, salvo const_pop (velocidad poblacional).", "",
          "| Política | Episodios con violación (N=5) | Violaciones / 100 latidos | Ídem desde el latido 20 | AVO | BACK | SUC | LOW | Gasto medio | Retorno RM |",
          "| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |"]
     for k, m in out["random_scenarios"].items():

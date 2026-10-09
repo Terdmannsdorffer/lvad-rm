@@ -49,7 +49,7 @@ class EnvConfig:
     unroll: int = 8
     snr_db: float | None = 25.0  # uniform noise on the measured pump flow (None: noiseless)
     n_last_actions: int = 4
-    obs_mode: str = "pump"  # "pump" (pump signals only) or "pressure" (Fernandez-Zapico MDP)
+    obs_mode: str = "pump"  # "pump", "pressure" (Fernandez-Zapico MDP) or "pressure_plus" (see _observation)
     eps_avo: float = 0.5  # [ml] aortic valve opening if the ejected volume exceeds it
     back_ml: float = 1.0  # [ml] BACK if the volume regurgitated through the pump in a beat exceeds it
     co_low: float = 4.4  # [l/min] LOW label (cardiac index 2.2 l/min/m2 with BSA 2 m2)
@@ -89,14 +89,17 @@ def _observation(key, state: EnvState, stats, samples, cfg: EnvConfig):
         qf, _ = _qp_features(key, samples, stats.tc, cfg)
         speed = jnp.stack([(state.omega - 10000.0) / 2000.0, 60.0 / stats.tc / 100.0])
         return jnp.concatenate([qf, speed, state.last_actions * 20.0])
+    cur = jnp.stack([stats.edp - cfg.edp_ref, stats.lvp_max - stats.aop_max]) / 10.0
     if cfg.obs_mode == "pressure":
-        cur = jnp.stack([stats.edp - cfg.edp_ref, stats.lvp_max - stats.aop_max]) / 10.0
         return jnp.concatenate([cur, state.prev_pressure])
+    if cfg.obs_mode == "pressure_plus":  # the "pump" observation with pressures instead of flow features
+        speed = jnp.stack([(state.omega - 10000.0) / 2000.0, 60.0 / stats.tc / 100.0])
+        return jnp.concatenate([cur, state.prev_pressure, speed, state.last_actions * 20.0])
     raise ValueError(f"unknown obs_mode {cfg.obs_mode!r}")
 
 
 def obs_size(cfg: EnvConfig) -> int:
-    return {"pump": 9 + cfg.n_last_actions, "pressure": 4}[cfg.obs_mode]
+    return {"pump": 9 + cfg.n_last_actions, "pressure": 4, "pressure_plus": 6 + cfg.n_last_actions}[cfg.obs_mode]
 
 
 def _run_beat(state: EnvState, omega0, omega_rate, omega_hold, cfg: EnvConfig):

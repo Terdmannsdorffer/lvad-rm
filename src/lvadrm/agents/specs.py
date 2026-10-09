@@ -1,6 +1,8 @@
 """What each agent observes, which reward it is trained on, and its action set.
 
 oracle   pump signals + one-hot of the true RM state; RM reward               (H1 upper reference)
+oracle_p pressures (sEDP, svalve, current and previous) + speed, HR, last actions + RM state;
+         RM reward: the oracle with pressure sensors instead of flow features    (H3 reference)
 rnn      pump signals only, GRU memory, no RM; RM reward                        (memory-only baseline)
 mlp      pump signals only, no memory, no RM; RM reward                         (ablation)
 fz       Fernandez-Zapico MDP: pressures (sEDP, svalve and their previous values), actions
@@ -35,6 +37,7 @@ class AgentSpec:
 
 SPECS = {
     "oracle": AgentSpec("oracle", "pump", True, "rm", FIVE_ACTIONS, False),
+    "oracle_p": AgentSpec("oracle_p", "pressure_plus", True, "rm", FIVE_ACTIONS, False),
     "rnn": AgentSpec("rnn", "pump", False, "rm", FIVE_ACTIONS, True),
     "mlp": AgentSpec("mlp", "pump", False, "rm", FIVE_ACTIONS, False),
     "fz": AgentSpec("fz", "pressure", False, "fz", (0.01, -0.01), False),

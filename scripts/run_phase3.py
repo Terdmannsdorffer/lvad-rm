@@ -9,7 +9,7 @@ import argparse
 import subprocess
 import sys
 
-AGENTS = ("oracle", "rnn", "mlp", "fz", "fz4")
+AGENTS = ("oracle", "oracle_p", "rnn", "mlp", "fz", "fz4")
 
 
 def main() -> None:
