@@ -26,7 +26,7 @@ from lvadrm.params import Params, PumpParams
 STATE_NAMES = ("lvv", "lap", "ap", "aop", "qt", "qp")
 LVV, LAP, AP, AOP, QT, QP = range(len(STATE_NAMES))
 
-G_NAMES = ("qa", "qm", "qp", "qt", "lap", "ap", "aop", "lvp", "suction", "qs")
+G_NAMES = ("qa", "qm", "qp", "qt", "lap", "ap", "aop", "lvp", "suction", "qs", "qp_back")
 G = {name: i for i, name in enumerate(G_NAMES)}
 
 PUMP_FORMS = ("consistent", "literal")
@@ -61,11 +61,13 @@ def pump_flow_derivative(lvp, aop, qp, omega, pump: PumpParams, form: str = "con
     raise ValueError(f"unknown pump form {form!r}; expected one of {PUMP_FORMS}")
 
 
-def rhs(t, y, omega, p: Params, pump_on: bool = True, pump_form: str = "consistent"):
+def rhs(t, y, omega, p: Params, pump_on: bool = True, pump_form: str = "consistent", q_vol=0.0):
     """Volume-form right-hand side. Returns (dy/dt, g) for a single state ``y`` of shape (6,).
 
     ``t`` is beat-local time in [0, tc]. With ``pump_on=False`` the pump branch is removed
-    (Qp = 0); setting omega = 0 would instead turn the pump into a leak.
+    (Qp = 0); setting omega = 0 would instead turn the pump into a leak. ``q_vol`` [ml/s] is an
+    external volume source at the left atrial node (infusion > 0, loss < 0): it is the only
+    way to change the total volume of this closed loop (preload changes, HANDOFF section 8).
     """
     h, c = p.heart, p.circ
     lvv, lap, ap, aop, qt, qp = (y[i] for i in range(len(STATE_NAMES)))
@@ -86,18 +88,18 @@ def rhs(t, y, omega, p: Params, pump_on: bool = True, pump_form: str = "consiste
     dy = jnp.stack(
         [
             qm - qa - qp,
-            (qs - qm) / c.cr,
+            (qs - qm + q_vol) / c.cr,
             (qt - qs) / c.cs,
             (qa + qp - qt) / c.ca,
             (aop - ap - c.rc * qt) / c.ls,
             dqp,
         ]
     )
-    g = jnp.stack([qa, qm, qp, qt, lap, ap, aop, lvp, suction, qs])
+    g = jnp.stack([qa, qm, qp, qt, lap, ap, aop, lvp, suction, qs, _relu(-qp)])
     return dy, g
 
 
-def rhs_pressure_form(t, z, omega, p: Params, pump_on: bool = True, pump_form: str = "consistent"):
+def rhs_pressure_form(t, z, omega, p: Params, pump_on: bool = True, pump_form: str = "consistent", q_vol=0.0):
     """Paper's pressure form: state z = [x1, lap, ap, aop, qt, qp] with
     dx1/dt = -(C'/C) x1 + (Qm - Qa - Qp)/C = (E'/E) x1 + E (Qm - Qa - Qp).
 
@@ -105,13 +107,18 @@ def rhs_pressure_form(t, z, omega, p: Params, pump_on: bool = True, pump_form: s
     """
     e, e_dot = jax.value_and_grad(lambda tt: elastance(tt, p.heart))(t)
     y = z.at[LVV].set(z[LVV] / e + p.heart.v0)
-    dy, g = rhs(t, y, omega, p, pump_on, pump_form)
+    dy, g = rhs(t, y, omega, p, pump_on, pump_form, q_vol)
     dz = dy.at[LVV].set(e_dot / e * z[LVV] + e * dy[LVV])
     return dz, g
 
 
+def pump_static_flow(lvp, aop, omega, pump: PumpParams):
+    """Pump flow with dQp/dt = 0 and no suction (consistent form), e.g. to initialize Qp."""
+    return (lvp - aop + pump.beta2 * omega**2) / (pump.ri + pump.ro - pump.beta0)
+
+
 def total_volume(y, p: Params):
-    """Vtot = LVV + Cr x2 + Cs x3 + Ca x4 [ml]; conserved exactly (inertances store no volume)."""
+    """Vtot = LVV + Cr x2 + Cs x3 + Ca x4 [ml]; conserved exactly when q_vol = 0 (inertances store no volume)."""
     c = p.circ
     return y[..., LVV] + c.cr * y[..., LAP] + c.cs * y[..., AP] + c.ca * y[..., AOP]
 

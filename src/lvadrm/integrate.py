@@ -7,6 +7,8 @@ n_inner = 1 gives the full trajectory for plotting).
 
 The pump speed inside a beat is omega(t) = omega0 + omega_rate * t (t beat-local), so a
 zero-order hold per beat is omega_rate = 0 and the open-loop ramps of Simaan Fig. 12 are exact.
+With omega_hold > 0 the ramp is applied as a staircase updated every omega_hold seconds
+(the 0.005 s speed updates of the Simaan controller).
 """
 
 from __future__ import annotations
@@ -32,6 +34,8 @@ class BeatStats(NamedTuple):
     qp_min: jax.Array
     qp_max: jax.Array
     qp_mean: jax.Array
+    t_qp_min: jax.Array  # beat-local time of the minimum pump flow [s]
+    v_back: jax.Array  # volume regurgitated through the pump, integral of max(-Qp, 0) [ml]
     dqp_min: jax.Array  # min dQp/dt [ml/s^2]
     dqp_max: jax.Array
     edv: jax.Array  # LVV at the end of the beat [ml]
@@ -42,6 +46,7 @@ class BeatStats(NamedTuple):
     lvv_max: jax.Array
     lvp_min: jax.Array
     lvp_max: jax.Array
+    lvp_mean: jax.Array
     aop_min: jax.Array
     aop_max: jax.Array
     aop_mean: jax.Array
@@ -75,6 +80,8 @@ def simulate_beat(
     p: Params,
     omega0,
     omega_rate=0.0,
+    q_vol=0.0,
+    omega_hold=0.0,
     *,
     n_seg: int = 64,
     n_inner: int = 160,
@@ -84,6 +91,7 @@ def simulate_beat(
 ):
     """Integrate one beat from beat-local t = 0 to tc. Single environment (use ``jax.vmap``).
 
+    ``q_vol`` [ml/s] is a constant volume source at the left atrium during the beat.
     Returns (y_end, BeatStats, samples[n_seg, len(SAMPLE_NAMES)]).
     """
     n_sub = n_seg * n_inner
@@ -92,7 +100,8 @@ def simulate_beat(
     dtype = y0.dtype
 
     def f(t, y):
-        return rhs(t, y, omega0 + omega_rate * t, p, pump_on, pump_form)
+        t_w = jnp.where(omega_hold > 0, jnp.floor(t / jnp.where(omega_hold > 0, omega_hold, 1.0)) * omega_hold, t)
+        return rhs(t, y, omega0 + omega_rate * t_w, p, pump_on, pump_form, q_vol)
 
     # running extrema of [qp, dqp, lvp, lvv, aop]
     inf = jnp.asarray(jnp.inf, dtype)
@@ -105,18 +114,20 @@ def simulate_beat(
         jnp.asarray(False),
         nan,
         nan,
+        jnp.zeros((), dtype),
     )
 
     def substep(carry, k):
-        y, ints, mn, mx, open_prev, lvv_avc, lvp_avc = carry
+        y, ints, mn, mx, open_prev, lvv_avc, lvp_avc, t_qmin = carry
         t = k * dt
         y_new, g_int, k1, g1 = rk4_step(f, t, y, dt)
         vals = jnp.stack([g1[G["qp"]], k1[QP], g1[G["lvp"]], y[LVV], g1[G["aop"]]])
+        t_qmin = jnp.where(vals[0] < mn[0], t, t_qmin)
         open_now = g1[G["qa"]] > 0.0
         closing = open_prev & ~open_now
         lvv_avc = jnp.where(closing, y[LVV], lvv_avc)
         lvp_avc = jnp.where(closing, g1[G["lvp"]], lvp_avc)
-        carry = (y_new, ints + g_int, jnp.minimum(mn, vals), jnp.maximum(mx, vals), open_now, lvv_avc, lvp_avc)
+        carry = (y_new, ints + g_int, jnp.minimum(mn, vals), jnp.maximum(mx, vals), open_now, lvv_avc, lvp_avc, t_qmin)
         return carry, None
 
     def segment(carry, s):
@@ -128,15 +139,17 @@ def simulate_beat(
         return carry, _samples(y, g)
 
     carry, samples = jax.lax.scan(segment, carry0, jnp.arange(n_seg))
-    y_end, ints, mn, mx, _, lvv_avc, lvp_avc = carry
+    y_end, ints, mn, mx, _, lvv_avc, lvp_avc, t_qmin = carry
     _, g_end = f(tc, y_end)
 
     stats = BeatStats(
         tc=tc,
-        omega_mean=omega0 + 0.5 * omega_rate * tc,
+        omega_mean=omega0 + 0.5 * omega_rate * (tc - omega_hold),  # staircase mean when omega_hold > 0
         qp_min=mn[0],
         qp_max=mx[0],
         qp_mean=ints[G["qp"]] / tc,
+        t_qp_min=t_qmin,
+        v_back=ints[G["qp_back"]],
         dqp_min=mn[1],
         dqp_max=mx[1],
         edv=y_end[LVV],
@@ -147,6 +160,7 @@ def simulate_beat(
         lvv_max=mx[3],
         lvp_min=mn[2],
         lvp_max=mx[2],
+        lvp_mean=ints[G["lvp"]] / tc,
         aop_min=mn[4],
         aop_max=mx[4],
         aop_mean=ints[G["aop"]] / tc,
@@ -169,6 +183,8 @@ def simulate_beats(
     omega0s,
     omega_rates=None,
     p_seq: Params | None = None,
+    q_vols=None,
+    omega_hold=0.0,
     *,
     n_seg: int = 64,
     n_inner: int = 160,
@@ -184,14 +200,16 @@ def simulate_beats(
     """
     if omega_rates is None:
         omega_rates = jnp.zeros_like(omega0s)
+    if q_vols is None:
+        q_vols = jnp.zeros_like(omega0s)
 
     def body(y, xs):
-        w0, wr, pb = xs
+        w0, wr, qv, pb = xs
         pb = p if pb is None else pb
         y, stats, samples = simulate_beat(
-            y, pb, w0, wr, n_seg=n_seg, n_inner=n_inner, pump_on=pump_on, pump_form=pump_form, unroll=unroll
+            y, pb, w0, wr, qv, omega_hold, n_seg=n_seg, n_inner=n_inner, pump_on=pump_on, pump_form=pump_form, unroll=unroll
         )
         return y, (stats, samples)
 
-    y_end, (stats, samples) = jax.lax.scan(body, y0, (omega0s, omega_rates, p_seq))
+    y_end, (stats, samples) = jax.lax.scan(body, y0, (omega0s, omega_rates, q_vols, p_seq))
     return y_end, stats, samples

@@ -1,0 +1,110 @@
+{
+  "v6_slew": {
+    "c": 0.15,
+    "slew_rpm_s": 250.0,
+    "omega_at_10s": 14735.279496254972,
+    "omega_at_20s": 15257.646759848607,
+    "omega_final": 15442.628843943136,
+    "beats_with_suction": 10
+  },
+  "v6_literal": {
+    "c": 0.76,
+    "max_omega": 18000.0,
+    "omega_final": 17252.039100703852,
+    "beats_with_suction": 18
+  },
+  "v6": {
+    "c": 0.15,
+    "omega_at_10s": 14735.279496254972,
+    "omega_at_20s": 15257.646759848607,
+    "omega_start": 13600.0,
+    "omega_final": 15442.628843943136,
+    "max_omega": 15482.463473788715,
+    "suction_speed": 15450.0,
+    "beats_with_suction": 10,
+    "target": "rises from ~13.6 krpm, settles ~15.25 krpm (< 15.5)"
+  },
+  "v6b_slew": {
+    "omega_at_27s": 15482.168268036561,
+    "omega_final": 14469.587504237676,
+    "min_omega_after_ramp": 14468.337504237676,
+    "beats_with_suction": 29
+  },
+  "v6b": {
+    "c": 0.15,
+    "omega_at_27s": 15482.168268036561,
+    "omega_final": 6069.806759606655,
+    "min_omega_after_ramp": 6069.806759606655,
+    "beats_with_suction": 4,
+    "target": "~15.25 -> ~14.25 krpm, always below suction (15 500 -> 14 400)"
+  },
+  "v6c": {
+    "0.5": {
+      "minflow": {
+        "omega": 17147.45966508249,
+        "co": 20.363646862981824,
+        "map": 187.57185510032312,
+        "table_v": [
+          14.4,
+          136.0
+        ],
+        "suction_beats_last_60s": 30
+      },
+      "deltap": {
+        "omega": 11403.717856932213,
+        "co": 10.68799905590469,
+        "map": 107.35797066585937,
+        "table_v": [
+          11.7,
+          110.0
+        ],
+        "suction_beats_last_60s": 0
+      }
+    },
+    "1.0": {
+      "minflow": {
+        "omega": 15436.941886541423,
+        "co": 10.480805147863636,
+        "map": 184.8301172240748,
+        "table_v": [
+          7.5,
+          133.0
+        ],
+        "suction_beats_last_60s": 12
+      },
+      "deltap": {
+        "omega": 10077.262101782311,
+        "co": 5.950979783184485,
+        "map": 112.06007590491834,
+        "table_v": [
+          6.5,
+          120.0
+        ],
+        "suction_beats_last_60s": 0
+      }
+    },
+    "2.0": {
+      "minflow": {
+        "omega": 14567.417046038969,
+        "co": 5.320992114379928,
+        "map": 183.34207948456685,
+        "table_v": [
+          3.8,
+          132.0
+        ],
+        "suction_beats_last_60s": 45
+      },
+      "deltap": {
+        "omega": 9172.914826437964,
+        "co": 3.155145047747138,
+        "map": 114.7950968465307,
+        "table_v": [
+          3.7,
+          137.0
+        ],
+        "suction_beats_last_60s": 0
+      }
+    }
+  },
+  "co_at_suction_minus_200rpm_rs1": 10.229183360470493
+}

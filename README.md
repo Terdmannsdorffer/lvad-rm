@@ -26,11 +26,25 @@ uv pip install --python ~/.venvs/lvad-rm/bin/python "jax[cuda12]" -e ".[dev]"
 From Git Bash on Windows, `./run_wsl.sh <command>` runs a command in that venv from the repo root
 (for example `./run_wsl.sh python -m pytest -q`).
 
-## Reproduce Phase 1
+## Environment
+
+`lvadrm.env` is a functional, pure-JAX environment (gymnax style): one step is one cardiac beat,
+the action is a multiplicative speed change, and the reward comes from a counting reward machine
+(`lvadrm.reward_machine`) over the per-beat propositions AVO, SUC, BACK and LOW (`lvadrm.labels`).
+Patients and within-episode events come from `lvadrm.scenarios`; the calibrated heart-failure
+patient is `lvadrm.patients.HF_PATIENT`. Classical baselines live in `lvadrm.baselines`.
+
+## Reproduce
 
 ```bash
-python scripts/run_phase1.py      # all validation figures, JSON and results/phase1/summary.md
-python -m pytest -q               # model tests (float64, CPU)
+python scripts/run_phase1.py      # model validation: results/phase1/summary.md
+python scripts/run_phase2.py      # patient, controllers, task difficulty: results/phase2/summary.md
+python scripts/run_phase3.py      # PPO agents (oracle, recurrent, Fernandez-Zapico MDP): results/phase3/summary.md
+python -m pytest -q               # tests (float64, CPU)
 ```
 
-Validation scripts run in float64 on CPU; `scripts/bench_gpu.py` runs in float32 on the GPU.
+Agents (`lvadrm.agents`): PureJaxRL-style PPO and recurrent PPO (GRU) in Flax/Optax, trained on
+8192 synchronized environments; `scripts/train_ppo.py --agent {oracle,rnn,mlp,fz,fz4}` trains one.
+
+Validation scripts run in float64 on CPU; benchmarks and environment rollouts run in float32 on the GPU.
+Decisions and assumptions: [docs/phase1_decisions.md](docs/phase1_decisions.md), [docs/phase2_decisions.md](docs/phase2_decisions.md).

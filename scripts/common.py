@@ -10,6 +10,10 @@ import numpy as np
 
 RESULTS = Path("results/phase1")
 
+
+def results_dir(phase: int = 1) -> Path:
+    return Path(f"results/phase{phase}")
+
 # Validation-grade discretization: N_sub = N_SEG * N_INNER substeps per beat.
 N_SEG = 64
 N_INNER = 160
@@ -36,9 +40,9 @@ def setup_cpu_x64() -> None:
     jax.config.update("jax_enable_x64", True)
 
 
-def save_json(name: str, data: dict) -> Path:
-    RESULTS.mkdir(parents=True, exist_ok=True)
-    path = RESULTS / name
+def save_json(name: str, data: dict, phase: int = 1) -> Path:
+    results_dir(phase).mkdir(parents=True, exist_ok=True)
+    path = results_dir(phase) / name
 
     def default(o):
         if isinstance(o, (np.floating, np.integer, np.bool_)):
@@ -51,12 +55,12 @@ def save_json(name: str, data: dict) -> Path:
     return path
 
 
-def load_json(name: str) -> dict:
-    return json.loads((RESULTS / name).read_text())
+def load_json(name: str, phase: int = 1) -> dict:
+    return json.loads((results_dir(phase) / name).read_text())
 
 
-def savefig(fig, name: str) -> Path:
-    RESULTS.mkdir(parents=True, exist_ok=True)
-    path = RESULTS / name
+def savefig(fig, name: str, phase: int = 1) -> Path:
+    results_dir(phase).mkdir(parents=True, exist_ok=True)
+    path = results_dir(phase) / name
     fig.savefig(path, dpi=150, bbox_inches="tight")
     return path
