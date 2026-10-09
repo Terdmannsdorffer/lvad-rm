@@ -1,0 +1,41 @@
+# Fase 5: experimento principal (media ± error estándar sobre semillas)
+
+2048 escenarios de prueba no vistos, 300 latidos, RM con N = 5 y r_back = -0.1. Política greedy; inicio en la velocidad del clínico (const_pop: velocidad poblacional). Las líneas base son deterministas (n = 1).
+
+| Política | n | Violaciones / 100 latidos (N=5) | Episodios con violación | N=3 | N=10 | AVO | BACK | LOW | Gasto | Retorno RM |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| const_pop | 1 | 6.22 ± 0.00 | 41 ± 0% | 10.39 ± 0.00 | 3.10 ± 0.00 | 69 ± 0% | 20.6 ± 0.0% | 38 ± 0% | 5.11 ± 0.00 | -31.5 ± 0.0 |
+| const_clinician | 1 | 2.80 ± 0.00 | 30 ± 0% | 4.71 ± 0.00 | 1.38 ± 0.00 | 86 ± 0% | 11.8 ± 0.0% | 38 ± 0% | 5.26 ± 0.00 | -20.3 ± 0.0 |
+| simaan_minflow | 1 | 4.38 ± 0.00 | 45 ± 0% | 7.35 ± 0.00 | 2.15 ± 0.00 | 78 ± 0% | 19.6 ± 0.0% | 37 ± 0% | 5.47 ± 0.00 | -30.2 ± 0.0 |
+| oracle_p | 5 | 0.01 ± 0.00 | 0 ± 0% | 6.41 ± 1.65 | 0.00 ± 0.00 | 56 ± 3% | 8.6 ± 1.8% | 36 ± 0% | 5.19 ± 0.03 | -10.4 ± 0.4 |
+| oracle | 5 | 0.01 ± 0.00 | 1 ± 0% | 10.20 ± 0.61 | 0.00 ± 0.00 | 62 ± 2% | 2.0 ± 0.0% | 33 ± 0% | 5.13 ± 0.01 | -7.8 ± 0.1 |
+| tdm_mlp | 5 | 0.18 ± 0.03 | 15 ± 1% | 9.61 ± 1.44 | 0.05 ± 0.01 | 62 ± 5% | 1.3 ± 0.1% | 35 ± 1% | 5.07 ± 0.03 | -7.8 ± 0.1 |
+| ibu_mlp | 5 | 0.22 ± 0.01 | 15 ± 1% | 5.58 ± 0.61 | 0.05 ± 0.00 | 75 ± 3% | 1.4 ± 0.0% | 36 ± 1% | 4.99 ± 0.01 | -7.6 ± 0.1 |
+| naive_mlp | 5 | 0.23 ± 0.01 | 19 ± 1% | 7.93 ± 0.32 | 0.07 ± 0.00 | 67 ± 1% | 1.9 ± 0.1% | 36 ± 0% | 5.01 ± 0.01 | -8.0 ± 0.1 |
+| rnn | 5 | 0.20 ± 0.06 | 18 ± 5% | 1.81 ± 0.80 | 0.07 ± 0.02 | 90 ± 4% | 2.7 ± 0.7% | 39 ± 1% | 4.93 ± 0.05 | -8.1 ± 0.2 |
+
+## Protocolos (1206 latidos): violaciones / 100 latidos (N = 5)
+
+| Política | ferreira_exercise | ferreira_hypertension | fz_sequential |
+| --- | --- | --- | --- |
+| const_pop | 0.00 ± 0.00 | 0.00 ± 0.00 | 1.82 ± 0.00 |
+| const_clinician | 0.08 ± 0.00 | 15.09 ± 0.00 | 5.06 ± 0.00 |
+| simaan_minflow | 15.59 ± 0.00 | 0.00 ± 0.00 | 7.38 ± 0.00 |
+| oracle_p | 0.00 ± 0.00 | 0.00 ± 0.00 | 0.00 ± 0.00 |
+| oracle | 0.00 ± 0.00 | 0.00 ± 0.00 | 0.00 ± 0.00 |
+| tdm_mlp | 0.00 ± 0.00 | 14.46 ± 0.18 | 0.15 ± 0.08 |
+| ibu_mlp | 0.00 ± 0.00 | 14.63 ± 0.14 | 0.00 ± 0.00 |
+| naive_mlp | 0.00 ± 0.00 | 14.15 ± 0.07 | 0.15 ± 0.04 |
+| rnn | 0.00 ± 0.00 | 7.01 ± 2.33 | 0.00 ± 0.00 |
+
+## Comparaciones (t de Welch sobre semillas)
+
+| Hipótesis | A − B | Δ violaciones / 100 (p) | Δ gasto (p) | Δ AVO (p) |
+| --- | --- | --- | --- | --- |
+| H1: RM structure vs memory only | oracle − rnn | -0.193 (0.0271) | +0.204 (0.00987) | -0.283 (0.000528) |
+| H2: TDM vs IBU | tdm_mlp − ibu_mlp | -0.034 (0.314) | +0.078 (0.0872) | -0.135 (0.0625) |
+| H2: TDM vs Naive | tdm_mlp − naive_mlp | -0.050 (0.16) | +0.066 (0.129) | -0.056 (0.353) |
+| TDM vs memory only | tdm_mlp − rnn | -0.021 (0.757) | +0.143 (0.0411) | -0.285 (0.00284) |
+| H3: pump-only TDM vs RM oracle | tdm_mlp − oracle | +0.172 (0.00378) | -0.061 (0.162) | -0.002 (0.974) |
+| H3: pump-only TDM vs pressure oracle | tdm_mlp − oracle_p | +0.176 (0.00362) | -0.114 (0.0322) | +0.058 (0.384) |
+| pressure vs pump sensors (oracles) | oracle_p − oracle | -0.003 (0.201) | +0.053 (0.118) | -0.059 (0.17) |

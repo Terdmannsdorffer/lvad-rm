@@ -32,7 +32,7 @@ class RMConfig:
     n: int = 5  # beats allowed without an aortic valve opening
     r_viol: float = -1.0
     r_suc: float = -2.0
-    r_back: float = -0.5
+    r_back: float = -0.1  # was -0.5 in Phases 3-4: avoiding mild regurgitation outweighed avoiding violations
     w_perf: float = 0.1
     w_act: float = 0.01
     co_target: float = 5.0  # [l/min], Fernandez-Zapico et al. 2024

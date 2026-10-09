@@ -39,6 +39,7 @@ def main() -> None:
     ap.add_argument("--rm-n", type=int, default=5)
     ap.add_argument("--tag", default="")
     ap.add_argument("--detector", default=None, help="AVO detector for naive / ibu / tdm agents")
+    ap.add_argument("--out-dir", default=None, help="directory for the run folder (default: results/phase3|4/runs)")
     args = ap.parse_args()
 
     spec = SPECS[args.agent]
@@ -51,6 +52,7 @@ def main() -> None:
         args.tag = f"_{args.detector}{args.tag}"
     env_cfg = env_config_for(spec, EnvConfig(patient=HF_PATIENT, episode_beats=300, rm=RMConfig(n=args.rm_n)))
     cfg = PPOConfig(n_envs=args.n_envs, n_steps=args.n_steps, total_beats=int(args.beats))
+    runs = Path(args.out_dir) if args.out_dir else runs
     run_dir = runs / f"{args.agent}{args.tag}_s{args.seed}"
     run_dir.mkdir(parents=True, exist_ok=True)
     (run_dir / "config.json").write_text(json.dumps({

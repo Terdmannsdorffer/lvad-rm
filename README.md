@@ -41,6 +41,7 @@ python scripts/run_phase1.py      # model validation: results/phase1/summary.md
 python scripts/run_phase2.py      # patient, controllers, task difficulty: results/phase2/summary.md
 python scripts/run_phase3.py      # PPO agents (oracle, pressure oracle, recurrent, Fernandez-Zapico MDP): results/phase3/summary.md
 python scripts/run_phase4.py      # data, AVO detectors, Naive / IBU / TDM inference, belief agents: results/phase4/
+python scripts/run_phase5.py      # main experiment, 5 seeds per agent: results/phase5/summary.md
 python -m pytest -q               # tests (float64, CPU)
 ```
 
@@ -48,4 +49,4 @@ Agents (`lvadrm.agents`): PureJaxRL-style PPO and recurrent PPO (GRU) in Flax/Op
 8192 synchronized environments; `scripts/train_ppo.py --agent {oracle,oracle_p,rnn,mlp,fz,fz4}` trains one.
 
 Validation scripts run in float64 on CPU; benchmarks and environment rollouts run in float32 on the GPU.
-Decisions and assumptions: [docs/phase1_decisions.md](docs/phase1_decisions.md), [docs/phase2_decisions.md](docs/phase2_decisions.md), [docs/phase3_decisions.md](docs/phase3_decisions.md), [docs/phase4_decisions.md](docs/phase4_decisions.md).
+Decisions and assumptions: [docs/phase1_decisions.md](docs/phase1_decisions.md), [docs/phase2_decisions.md](docs/phase2_decisions.md), [docs/phase3_decisions.md](docs/phase3_decisions.md), [docs/phase4_decisions.md](docs/phase4_decisions.md), [docs/phase5_decisions.md](docs/phase5_decisions.md).
