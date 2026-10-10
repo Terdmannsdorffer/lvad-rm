@@ -1,0 +1,28 @@
+{
+  "synthetic": {
+    "iid_e0.3": {
+      "config": {
+        "kind": "iid",
+        "eps": 0.3,
+        "rho": 0.9,
+        "spread": 1.0,
+        "eps_max": 0.5,
+        "scale_ml": 1.0,
+        "p_pos": 0.8012045886285656,
+        "p_neg": 0.424466556309461
+      }
+    },
+    "markov_e0.3_r0.9": {
+      "config": {
+        "kind": "markov",
+        "eps": 0.3,
+        "rho": 0.9,
+        "spread": 1.0,
+        "eps_max": 0.5,
+        "scale_ml": 1.0,
+        "p_pos": 0.8061278053272258,
+        "p_neg": 0.4163030318547753
+      }
+    }
+  }
+}

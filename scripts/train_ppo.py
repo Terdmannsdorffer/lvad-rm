@@ -40,6 +40,7 @@ def main() -> None:
     ap.add_argument("--tag", default="")
     ap.add_argument("--detector", default=None, help="AVO detector for naive / ibu / tdm agents")
     ap.add_argument("--out-dir", default=None, help="directory for the run folder (default: results/phase3|4/runs)")
+    ap.add_argument("--tdm-path", default=None, help="TDM parameters for tdm agents (default: Phase 4 file of the detector)")
     args = ap.parse_args()
 
     spec = SPECS[args.agent]
@@ -47,7 +48,7 @@ def main() -> None:
     runs = RUNS
     if spec.belief != "true":
         assert args.detector, "belief agents need --detector"
-        belief = make_belief(spec.belief, args.rm_n, args.detector)
+        belief = make_belief(spec.belief, args.rm_n, args.detector, args.tdm_path)
         runs = Path("results/phase4/runs")
         args.tag = f"_{args.detector}{args.tag}"
     env_cfg = env_config_for(spec, EnvConfig(patient=HF_PATIENT, episode_beats=300, rm=RMConfig(n=args.rm_n)))
@@ -58,6 +59,7 @@ def main() -> None:
     (run_dir / "config.json").write_text(json.dumps({
         "agent": dataclasses.asdict(spec), "ppo": dataclasses.asdict(cfg), "seed": args.seed, "rm_n": args.rm_n,
         "detector": args.detector,
+        "tdm_path": args.tdm_path,
         "env": {"episode_beats": env_cfg.episode_beats, "snr_db": env_cfg.snr_db, "back_ml": env_cfg.back_ml,
                 "omega_min": env_cfg.omega_min, "omega_max": env_cfg.omega_max, "rm": dataclasses.asdict(env_cfg.rm)},
     }, indent=2))

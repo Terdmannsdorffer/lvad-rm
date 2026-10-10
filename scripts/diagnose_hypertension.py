@@ -11,6 +11,7 @@ Writes results/phase5/hypertension_diagnosis.json.
 
 from __future__ import annotations
 
+import argparse
 import dataclasses
 from pathlib import Path
 
@@ -33,11 +34,16 @@ T_HYPER = 260.0
 
 
 def main() -> None:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--runs", nargs="*", default=[str(RUNS / a) for a in AGENTS])
+    ap.add_argument("--phase", type=int, default=5)
+    args = ap.parse_args()
     det = load_detector("mlp")
     scn, _ = ferreira_hypertension(HF_PATIENT)
     out = {}
-    for name in AGENTS:
-        spec, cfg, net, params, hidden, belief = load_agent(RUNS / name)
+    for run in args.runs:
+        name = Path(run).name
+        spec, cfg, net, params, hidden, belief = load_agent(Path(run))
         cfg = dataclasses.replace(cfg, episode_beats=1206)
         pol = greedy_policy(spec, cfg, net, params, hidden, belief=belief)
         w0 = initial_speeds("const_clinician", jax.tree.map(lambda a: a[None], scn), dataclasses.replace(cfg, obs_mode="pump"), jax.random.PRNGKey(0))[0]
@@ -73,7 +79,7 @@ def main() -> None:
             "belief_risk_when_at_risk": float(b[risk][:, -1].mean()) if risk.any() and belief is not None else None,
         }
         print(name, out[name], flush=True)
-    common.save_json("hypertension_diagnosis.json", out, phase=5)
+    common.save_json("hypertension_diagnosis.json", out, phase=args.phase)
 
 
 if __name__ == "__main__":

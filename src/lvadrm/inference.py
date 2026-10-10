@@ -40,6 +40,17 @@ def initial_belief(n: int, dtype=jnp.float32):
     return jax.nn.one_hot(0, n, dtype=dtype)
 
 
+def rm_state_sequence(avo: np.ndarray, n: int) -> np.ndarray:
+    """True counting-RM state after each beat for AVO sequences [E, T] (start in u_0)."""
+    u = np.zeros(avo.shape[0], dtype=np.int32)
+    out = np.zeros(avo.shape, dtype=np.int32)
+    for t in range(avo.shape[1]):
+        viol = ~avo[:, t] & (u == n - 1)
+        u = np.where(avo[:, t] | viol, 0, u + 1)
+        out[:, t] = u
+    return out
+
+
 def log_likelihood(b, u_true, floor: float = LL_FLOOR):
     """log max(b[u_true], floor), elementwise over leading axes."""
     pb = jnp.take_along_axis(b, jnp.asarray(u_true)[..., None], axis=-1)[..., 0]

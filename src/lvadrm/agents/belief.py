@@ -26,6 +26,7 @@ from lvadrm.detectors import LEARNED, Detector, SyntheticDetector, learned_detec
 from lvadrm.inference import TDM, ibu_update, initial_belief, naive_update, tdm_input
 
 DET_DIR = Path("results/phase4/detectors")
+DET_DIR_P6 = Path("results/phase6/detectors")
 TDM_DIR = Path("results/phase4/tdm")
 OBS_DIM = 13
 WAVE_DIM = 64
@@ -76,26 +77,37 @@ def tdm_belief(det: Detector, n: int, model: TDM, params, features: str = "full"
     return Belief(init, update, lambda bs: bs[2])
 
 
+def synthetic_config(name: str) -> dict:
+    """Calibrated synthetic detector configuration (Phase 4 file first, then Phase 6 additions)."""
+    for f in (DET_DIR / "detectors.json", DET_DIR_P6 / "detectors.json"):
+        if f.exists():
+            syn = json.loads(f.read_text())["synthetic"]
+            if name in syn:
+                return syn[name]["config"]
+    raise KeyError(f"no calibrated synthetic detector {name!r}")
+
+
 def load_detector(name: str) -> Detector:
     if name in LEARNED:
         model = LEARNED[name]()
         tmpl = model.init(jax.random.PRNGKey(0), jnp.zeros((1, OBS_DIM)), jnp.zeros((1, WAVE_DIM)))
         return learned_detector(model, serialization.from_bytes(tmpl, (DET_DIR / f"{name}.msgpack").read_bytes()))
-    conf = json.loads((DET_DIR / "detectors.json").read_text())["synthetic"][name]["config"]
-    return synthetic_detector(SyntheticDetector(**conf))
+    return synthetic_detector(SyntheticDetector(**synthetic_config(name)))
 
 
-def load_tdm(name: str, n: int, hidden: int = 128, features: str = "full"):
+def load_tdm(name: str, n: int, hidden: int = 128, features: str = "full", path: str | None = None):
+    """TDM parameters from ``path`` or, by default, the Phase 4 file of detector ``name``."""
     from lvadrm.env import PUMP_FLOW_FEATURES
 
     model = TDM(n_states=n, hidden=hidden)
     d_in = 2 + (OBS_DIM if features == "full" else OBS_DIM - PUMP_FLOW_FEATURES)
     tmpl = model.init(jax.random.PRNGKey(0), jnp.zeros((1, hidden)), jnp.zeros((1, d_in)))
     suffix = "" if features == "full" else "__det"
-    return model, serialization.from_bytes(tmpl, (TDM_DIR / f"{name}{suffix}.msgpack").read_bytes())
+    f = Path(path) if path else TDM_DIR / f"{name}{suffix}.msgpack"
+    return model, serialization.from_bytes(tmpl, f.read_bytes())
 
 
-def make_belief(kind: str, n: int, detector: str | None = None) -> Belief:
+def make_belief(kind: str, n: int, detector: str | None = None, tdm_path: str | None = None) -> Belief:
     if kind == "true":
         return true_belief(n)
     det = load_detector(detector)
@@ -104,7 +116,7 @@ def make_belief(kind: str, n: int, detector: str | None = None) -> Belief:
     if kind == "ibu":
         return ibu_belief(det, n)
     if kind == "tdm":
-        return tdm_belief(det, n, *load_tdm(detector, n))
+        return tdm_belief(det, n, *load_tdm(detector, n, path=tdm_path))
     if kind == "tdm_det":
-        return tdm_belief(det, n, *load_tdm(detector, n, features="detector"), features="detector")
+        return tdm_belief(det, n, *load_tdm(detector, n, features="detector", path=tdm_path), features="detector")
     raise ValueError(kind)

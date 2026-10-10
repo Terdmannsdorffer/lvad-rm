@@ -32,12 +32,17 @@ from lvadrm.env import EnvConfig, reset  # noqa: E402
 from lvadrm.evaluation import classical_policy, initial_speeds, metrics, rollout  # noqa: E402
 from lvadrm.patients import HF_PATIENT  # noqa: E402
 from lvadrm.reward_machine import RMConfig  # noqa: E402
-from lvadrm.scenarios import ScenarioConfig, protocol_batch, sample_scenario  # noqa: E402
+from lvadrm.scenarios import WIDE_SCENARIOS, ScenarioConfig, protocol_batch, sample_scenario  # noqa: E402
 
 RUNS = Path("results/phase3/runs")
 N_TEST = 2048
 TEST_SEED = 12345
 BASELINES = ("const_pop", "const_clinician", "simaan_minflow")
+TEST_SCENARIOS = {
+    "default": ScenarioConfig(),
+    "wide": WIDE_SCENARIOS,  # Rs up to 2.5 x the patient's (training: 1.56 x)
+    "lowemax": ScenarioConfig(emax_scale=(0.3, 0.5)),  # contractility below the training range (0.5-1.5 x)
+}
 
 
 def load_agent(run_dir: Path):
@@ -50,7 +55,7 @@ def load_agent(run_dir: Path):
     x = agent_obs(spec, obs, st, env_cfg)
     template = net.init(jax.random.PRNGKey(0), jnp.zeros(ppo.hidden), x) if spec.recurrent else net.init(jax.random.PRNGKey(0), x)
     params = serialization.from_bytes(template, (run_dir / "params.msgpack").read_bytes())
-    belief = make_belief(spec.belief, conf["rm_n"], conf.get("detector")) if spec.belief != "true" else None
+    belief = make_belief(spec.belief, conf["rm_n"], conf.get("detector"), conf.get("tdm_path")) if spec.belief != "true" else None
     return spec, env_cfg, net, params, ppo.hidden, belief
 
 
@@ -59,7 +64,12 @@ def main() -> None:
     ap.add_argument("--runs", nargs="*", default=None, help="run directory names in results/phase3/runs (default: all)")
     ap.add_argument("--dirs", nargs="*", default=None, help="explicit run directories (overrides --runs)")
     ap.add_argument("--phase", type=int, default=3, help="where to write eval.json / summary.md")
+    ap.add_argument("--scenarios", choices=sorted(TEST_SCENARIOS), default="default")
+    ap.add_argument("--no-protocols", action="store_true")
+    ap.add_argument("--no-baselines", action="store_true")
+    ap.add_argument("--name", default="eval", help="output stem (eval -> eval.json, summary.md)")
     args = ap.parse_args()
+    suffix = "" if args.name == "eval" else "_" + args.name.removeprefix("eval_")
     if args.dirs:
         run_dirs = [Path(d) for d in args.dirs if (Path(d) / "params.msgpack").exists()]
     else:
@@ -69,20 +79,25 @@ def main() -> None:
 
     base_cfg = EnvConfig(patient=HF_PATIENT, episode_beats=300)
     k_scn, k_run = jax.random.split(jax.random.PRNGKey(TEST_SEED))
-    scns = jax.vmap(lambda k: sample_scenario(k, HF_PATIENT, ScenarioConfig(), 300))(jax.random.split(k_scn, N_TEST))
+    scn_cfg = TEST_SCENARIOS[args.scenarios]
+    scns = jax.vmap(lambda k: sample_scenario(k, HF_PATIENT, scn_cfg, 300))(jax.random.split(k_scn, N_TEST))
     names, proto_scns = protocol_batch(HF_PATIENT)
     out = {"n_test": N_TEST, "test_seed": TEST_SEED, "initial_speed": "clinician (const_pop: base)",
-           "random_scenarios": {}, "protocols": {}}
+           "scenarios": args.scenarios, "random_scenarios": {}, "protocols": {}}
     base_long = dataclasses.replace(base_cfg, episode_beats=1206)
     starts = {
         "clinician": (initial_speeds("const_clinician", scns, base_cfg, k_run),
-                      initial_speeds("const_clinician", proto_scns, base_long, k_run)),
+                      None if args.no_protocols else initial_speeds("const_clinician", proto_scns, base_long, k_run)),
         "base": (jnp.full(N_TEST, HF_PATIENT.omega), jnp.full(len(names), HF_PATIENT.omega)),
     }
 
     def evaluate(label, policy_fn, cfg, start="clinician"):
         o = rollout(policy_fn(cfg), scns, cfg, k_run, starts[start][0])
         out["random_scenarios"][label] = metrics(o, cfg)
+        if args.no_protocols:
+            m = out["random_scenarios"][label]
+            print(f"{label:28s} viol N5 {m['N5_violations_per_100_beats']:.3f}/100 AVO {m['avo_frac']:.2f} CO {m['co_mean']:.2f}", flush=True)
+            return
         cfg_long = dataclasses.replace(cfg, episode_beats=1206)
         ol = rollout(policy_fn(cfg_long), proto_scns, cfg_long, k_run, starts[start][1])
         for i, proto in enumerate(names):
@@ -93,13 +108,16 @@ def main() -> None:
               f"AVO {m['avo_frac']:.2f} BACK {m['back_frac']:.2f} SUC {m['suc_frac']:.4f} LOW {m['low_frac']:.2f} "
               f"CO {m['co_mean']:.2f} return {m['return_mean_N5']:.1f}", flush=True)
 
-    for b in BASELINES:
+    for b in () if args.no_baselines else BASELINES:
         evaluate(b, lambda cfg, b=b: classical_policy(b, cfg), base_cfg, "base" if b == "const_pop" else "clinician")
     for d in run_dirs:
         spec, env_cfg, net, params, hidden, belief = load_agent(d)
         evaluate(d.name, lambda cfg, spec=spec, net=net, params=params, hidden=hidden, belief=belief:
                  greedy_policy(spec, cfg, net, params, hidden, belief=belief), env_cfg)
-    common.save_json("eval.json", out, phase=args.phase)
+    common.save_json(f"{args.name}.json", out, phase=args.phase)
+    if args.name != "eval" or args.scenarios != "default":
+        print(f"wrote results/phase{args.phase}/{args.name}.json")
+        return
 
     # learning curves
     fig, ax = plt.subplots(1, 3, figsize=(15, 3.8))
