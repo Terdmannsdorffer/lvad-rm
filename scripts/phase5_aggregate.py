@@ -35,7 +35,8 @@ COMPARISONS = [  # (a, b, hypothesis)
     ("tdm_mlp", "oracle_p", "H3: pump-only TDM vs pressure oracle"),
     ("oracle_p", "oracle", "pressure vs pump sensors (oracles)"),
 ]
-ORDER = ["const_pop", "const_clinician", "simaan_minflow", "oracle_p", "oracle", "tdm_mlp_v2", "tdm_mlp", "ibu_mlp", "naive_mlp", "rnn"]
+ORDER = ["const_pop", "const_clinician", "simaan_minflow", "mod_open_loop", "mod_rule_mlp", "mod_rule_oracle",
+         "oracle_p", "oracle", "tdm_mlp_v2", "tdm_mlp", "ibu_mlp", "naive_mlp", "rnn"]
 
 
 def group(label: str) -> str:
