@@ -57,9 +57,13 @@ def synthetic_conf(name: str, p4_train: dict) -> dict:
     except KeyError:
         pass
     m = re.fullmatch(r"(iid|markov)_e([\d.]+)(?:_r([\d.]+))?", name)
-    if not m:
+    mc = re.fullmatch(r"(iid|markov)_fn([\d.]+)_fp([\d.]+)(?:_r([\d.]+))?", name)
+    if m:
+        det = SyntheticDetector(kind=m.group(1), eps=float(m.group(2)), rho=float(m.group(3) or 0.9))
+    elif mc:
+        det = SyntheticDetector(kind=mc.group(1), eps=float(mc.group(2)), eps_fp=float(mc.group(3)), rho=float(mc.group(4) or 0.9))
+    else:
         raise ValueError(f"cannot parse synthetic detector name {name!r}")
-    det = SyntheticDetector(kind=m.group(1), eps=float(m.group(2)), rho=float(m.group(3) or 0.9))
     d_tr = synthetic_detections(det, p4_train["avo"], p4_train["v_aortic"], seed=1)
     det = calibrate(det, p4_train["avo"].ravel(), d_tr.ravel())
     assert det.name == name, (det.name, name)

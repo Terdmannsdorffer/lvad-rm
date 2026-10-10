@@ -8,6 +8,9 @@ B  generalization of Phase 5/6 agents to wide scenarios and low contractility (n
 C  noise robustness (H2): synthetic detectors iid / Markov with eps 0.1 and 0.3; Naive / IBU / TDM
    agents, 3 seeds.
 D  ablation of the RM horizon N in {3, 10} for the oracle and the TDM agent, 3 seeds.
+E  clinical-level AVO detector (Clifford et al. 2019: sensitivity 86 %, specificity 93 %), with
+   independent or persistent (Markov, rho 0.9) errors: Naive / IBU / TDM agents, 5 seeds, plus the
+   detector-in-the-loop modulation rule; references copied from eval.json (same test set).
 Run collect_data_v2.py first.
 """
 
@@ -23,6 +26,8 @@ P5 = Path("results/phase5")
 P6 = Path("results/phase6")
 P5_AGENTS = ["oracle", "oracle_p", "rnn", "naive_mlp", "ibu_mlp", "tdm_mlp"]
 NOISE_DETECTORS = ["iid_e0.1", "iid_e0.3", "markov_e0.1_r0.9", "markov_e0.3_r0.9"]
+CLINICAL_DETECTORS = ["markov_fn0.14_fp0.07_r0.9", "iid_fn0.14_fp0.07"]
+REFERENCES = ["const_pop", "const_clinician", "simaan_minflow", "mod_open_loop", "mod_rule_oracle"]
 
 
 def py(*cmd):
@@ -112,12 +117,36 @@ def stage_d():
        "--title", "Fase 6D: ablación del horizonte N")
 
 
+def stage_e():
+    out = P6 / "runs_clinical"
+    dirs = []
+    for det in CLINICAL_DETECTORS:
+        path = tdm_v2(det, 5)
+        for s in range(5):
+            for agent in ("naive", "ibu", "tdm"):
+                dirs.append(train(agent, s, out, det, path if agent == "tdm" else None))
+    if not (P6 / "eval_clinical.json").exists():
+        py("scripts/eval_agents.py", "--phase", "6", "--name", "eval_clinical", "--no-baselines", "--dirs", *dirs)
+        ev = json.loads((P6 / "eval_clinical.json").read_text())
+        ref = json.loads((P6 / "eval.json").read_text())
+        keep = REFERENCES + [k for k in ref["random_scenarios"] if k.startswith(("oracle_s", "tdm_mlp_v2_s"))]
+        for k in keep:
+            ev["random_scenarios"][k] = ref["random_scenarios"][k]
+            for proto in ev["protocols"]:
+                ev["protocols"][proto][k] = ref["protocols"][proto][k]
+        (P6 / "eval_clinical.json").write_text(json.dumps(ev, indent=2))
+        for det in CLINICAL_DETECTORS:
+            py("scripts/eval_modulation.py", "--detector", det, "--families", "rule", "--eval-name", "eval_clinical")
+    py("scripts/phase5_aggregate.py", "--phase", "6", "--name", "eval_clinical", "--runs", str(out), str(P5 / "runs"), str(P6 / "runs"),
+       "--title", "Fase 6E: detector de nivel clínico (sensibilidad 86 %, especificidad 93 %)")
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--stages", nargs="+", default=["A", "B", "C", "D"])
     args = ap.parse_args()
     for st in args.stages:
-        {"A": stage_a, "B": stage_b, "C": stage_c, "D": stage_d}[st]()
+        {"A": stage_a, "B": stage_b, "C": stage_c, "D": stage_d, "E": stage_e}[st]()
 
 
 if __name__ == "__main__":

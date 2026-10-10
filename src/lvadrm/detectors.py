@@ -11,6 +11,8 @@ info) -> (p, d, dstate)):
     iid      independent flips with rate eps;
     markov   a two-state error process with stationary rate eps and persistence rho
              (errors repeat beat after beat);
+    (with eps_fp set, eps is the false-negative rate and eps_fp the false-positive rate, e.g. the
+    clinical AVO detector of Clifford et al. 2019: sensitivity 86 %, specificity 93 %)
     patient  per-episode error rate drawn uniformly in eps * [1 - spread, 1 + spread];
     margin   error probability eps_max * exp(-|V_ao - eps_avo| / scale): openings near the threshold
              are confused, and since the physiology changes slowly the errors are correlated in time.
@@ -41,7 +43,8 @@ class Detector(NamedTuple):
 @dataclass(frozen=True)
 class SyntheticDetector:
     kind: str = "iid"  # iid, markov, patient or margin
-    eps: float = 0.1
+    eps: float = 0.1  # error rate (false-negative rate when eps_fp is set)
+    eps_fp: float | None = None  # false-positive rate (iid / markov); None: same as eps
     rho: float = 0.9  # markov persistence: P(error | error at the previous beat)
     spread: float = 1.0  # patient
     eps_max: float = 0.5  # margin
@@ -51,6 +54,8 @@ class SyntheticDetector:
 
     @property
     def name(self) -> str:
+        if self.eps_fp is not None and self.kind in ("iid", "markov"):
+            return f"{self.kind}_fn{self.eps}_fp{self.eps_fp}" + (f"_r{self.rho}" if self.kind == "markov" else "")
         if self.kind == "markov":
             return f"markov_e{self.eps}_r{self.rho}"
         if self.kind == "margin":
@@ -68,10 +73,11 @@ class SynState(NamedTuple):
 def synthetic_errors(key, ds: SynState, avo, v_aortic, det: SyntheticDetector, eps_avo: float = EPS_AVO_ML):
     """Error indicator for one beat and the next detector state."""
     u = jax.random.uniform(key, ())
+    eps = det.eps if det.eps_fp is None else jnp.where(avo, det.eps, det.eps_fp)  # class-conditional rates
     if det.kind == "iid":
-        p_err = jnp.asarray(det.eps)
+        p_err = jnp.asarray(eps)
     elif det.kind == "markov":
-        p_enter = det.eps * (1.0 - det.rho) / (1.0 - det.eps)  # keeps the stationary rate at eps
+        p_enter = eps * (1.0 - det.rho) / (1.0 - eps)  # keeps the stationary rate at eps
         p_err = jnp.where(ds.err, det.rho, p_enter)
     elif det.kind == "patient":
         p_err = ds.eps_ep

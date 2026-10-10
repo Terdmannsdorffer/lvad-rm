@@ -11,6 +11,7 @@ mod_rule_oracle. Writes results/phase6/modulation_tuning.json.
 
 from __future__ import annotations
 
+import argparse
 import dataclasses
 import itertools
 import json
@@ -91,9 +92,14 @@ def scalar_params(cls, c: dict):
 
 
 def main() -> None:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--detector", default="mlp", help="AVO detector of the closed-loop rule")
+    ap.add_argument("--families", nargs="+", default=["open_loop", "rule"])
+    ap.add_argument("--eval-name", default="eval", help="evaluation file in results/phase6 to merge into")
+    args = ap.parse_args()
     cfg = EnvConfig(patient=HF_PATIENT, episode_beats=300)
-    det = load_detector("mlp")
-    fams = {"open_loop": open_loop_fns(), "rule": rule_fns(det)}
+    det = load_detector(args.detector)
+    fams = {k: v for k, v in {"open_loop": open_loop_fns(), "rule": rule_fns(det)}.items() if k in args.families}
 
     k_scn, k_run = jax.random.split(jax.random.PRNGKey(VAL_SEED))
     scns_val = jax.vmap(lambda k: sample_scenario(k, HF_PATIENT, ScenarioConfig(), 300))(jax.random.split(k_scn, N_VAL))
@@ -102,7 +108,7 @@ def main() -> None:
     for fam, fns in fams.items():
         best[fam], rows = tune(fam, fns, cfg, scns_val, omega_val, k_run)
         tuning[fam] = {"best": best[fam], "all": rows}
-    common.save_json("modulation_tuning.json", tuning, phase=6)
+    common.save_json("modulation_tuning.json" if args.detector == "mlp" else f"modulation_tuning_{args.detector}.json", tuning, phase=6)
 
     # test set and protocols, exactly like eval_agents.py
     k_scn, k_run = jax.random.split(jax.random.PRNGKey(TEST_SEED))
@@ -111,12 +117,14 @@ def main() -> None:
     cfg_long = dataclasses.replace(cfg, episode_beats=1206)
     w_test = initial_speeds("const_clinician", scns, cfg, k_run)
     w_proto = initial_speeds("const_clinician", proto_scns, cfg_long, k_run)
-    policies = {
-        "mod_open_loop": as_policy(fams["open_loop"], scalar_params(OpenLoopParams, best["open_loop"]["config"])),
-        "mod_rule_mlp": as_policy(fams["rule"], scalar_params(RuleParams, best["rule"]["config"])),
-        "mod_rule_oracle": as_policy(rule_fns(None), scalar_params(RuleParams, best["rule"]["config"])),
-    }
-    ev = json.loads((P6 / "eval.json").read_text())
+    policies = {}
+    if "open_loop" in fams:
+        policies["mod_open_loop"] = as_policy(fams["open_loop"], scalar_params(OpenLoopParams, best["open_loop"]["config"]))
+    if "rule" in fams:
+        policies[f"mod_rule_{args.detector}"] = as_policy(fams["rule"], scalar_params(RuleParams, best["rule"]["config"]))
+        if args.detector == "mlp":
+            policies["mod_rule_oracle"] = as_policy(rule_fns(None), scalar_params(RuleParams, best["rule"]["config"]))
+    ev = json.loads((P6 / f"{args.eval_name}.json").read_text())
     for label, pol in policies.items():
         o = rollout(pol, scns, cfg, k_run, w_test)
         ev["random_scenarios"][label] = metrics(o, cfg)
@@ -128,8 +136,8 @@ def main() -> None:
         print(f"{label:16s} test: viol {m['N5_violations_per_100_beats']:.3f}/100, episodes {m['N5_episodes_with_violation']:.0%}, "
               f"AVO {m['avo_frac']:.2f}, BACK {m['back_frac']:.3f}, CO {m['co_mean']:.2f}, return {m['return_mean_N5']:.1f} | "
               + " ".join(f"{p} {ev['protocols'][p][label]['N5_violations_per_100_beats']:.2f}" for p in names), flush=True)
-    (P6 / "eval.json").write_text(json.dumps(ev, indent=2))
-    print("merged into results/phase6/eval.json")
+    (P6 / f"{args.eval_name}.json").write_text(json.dumps(ev, indent=2))
+    print(f"merged into results/phase6/{args.eval_name}.json")
 
 
 if __name__ == "__main__":

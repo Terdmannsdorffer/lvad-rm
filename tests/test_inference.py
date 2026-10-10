@@ -72,3 +72,17 @@ def test_tdm_converges_on_toy_problem():
         lls.append(np.asarray(log_likelihood(b, jnp.asarray(u[320:, t]))))
     ibu_ll = float(np.mean(lls))
     assert hist[-1]["val_ll"] > ibu_ll - 0.05, (hist[-1]["val_ll"], ibu_ll)
+
+
+def test_class_conditional_markov_rates():
+    det = SyntheticDetector(kind="markov", eps=0.14, eps_fp=0.07, rho=0.9)
+    assert det.name == "markov_fn0.14_fp0.07_r0.9"
+    for avo, target in ((True, 0.14), (False, 0.07)):
+        keys = jax.random.split(jax.random.PRNGKey(1), 200_000)
+
+        def body(ds, k, avo=avo):
+            err, ds = synthetic_errors(k, ds, jnp.bool_(avo), 5.0, det)
+            return ds, err
+
+        _, err = jax.lax.scan(body, SynState(jnp.bool_(False), jnp.float32(0.1)), keys)
+        assert abs(float(np.asarray(err).mean()) - target) < 0.01
