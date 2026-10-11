@@ -90,7 +90,7 @@ La revisión de 2026 (arXiv 2609.20518) describe el RL para LVAD como prometedor
 
 **Hallazgos nuestros que aportan a la literatura de reward machines con ruido:**
 
-- En control, una creencia mala se paga con conservadurismo y con colapsos del entrenamiento, más que con violaciones.
+- En control, una creencia mala se paga con conservadurismo más que con violaciones. Los colapsos del entrenamiento que vimos venían del recorte del valor en PPO, no de la creencia (`phase6_decisions.md`, sección G).
 - TDM corrige fallas del detector que dependen del régimen si sus datos cubren ese régimen.
 - Contra una regla de modulación con el mismo detector en el lazo, TDM tiene ~4 veces menos violaciones.
 

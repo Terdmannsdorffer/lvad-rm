@@ -31,11 +31,11 @@ def test_fz_reward():
     np.testing.assert_allclose(np.asarray(fz_reward(obs, jnp.array([-0.01, -0.01]))), [-2.0 + 1.0, 1.0 + 0.0])
 
 
-@pytest.mark.parametrize("agent", ["oracle", "rnn", "fz"])
-def test_tiny_training_update(agent):
+@pytest.mark.parametrize("agent,vf_clip", [("oracle", 0.2), ("rnn", 0.2), ("fz", 0.2), ("oracle", None), ("rnn", None)])
+def test_tiny_training_update(agent, vf_clip):
     spec = SPECS[agent]
     env_cfg = env_config_for(spec, EnvConfig(patient=HF_PATIENT, episode_beats=4, warmup_beats=2, n_inner=20, unroll=1))
-    cfg = PPOConfig(n_envs=12, n_steps=2, total_beats=48, n_epochs=2, minibatch_size=5, hidden=16)
+    cfg = PPOConfig(n_envs=12, n_steps=2, total_beats=48, n_epochs=2, minibatch_size=5, hidden=16, vf_clip=vf_clip)
     init, update, _ = make_ppo(spec, env_cfg, cfg)
     ts = init(jax.random.PRNGKey(0))
     p0 = jax.tree.leaves(ts.params)[0].copy()

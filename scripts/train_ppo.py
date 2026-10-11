@@ -41,6 +41,7 @@ def main() -> None:
     ap.add_argument("--detector", default=None, help="AVO detector for naive / ibu / tdm agents")
     ap.add_argument("--out-dir", default=None, help="directory for the run folder (default: results/phase3|4/runs)")
     ap.add_argument("--tdm-path", default=None, help="TDM parameters for tdm agents (default: Phase 4 file of the detector)")
+    ap.add_argument("--no-vf-clip", action="store_true", help="turn off PPO value clipping")
     args = ap.parse_args()
 
     spec = SPECS[args.agent]
@@ -52,7 +53,8 @@ def main() -> None:
         runs = Path("results/phase4/runs")
         args.tag = f"_{args.detector}{args.tag}"
     env_cfg = env_config_for(spec, EnvConfig(patient=HF_PATIENT, episode_beats=300, rm=RMConfig(n=args.rm_n)))
-    cfg = PPOConfig(n_envs=args.n_envs, n_steps=args.n_steps, total_beats=int(args.beats))
+    cfg = PPOConfig(n_envs=args.n_envs, n_steps=args.n_steps, total_beats=int(args.beats),
+                    vf_clip=None if args.no_vf_clip else 0.2)
     runs = Path(args.out_dir) if args.out_dir else runs
     run_dir = runs / f"{args.agent}{args.tag}_s{args.seed}"
     run_dir.mkdir(parents=True, exist_ok=True)

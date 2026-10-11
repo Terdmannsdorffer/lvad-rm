@@ -106,7 +106,7 @@ def main() -> None:
         m = out["random_scenarios"][label]
         print(f"{label:22s} viol N5 {m['N5_episodes_with_violation']:.0%} ({m['N5_violations_per_100_beats']:.2f}/100)  "
               f"AVO {m['avo_frac']:.2f} BACK {m['back_frac']:.2f} SUC {m['suc_frac']:.4f} LOW {m['low_frac']:.2f} "
-              f"CO {m['co_mean']:.2f} return {m['return_mean_N5']:.1f}", flush=True)
+              f"CO {m['co_mean']:.2f} return (N={cfg.rm.n}) {m[f'return_mean_N{cfg.rm.n}']:.1f}", flush=True)
 
     for b in () if args.no_baselines else BASELINES:
         evaluate(b, lambda cfg, b=b: classical_policy(b, cfg), base_cfg, "base" if b == "const_pop" else "clinician")

@@ -11,6 +11,8 @@ D  ablation of the RM horizon N in {3, 10} for the oracle and the TDM agent, 3 s
 E  clinical-level AVO detector (Clifford et al. 2019: sensitivity 86 %, specificity 93 %), with
    independent or persistent (Markov, rho 0.9) errors: Naive / IBU / TDM agents, 5 seeds, plus the
    detector-in-the-loop modulation rule; references copied from eval.json (same test set).
+G  PPO without value clipping (--no-vf-clip) on the 5 runs that collapsed in C and D and on oracle
+   seeds 0-2 (collapse fix check).
 Run collect_data_v2.py first.
 """
 
@@ -35,7 +37,7 @@ def py(*cmd):
     subprocess.run([sys.executable, *cmd], check=True)
 
 
-def train(agent, seed, out_dir, detector=None, tdm_path=None, rm_n=5, tag=""):
+def train(agent, seed, out_dir, detector=None, tdm_path=None, rm_n=5, tag="", extra=()):
     name = f"{agent}{'_' + detector if detector else ''}{tag}_s{seed}"
     if (Path(out_dir) / name / "params.msgpack").exists():
         return str(Path(out_dir) / name)
@@ -46,7 +48,7 @@ def train(agent, seed, out_dir, detector=None, tdm_path=None, rm_n=5, tag=""):
         cmd += ["--tdm-path", tdm_path]
     if tag:
         cmd += ["--tag", tag]
-    py(*cmd)
+    py(*cmd, *extra)
     return str(Path(out_dir) / name)
 
 
@@ -141,12 +143,26 @@ def stage_e():
        "--title", "Fase 6E: detector de nivel clínico (sensibilidad 86 %, especificidad 93 %)")
 
 
+def stage_g():
+    """PPO without value clipping: the 5 runs that collapsed in C and D (all seed 2) and oracle seeds 0-2."""
+    out = P6 / "runs_novfclip"
+    nv = ("--no-vf-clip",)
+    dirs = [train("naive", 2, out, "iid_e0.3", extra=nv),
+            train("ibu", 2, out, "iid_e0.3", extra=nv),
+            train("ibu", 2, out, "markov_e0.3_r0.9", extra=nv),
+            train("oracle", 2, out, rm_n=3, tag="_N3", extra=nv),
+            train("tdm", 2, out, "mlp", tdm_v2("mlp", 3), rm_n=3, tag="_N3", extra=nv)]
+    dirs += [train("oracle", s, out, extra=nv) for s in range(3)]
+    if not (P6 / "eval_novfclip.json").exists():
+        py("scripts/eval_agents.py", "--phase", "6", "--name", "eval_novfclip", "--no-baselines", "--dirs", *dirs)
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--stages", nargs="+", default=["A", "B", "C", "D"])
     args = ap.parse_args()
     for st in args.stages:
-        {"A": stage_a, "B": stage_b, "C": stage_c, "D": stage_d, "E": stage_e}[st]()
+        {"A": stage_a, "B": stage_b, "C": stage_c, "D": stage_d, "E": stage_e, "G": stage_g}[st]()
 
 
 if __name__ == "__main__":

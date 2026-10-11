@@ -36,6 +36,9 @@ class PPOConfig:
     gamma: float = 0.99
     gae_lambda: float = 0.95
     clip_eps: float = 0.2
+    # PPO-style value clipping, in value units: the critic moves at most vf_clip per update. With
+    # returns of order -30 in bad regimes this freezes the critic; None turns it off (Phase 6G).
+    vf_clip: float | None = 0.2
     ent_coef: float = 0.01
     vf_coef: float = 0.5
     max_grad_norm: float = 0.5
@@ -173,8 +176,11 @@ def make_ppo(spec: AgentSpec, env_cfg: EnvConfig, cfg: PPOConfig, belief: Belief
         ratio = jnp.exp(logp - old_logp)
         adv_n = (adv - adv.mean()) / (adv.std() + 1e-8)
         pg = -jnp.minimum(ratio * adv_n, jnp.clip(ratio, 1.0 - cfg.clip_eps, 1.0 + cfg.clip_eps) * adv_n).mean()
-        v_clip = old_v + jnp.clip(v - old_v, -cfg.clip_eps, cfg.clip_eps)
-        vf = 0.5 * jnp.maximum((v - targets) ** 2, (v_clip - targets) ** 2).mean()
+        if cfg.vf_clip is None:
+            vf = 0.5 * ((v - targets) ** 2).mean()
+        else:
+            v_clip = old_v + jnp.clip(v - old_v, -cfg.vf_clip, cfg.vf_clip)
+            vf = 0.5 * jnp.maximum((v - targets) ** 2, (v_clip - targets) ** 2).mean()
         ent = -(jnp.exp(logp_all) * logp_all).sum(-1).mean()
         total = pg + cfg.vf_coef * vf - cfg.ent_coef * ent
         aux = {
