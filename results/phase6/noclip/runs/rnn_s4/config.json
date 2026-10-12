@@ -1,0 +1,55 @@
+{
+  "agent": {
+    "name": "rnn",
+    "obs_mode": "pump",
+    "rm_in_obs": false,
+    "reward": "rm",
+    "actions": [
+      -0.05,
+      -0.01,
+      0.0,
+      0.01,
+      0.05
+    ],
+    "recurrent": true,
+    "belief": "true"
+  },
+  "ppo": {
+    "n_envs": 8192,
+    "n_steps": 25,
+    "total_beats": 30000000,
+    "n_epochs": 4,
+    "minibatch_size": 8192,
+    "lr": 0.0003,
+    "anneal_lr": true,
+    "gamma": 0.99,
+    "gae_lambda": 0.95,
+    "clip_eps": 0.2,
+    "vf_clip": null,
+    "ent_coef": 0.01,
+    "vf_coef": 0.5,
+    "max_grad_norm": 0.5,
+    "hidden": 128
+  },
+  "seed": 4,
+  "rm_n": 5,
+  "detector": null,
+  "tdm_path": null,
+  "env": {
+    "episode_beats": 300,
+    "snr_db": 25.0,
+    "back_ml": 1.0,
+    "omega_min": 6000.0,
+    "omega_max": 16000.0,
+    "rm": {
+      "n": 5,
+      "r_viol": -1.0,
+      "r_suc": -2.0,
+      "r_back": -0.1,
+      "w_perf": 0.1,
+      "w_act": 0.01,
+      "co_target": 5.0,
+      "terminal_on_violation": false
+    }
+  }
+}

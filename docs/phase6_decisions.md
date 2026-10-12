@@ -211,10 +211,88 @@ La causa probable es el recorte del valor estilo PPO:
 
 **Implicación.** Todas las corridas anteriores usan el recorte. Para comparaciones homogéneas hay que reentrenar sin recorte, como mínimo el experimento principal y la sección F. Mientras tanto, los colapsos de C y D deben leerse como un artefacto de la implementación de PPO y no de la inferencia.
 
+## H. Reentrenamiento completo sin recorte del valor
+
+**Qué se hizo:**
+
+- Se reentrenaron sin recorte del valor todos los agentes PPO de las Fases 5 y 6: experimento principal, F, C y D. Luego se repitieron las evaluaciones, incluida la generalización de B.
+- Script: `scripts/run_noclip.py`, ~33 h en la 3090. Resultados en `results/phase6/noclip/`, con los mismos nombres de archivo que en las Fases 5 y 6.
+- Las 8 corridas de la sección G tienen la misma configuración y se copiaron en vez de reentrenarse.
+- **Sin cambios:** detectores y modelos TDM. El TDM v2 se entrenó en parte con datos de la política TDM de la Fase 5, con recorte. Se mantuvo, porque es solo un conjunto de datos para el modelo de inferencia.
+- **Copiadas de las evaluaciones con recorte:** las líneas base clásicas y las reglas de modulación, que son deterministas y usan el mismo conjunto de prueba.
+
+**Experimento principal** (5 semillas; violaciones cada 100 latidos; con recorte → sin recorte):
+
+| Agente | Violaciones | Retorno RM | Hipertensión |
+| --- | --- | --- | --- |
+| oracle | 0.01 → 0.03 | −7.8 → **−7.2** | 0 → 0 |
+| oracle con presiones | 0.01 → 0.01 | −10.4 → −9.8 | 0 → 0 |
+| TDM v2 | 0.17 → **0.13** | −7.9 → −7.6 | 6.3 → 5.4 |
+| TDM (Fase 4) | 0.18 → 0.15 | −7.8 → −7.7 | 14.5 → 14.8 |
+| IBU | 0.22 → 0.19 | −7.6 → −7.5 | 14.6 → 15.0 |
+| Naive | 0.23 → 0.26 | −8.0 → −8.0 | 14.2 → 14.2 |
+| PPO recurrente | 0.20 → 0.35 | −8.1 → −8.2 | 7.0 → 3.5 |
+
+- **El oracle vuelve a tener el mejor retorno entre los agentes de RL.** Abre la válvula en 71% de los latidos (antes 62%), con 1.3% de reflujo y el gasto en el objetivo (5.04 l/min).
+- **H1 se fortalece:** oracle contra PPO recurrente, −0.33 violaciones cada 100 latidos (p = 0.016). En parte es porque el recurrente empeora: tiene más violaciones en sus 5 semillas. El recorte del valor parece ayudar a un crítico recurrente de alta varianza, así que esto no es una mejora general.
+- **H2 se fortalece:**
+  - TDM v2 contra IBU: −0.053 (p = 0.01); con recorte no era significativo.
+  - TDM contra Naive: −0.11 (p = 0.002).
+- **H3 no cambia:** TDM v2 contra el oracle, +0.11 (p < 0.001).
+
+**Detector clínico (F):**
+
+| Detector | Naive | IBU | TDM | Hipertensión (Naive / IBU / TDM) |
+| --- | --- | --- | --- | --- |
+| Persistente | 0.13 | 0.13 | **0.09** | 13.2 / 14.7 / **0.03** |
+| Independiente | 0.13 | 0.12 | 0.10 | **0.95** / 1.23 / 4.05 |
+
+- **Con errores persistentes TDM ahora gana también en escenarios aleatorios:** contra IBU p = 0.015, contra Naive p = 0.004. Con recorte era un empate. En hipertensión sigue siendo el único que resiste.
+- **Con errores independientes TDM ya no es peor en escenarios aleatorios:** contra IBU p = 0.17, contra Naive p = 0.045. En hipertensión Naive e IBU siguen siendo mejores, lo que coincide con Li et al. (2024).
+- Los retornos de oracle, TDM, Naive e IBU quedan entre −7.0 y −7.3.
+- Las reglas de modulación con el mismo detector quedan igual que en F (0.20 y 0.29).
+
+**Barrido de ruido (C, 3 semillas):**
+
+| Detector | Naive | IBU | TDM | p (TDM − IBU) |
+| --- | --- | --- | --- | --- |
+| Independiente ε 0.1 | 0.17 | 0.19 | **0.09** | 0.004 |
+| Independiente ε 0.3 | 0.16 | 0.13 | 0.13 | 0.72 |
+| Markov ε 0.1 | 0.13 | 0.14 | 0.16 | 0.56 |
+| Markov ε 0.3 | 0.18 | 0.17 | **0.08** | 0.002 |
+
+- Ninguna corrida colapsa (0 de 36).
+- TDM gana con claridad en 2 detectores y empata en los otros 2. Tiene más varianza entre semillas (Markov ε 0.1: 0.10–0.22).
+- En los 4 detectores TDM entrega más gasto (4.90–4.96 contra ~4.80 l/min) y fuerza menos aperturas.
+- Sin los colapsos, la ventaja de TDM en violaciones en el barrido sintético es moderada e inconsistente.
+
+**Horizonte N (D, 3 semillas, cada uno con su N):**
+
+| Agente | N = 3 | N = 5 | N = 10 |
+| --- | --- | --- | --- |
+| oracle | 0.011–0.015 | 0.013–0.053 | 0.003–0.005 |
+| TDM | 0.11–0.14 | 0.11–0.13 | 0.10–0.13 |
+
+- Ninguna corrida colapsa (con recorte colapsaron 2 con N = 3).
+- La brecha de ~0.1 violaciones cada 100 latidos entre TDM y el oracle se mantiene para todo N.
+
+**Generalización (B):**
+
+- Los agentes con creencia siguen fallando en escenarios amplios (TDM v2: 6.7; Naive, IBU y TDM: 8.5–9.3).
+- **El oracle sin recorte generaliza peor que con recorte** (0.80 contra 0.12). Dos de sus semillas tienen 1.1 y 2.1, las otras 0.04–0.39. Su política, menos conservadora, gana dentro del rango de entrenamiento y deja menos margen fuera de él.
+- Baja contractilidad: sin cambios (sigue siendo infactible con ω_min).
+
+**Conclusión para el informe:**
+
+1. Los resultados principales se reportan sin recorte (`results/phase6/noclip/`).
+2. La evidencia fuerte de H2 es la hipertensión con errores persistentes (0.03 contra 13–15), junto con la ventaja en escenarios aleatorios con detector clínico persistente y con el detector MLP (TDM v2).
+3. Con errores independientes la ventaja de TDM desaparece o se invierte en hipertensión, como predice la teoría.
+
 ## Problemas y pendientes
 
-1. **Colapso de PPO en condiciones difíciles:** 5 corridas de 66 en las secciones A–D, todas en la semilla 2; en la sección F, ninguna de 30. Resuelto quitando el recorte del valor (sección G). Falta reentrenar sin recorte para que las comparaciones sean homogéneas. Posibles remedios: normalizar la recompensa o la ventaja por escalas, un piso de entropía, reiniciar las corridas atascadas (por ejemplo, si AVO se mantiene en 0 durante N latidos tras 5 M latidos), o reportar la tasa de colapso como métrica. Por ahora se reporta aparte.
+1. **Colapso de PPO en condiciones difíciles:** 5 corridas de 66 en las secciones A–D, todas en la semilla 2; en la sección F, ninguna de 30. Resuelto quitando el recorte del valor (sección G); todo se reentrenó sin recorte (sección H).
 2. **Generalización fuera de rango:** entrenar los agentes, y no solo el TDM, con escenarios amplios.
 3. **Baja contractilidad:** revisar ω_min para corazones muy débiles antes de usarla como test.
-4. **El oracle no es una cota superior del retorno:** con detector clínico, Naive e IBU lo superan (sección F). La brecha viene del seguimiento del gasto, no de los pesos de la RM; ver la sección G.
+4. **El oracle no era una cota superior del retorno:** con recorte, Naive e IBU lo superaban (sección F). La brecha venía del seguimiento del gasto, no de los pesos de la RM. Sin recorte el oracle tiene el mejor retorno del experimento principal (−7.2), aunque en F empata con Naive e IBU (secciones G y H).
 5. **Estructura temporal de los errores clínicos:** H2 depende de ella. Si hay registros latido a latido de un detector clínico (por ejemplo, del grupo de Clifford y Hayward), estimar ρ.
+6. **Generalización del oracle sin recorte:** dentro del rango de entrenamiento mejora, fuera de él empeora (0.80 contra 0.12 en escenarios amplios). Entrenar con escenarios amplios (punto 2) es ahora más importante.

@@ -1,0 +1,42 @@
+{
+  "tdm_mlp_v2_s0": {
+    "uses_belief": true,
+    "avo_frac": 0.17253121452894438,
+    "omega_mean": 8872.96875,
+    "back_frac": 0.8070374574347332,
+    "detector_mean_p_when_closed": 0.40404024720191956,
+    "detector_fp_rate_when_closed": 0.39643347050754457,
+    "belief_u0_when_closed": 0.18170543015003204,
+    "belief_risk_when_at_risk": 0.5343331098556519
+  },
+  "tdm_mlp_s0": {
+    "uses_belief": true,
+    "avo_frac": 0.00340522133938706,
+    "omega_mean": 9011.9951171875,
+    "back_frac": 0.40068104426787743,
+    "detector_mean_p_when_closed": 0.32243824005126953,
+    "detector_fp_rate_when_closed": 0.3337129840546697,
+    "belief_u0_when_closed": 0.3605002462863922,
+    "belief_risk_when_at_risk": 0.32588109374046326
+  },
+  "ibu_mlp_s0": {
+    "uses_belief": true,
+    "avo_frac": 0.0,
+    "omega_mean": 8884.22265625,
+    "back_frac": 0.9931895573212258,
+    "detector_mean_p_when_closed": 0.47929030656814575,
+    "detector_fp_rate_when_closed": 0.4676503972758229,
+    "belief_u0_when_closed": 0.4915499985218048,
+    "belief_risk_when_at_risk": 0.03489426523447037
+  },
+  "oracle_s0": {
+    "uses_belief": false,
+    "avo_frac": 0.322360953461975,
+    "omega_mean": 8805.267578125,
+    "back_frac": 0.8933030646992054,
+    "detector_mean_p_when_closed": 0.4464208483695984,
+    "detector_fp_rate_when_closed": 0.4304857621440536,
+    "belief_u0_when_closed": null,
+    "belief_risk_when_at_risk": null
+  }
+}

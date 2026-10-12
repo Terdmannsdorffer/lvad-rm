@@ -36,7 +36,7 @@ T_HYPER = 260.0
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--runs", nargs="*", default=[str(RUNS / a) for a in AGENTS])
-    ap.add_argument("--phase", type=int, default=5)
+    ap.add_argument("--phase", default="5", help="results/phase<phase> (e.g. 6 or 6/noclip)")
     args = ap.parse_args()
     det = load_detector("mlp")
     scn, _ = ferreira_hypertension(HF_PATIENT)

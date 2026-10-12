@@ -44,6 +44,7 @@ python scripts/run_phase4.py      # data, AVO detectors, Naive / IBU / TDM infer
 python scripts/run_phase5.py      # main experiment, 5 seeds per agent: results/phase5/summary.md
 python scripts/collect_data_v2.py && python scripts/run_phase6.py   # robustness, generalization, N ablation: results/phase6/
 python scripts/eval_modulation.py && python scripts/run_phase6.py --stages E   # modulation baselines; clinical-level AVO detector
+python scripts/run_phase6.py --stages G && python scripts/run_noclip.py   # PPO without value clipping; full retrain: results/phase6/noclip/
 python -m pytest -q               # tests (float64, CPU)
 ```
 

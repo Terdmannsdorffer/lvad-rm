@@ -63,7 +63,7 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--runs", nargs="*", default=None, help="run directory names in results/phase3/runs (default: all)")
     ap.add_argument("--dirs", nargs="*", default=None, help="explicit run directories (overrides --runs)")
-    ap.add_argument("--phase", type=int, default=3, help="where to write eval.json / summary.md")
+    ap.add_argument("--phase", default="3", help="where to write eval.json / summary.md: results/phase<phase> (e.g. 6/noclip)")
     ap.add_argument("--scenarios", choices=sorted(TEST_SCENARIOS), default="default")
     ap.add_argument("--no-protocols", action="store_true")
     ap.add_argument("--no-baselines", action="store_true")

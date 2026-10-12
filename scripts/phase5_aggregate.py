@@ -52,7 +52,7 @@ def summarize(values: np.ndarray, rng) -> dict:
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--phase", type=int, default=5)
+    ap.add_argument("--phase", default="5", help="results/phase<phase> (e.g. 6 or 6/noclip)")
     ap.add_argument("--name", default="eval", help="evaluation file stem")
     ap.add_argument("--runs", nargs="*", default=None, help="directories with the runs' train logs")
     ap.add_argument("--title", default="Fase 5: experimento principal")
