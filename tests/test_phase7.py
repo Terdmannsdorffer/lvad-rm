@@ -6,7 +6,19 @@ import jax.numpy as jnp
 import numpy as np
 import pytest
 
-from lvadrm.estimators import FilterModel, LambdaDetector, filter_belief, fit_detector, make_estimator
+from lvadrm.estimators import (
+    WINDOW,
+    DriftingDetector,
+    FilterModel,
+    LambdaDetector,
+    WindowTDM,
+    beat_input,
+    calibrated_detector,
+    filter_belief,
+    fit_detector,
+    make_estimator,
+    windows,
+)
 from lvadrm.inference import ibu_update, rm_state_sequence
 from lvadrm.presets import env_v3
 from lvadrm.reward_machine import rm_transition
@@ -106,3 +118,77 @@ def test_identity_of_theorem_1():
         assert abs(truth(k, s) - e - rhs) < 1e-12
     assert ibu(6, 0.9, 0.0) < truth(6, 0.9)  # persistent labels: underestimates
     assert ibu(6, 0.5, 0.8) > truth(6, 0.5)  # persistent errors: overestimates
+
+
+@pytest.mark.parametrize("jumps", [False, True])
+def test_drifting_bias_is_stationary_with_the_requested_autocorrelation(jumps):
+    det = DriftingDetector(tau=56.0, sigma=36.0, lam=0.5, theta=20.0, jumps=jumps)
+    keys = jax.random.split(jax.random.PRNGKey(0), 8000)
+    s = jax.vmap(det.init)(keys)
+    bs = [np.asarray(s[0])]
+    for t in range(40):
+        s = jax.vmap(det.advance)(jax.vmap(lambda k: jax.random.fold_in(k, t))(keys), s)  # noqa: B023
+        bs.append(np.asarray(s[0]))
+    bs = np.array(bs)
+    assert np.allclose(bs.std(1), np.sqrt(0.5) * 36.0, rtol=0.04)
+    for lag in (5, 20, 40):
+        assert abs(np.corrcoef(bs[0], bs[lag])[0, 1] - np.exp(-lag / 20.0)) < 0.04
+    assert (np.asarray(s[1]) == 0.0).all() and (np.asarray(s[2]) == 40).all()
+
+
+def test_recalibration_replaces_the_estimate_at_the_right_beats():
+    det = DriftingDetector(tau=56.0, sigma=36.0, lam=0.9, theta=30.0, cal_err=0.0, cal_every=10)
+    s = det.init(jax.random.PRNGKey(1))
+    assert float(s[0]) == float(s[1])
+    for t in range(1, 31):
+        s = det.advance(jax.random.PRNGKey(100 + t), s)
+        assert (float(s[0]) == float(s[1])) == (t % 10 == 0)
+    # a frozen bias that was measured exactly leaves only the noise of each beat
+    frozen = DriftingDetector(tau=56.0, sigma=36.0, lam=1.0, theta=1e12, cal_err=0.0)
+    s = frozen.init(jax.random.PRNGKey(2))
+    assert bool(frozen.detect(jax.random.PRNGKey(3), s, None, 0.0561)) and not bool(frozen.detect(jax.random.PRNGKey(3), s, None, 0.0559))
+
+
+def test_calibrated_detector_variances():
+    det = LambdaDetector(tau=56.0, sigma=36.0, lam=0.9)
+    c = calibrated_detector(det, 10.0)
+    assert np.isclose((1 - c.lam) * c.sigma**2, 0.1 * 36.0**2) and np.isclose(c.lam * c.sigma**2, 100.0)
+    c = calibrated_detector(det, 1000.0)  # a measurement never adds bias
+    assert np.isclose(c.sigma, 36.0) and np.isclose(c.lam, 0.9)
+    c = calibrated_detector(LambdaDetector(tau=56.0, sigma=36.0, lam=1.0), 0.0)
+    assert c.lam == 0.0 and c.sigma < 0.01
+
+
+def run_estimator(est, d, obs):
+    bs = est.init(jax.random.PRNGKey(0))
+    out = []
+    for t in range(len(d)):
+        bs = est.update(jax.random.PRNGKey(t), bs, obs[t], {"labels": jnp.array([bool(d[t])]), "t_open": jnp.zeros(()), "u_next": jnp.int32(0)})
+        out.append(np.asarray(est.vector(bs)))
+    return np.array(out)
+
+
+def test_vote_counts_debounced_openings():
+    det = LambdaDetector(perfect=True)
+    d = [0, 1, 0, 0, 1, 1, 0, 1, 0, 0]
+    u = run_estimator(make_estimator("vote22", det, 5), d, jnp.zeros((10, 8)))[:, :5].argmax(1)
+    assert u.tolist() == [1, 2, 3, 4, 4, 0, 1, 2, 3, 4]
+    u = run_estimator(make_estimator("vote23", det, 5), d, jnp.zeros((10, 8)))[:, :5].argmax(1)
+    assert u.tolist() == [1, 2, 3, 4, 4, 0, 0, 0, 1, 2]
+    u = run_estimator(make_estimator("vote11", det, 5), d, jnp.zeros((10, 8)))[:, :5].argmax(1)
+    assert u.tolist() == run_estimator(make_estimator("naive", det, 5), d, jnp.zeros((10, 8)))[:, :5].argmax(1).tolist()
+
+
+def test_window_network_sees_the_same_inputs_online_and_in_training():
+    rng = np.random.default_rng(0)
+    t_len, dim = 30, 8
+    d, obs = rng.random(t_len) < 0.4, rng.normal(size=(t_len, dim)).astype(np.float32)
+    x = np.stack([np.asarray(beat_input(jnp.float32(d[t]), jnp.asarray(obs[t]))) for t in range(t_len)])[None]
+    w = windows(x)
+    assert w.shape == (1, t_len, WINDOW, dim + 2)
+    assert (w[0, 3, :4, -1] == 1).all() and (w[0, 3, 4:] == 0).all() and np.allclose(w[0, 20, 5, :-1], x[0, 15])
+    net = WindowTDM(n_states=5)
+    params = net.init(jax.random.PRNGKey(0), jnp.asarray(w[:1, 0]))
+    off = np.asarray(jax.nn.softmax(net.apply(params, jnp.asarray(w[0]))))
+    on = run_estimator(make_estimator("tdm_win", LambdaDetector(perfect=True), 5, {"win": params}), d, jnp.asarray(obs))[:, :5]
+    assert np.allclose(off, on, atol=1e-5)

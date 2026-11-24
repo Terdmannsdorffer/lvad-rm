@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import json
+import os
 import pickle
+import time
 from pathlib import Path
 
 import jax
@@ -16,6 +18,29 @@ from lvadrm.scenarios import sample_scenario
 
 OUT = Path("results/phase7")
 SKIP = 30  # beats discarded at the start of every evaluation episode (common initial speed)
+PAUSE = OUT / "PAUSE"  # while this file exists, the stages save their state and exit (scripts/phase7_run.sh waits)
+EXIT_PAUSED = 75
+
+
+def write_atomic(path, data):
+    """Write to a temporary file and rename it, so that an interruption never leaves a truncated file."""
+    path = Path(path)
+    tmp = path.with_name(path.name + ".tmp")
+    tmp.write_bytes(data if isinstance(data, bytes) else data.encode())
+    for _ in range(20):
+        try:
+            os.replace(tmp, path)
+            return
+        except PermissionError:  # the file is open on the Windows side
+            time.sleep(0.5)
+    os.replace(tmp, path)
+
+
+def pause_point():
+    """Leave (exit code EXIT_PAUSED) if a pause was requested; call it where everything finished is on disk."""
+    if PAUSE.exists():
+        print("PAUSED", flush=True)
+        raise SystemExit(EXIT_PAUSED)
 
 
 def scenarios(key, cfg, n, beats=None):
@@ -105,10 +130,18 @@ def load_filter(cal=None):
     return FilterModel(**{k: (np.asarray(v) if isinstance(v, list) else v) for k, v in f.items()})
 
 
-def model_path(lam, n, rnd=2):
-    return OUT / "models" / f"lam{lam:g}_N{n}_r{rnd}.pkl"
+def model_path(lam, n, rnd=2, sb=None, seed=0):
+    """``sb``: residual SD [ms] of the bias of a calibrated detector (None: not calibrated); ``seed``: training seed."""
+    return OUT / "models" / f"lam{lam:g}{'' if sb is None else f'_sb{sb:g}'}_N{n}{f'_s{seed}' if seed else ''}_r{rnd}.pkl"
 
 
-def load_models(lam, n, rnd=2):
-    m = pickle.loads(model_path(lam, n, rnd).read_bytes())
+def window_path(lam, n, sb=None, seed=0):
+    p = model_path(lam, n, 2, sb, seed)
+    return p.with_name(p.name.replace("_r2", "_win"))
+
+
+def load_models(lam, n, rnd=2, sb=None, seed=0):
+    m = pickle.loads(model_path(lam, n, rnd, sb, seed).read_bytes())
+    if window_path(lam, n, sb, seed).exists():
+        m |= pickle.loads(window_path(lam, n, sb, seed).read_bytes())
     return m | {"filter": load_filter()}

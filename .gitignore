@@ -21,3 +21,5 @@ manuscripts/**/*.fls
 manuscripts/**/*.log
 manuscripts/**/*.out
 results/phase7/data/
+results/phase7/ckpt/
+results/phase7/PAUSE

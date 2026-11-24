@@ -23,7 +23,7 @@ SEED, N_VAL2 = 778, 512
 
 def main() -> None:
     for path in sorted((OUT / "monitor").glob("*.json")):
-        if "coarse" in path.name:
+        if "coarse" in path.name or path.name.startswith("calibrated"):  # the latter validates itself
             continue
         res = json.loads(path.read_text())
         ramp = path.stem.endswith("_ramp")

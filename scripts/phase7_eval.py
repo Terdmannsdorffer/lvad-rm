@@ -19,7 +19,7 @@ import jax
 import jax.numpy as jnp
 import numpy as np
 from flax import serialization
-from phase7_common import OUT, outcome, rollout, scenarios, start_speeds
+from phase7_common import OUT, outcome, pause_point, rollout, scenarios, start_speeds, write_atomic
 from phase7_monitor import BEATS, N_TEST, TEST_SEED
 from phase7_train import belief_for, spec_for
 
@@ -80,6 +80,7 @@ def main() -> None:
         tmpl = net.init(jax.random.PRNGKey(0), jnp.zeros(HIDDEN), x) if spec.recurrent else net.init(jax.random.PRNGKey(0), x)
         scn, w0 = scenarios(k1, cfg, N_TEST), start_speeds(k2, cfg, N_TEST)
         for i in range(0, len(runs), a.batch):
+            pause_point()
             t0 = time.perf_counter()
             part = runs[i : i + a.batch]
             ps = [serialization.from_bytes(tmpl, (Path(d) / "params.msgpack").read_bytes()) for d, _ in part]
@@ -93,7 +94,7 @@ def main() -> None:
                 res[d.name] = c | {k: float(v.mean()) for k, v in e.items()} | {"viol_worst5": w5, "viol_episodes": e["viol"].round(4).tolist()}
                 print(f"{d.name:44s} viol {100 * res[d.name]['viol']:6.2f}%  dev {res[d.name]['dev']:.3f}  CO {res[d.name]['co']:.2f}  open {res[d.name]['open']:.2f}  "
                       f"back {res[d.name]['back']:.3f}  worst5 {100 * w5:.0f}%", flush=True)
-            path.write_text(json.dumps(res))
+            write_atomic(path, json.dumps(res))
             print(f"  [{time.perf_counter() - t0:.0f} s]", flush=True)
 
 

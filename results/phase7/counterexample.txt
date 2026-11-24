@@ -1,0 +1,36 @@
+dependent=False k=2: largest beta_k found +7.228e-14; most negative conditional covariance -1.639e-01
+dependent=False k=3: largest beta_k found +7.272e-14; most negative conditional covariance -9.279e-02
+dependent=False k=4: largest beta_k found +4.152e-14; most negative conditional covariance -1.408e-01
+dependent=True k=2: largest beta_k found +2.646e-03; most negative conditional covariance -9.377e-02
+   n 5 q [0.401 0.575] u1 [0.003 0.    0.001] u0 [0.572 0.136 0.995] W [[0.512, 0.0077], [0.0, 0.0001], [0.0191, 0.4611]] truth 0.2401
+dependent=True k=3: largest beta_k found +1.515e-03; most negative conditional covariance -1.458e-01
+   n 0 q [0.29  0.158] u1 [0.009 0.991 0.987] u0 [0.067 0.905 0.001] W [[0.0001, 0.0007], [0.0041, 0.652], [0.3369, 0.0062]] truth 0.0109
+dependent=True k=4: largest beta_k found +1.307e-03; most negative conditional covariance -1.438e-01
+   n 0 q [0.236 0.356] u1 [0.986 0.994 0.981] u0 [0.025 0.21  0.944] W [[0.0299, 0.3459], [0.0006, 0.0224], [0.5966, 0.0045]] truth 0.0079
+dependent=False k=2: largest beta_k found +8.460e-14; most negative conditional covariance -1.526e-01
+dependent=False k=3: largest beta_k found +7.738e-14; most negative conditional covariance -1.715e-01
+dependent=False k=4: largest beta_k found +4.274e-14; most negative conditional covariance -6.774e-02
+dependent=True k=2: largest beta_k found +4.541e-03; most negative conditional covariance -8.052e-02
+   n 0 q [0.26  0.416] u1 [0.037 0.032] u0 [0.018 0.972] W [[0.4133, 0.0249], [0.0099, 0.5518]] truth 0.1285
+dependent=True k=3: largest beta_k found +1.164e-03; most negative conditional covariance -1.719e-01
+   n 0 q [0.138 0.252] u1 [0.984 0.864] u0 [0.993 0.005] W [[0.4988, 0.006], [0.0, 0.4952]] truth 0.0093
+dependent=True k=4: largest beta_k found +5.739e-03; most negative conditional covariance -1.335e-01
+   n 0 q [0.627 0.475] u1 [0.731 1.    0.931] u0 [1.    0.998 0.052] W [[0.0002, 0.1664], [0.0029, 0.0841], [0.7141, 0.0322]] truth 0.1256
+dependent=False k=2: largest beta_k found +7.527e-14; most negative conditional covariance -1.380e-01
+dependent=False k=3: largest beta_k found +7.339e-14; most negative conditional covariance -1.847e-01
+dependent=False k=4: largest beta_k found +5.540e-14; most negative conditional covariance -2.174e-01
+dependent=True k=2: largest beta_k found +7.507e-03; most negative conditional covariance -1.196e-01
+   n 0 q [0.401 0.112] u1 [0.01  0.998] u0 [0.999 0.996] W [[0.0002, 0.9008], [0.0963, 0.0027]] truth 0.0269
+dependent=True k=3: largest beta_k found +6.738e-03; most negative conditional covariance -9.604e-02
+   n 0 q [0.604 0.766] u1 [0.524 0.922 0.991] u0 [0.979 0.092 0.003] W [[0.1702, 0.0], [0.0581, 0.0104], [0.0007, 0.7605]] truth 0.3968
+dependent=True k=4: largest beta_k found +2.437e-03; most negative conditional covariance -1.050e-01
+   n 0 q [0.267 0.417 0.453] u1 [0.035 0.097] u0 [0. 1.] W [[0.4973, 0.0069, 0.0049], [0.0, 0.4908, 0.0]] truth 0.0178
+dependent=False k=2: largest beta_k found +1.471e-14; most negative conditional covariance -1.426e-01
+dependent=False k=3: largest beta_k found +4.896e-14; most negative conditional covariance -1.712e-01
+dependent=False k=4: largest beta_k found +7.916e-14; most negative conditional covariance -1.196e-01
+dependent=True k=2: largest beta_k found +6.079e-03; most negative conditional covariance -1.793e-01
+   n 0 q [0.243 0.43 ] u1 [0.    0.207 0.015] u0 [0.997 0.044 0.024] W [[0.0179, 0.4673], [0.0024, 0.0048], [0.4971, 0.0105]] truth 0.12
+dependent=True k=3: largest beta_k found +6.299e-03; most negative conditional covariance -1.578e-01
+   n 0 q [0.486 0.268 0.852] u1 [0.987 0.97 ] u0 [0.892 0.008] W [[0.0006, 0.5572, 0.0003], [0.4157, 0.0226, 0.0037]] truth 0.0614
+dependent=True k=4: largest beta_k found +1.396e-03; most negative conditional covariance -1.425e-01
+   n 5 q [0.798 0.86 ] u1 [0.594 0.099 0.854] u0 [0.306 1.    0.576] W [[0.0006, 0.0043], [0.0009, 0.7878], [0.2021, 0.0043]] truth 0.5188

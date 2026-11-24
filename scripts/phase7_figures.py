@@ -338,6 +338,139 @@ def fig_bias(lam="0.5"):
                        for lam_ in ("0", "0.5", "0.9") for p in ("blind", "tdm", "ibu_d")}
 
 
+BINS = (-9.0, -1.5, -1.0, -0.5, 0.0, 0.5, 1.0, 1.5, 9.0)
+
+
+def by_bias(ax, rows, lam, kinds):
+    """Mean violations per bin of the detector bias of the patient."""
+    for k in kinds:
+        e = rows.get(f"{k}_lam{lam:g}")
+        if e is None:
+            continue
+        z, v = np.array(e["b"]), 100 * np.array(e["viol"])
+        idx = [(z >= lo) & (z < hi) for lo, hi in zip(BINS[:-1], BINS[1:])]
+        c, m, ls, lab = STYLE[k]
+        ax.plot([z[i].mean() for i in idx], [v[i].mean() for i in idx], color=c, marker=m, ls=ls, label=lab, markeredgecolor="white", markeredgewidth=0.4)
+    ax.axvline(0, color=INK2, lw=0.6)
+
+
+def mechanism_numbers(rows):
+    out = {}
+    for name, e in rows.items():
+        z, v = np.array(e["b"]), np.array(e["viol"])
+        out[name] = {"viol": 100 * v.mean(), "below0": 100 * v[z < 0].mean(), "0to1": 100 * v[(z >= 0) & (z < 1)].mean(), "1to1.5": 100 * v[(z >= 1) & (z < 1.5)].mean(),
+                     "above1.5": 100 * v[z >= 1.5].mean(), "share_above1": 100 * v[z >= 1].sum() / v.sum(), "patients_above1": 100 * (z >= 1).mean()}
+    return out
+
+
+def fig_mechanism():
+    rows = load("mechanism.json")
+    if not rows:
+        return
+    fig, ax = plt.subplots(1, 2, figsize=(5.6, 2.2), sharey=True, gridspec_kw={"wspace": 0.08})
+    for a, lam, t in zip(ax, (0.5, 0.9), (r"(a) $\lambda$ = 0.5", r"(b) $\lambda$ = 0.9")):
+        by_bias(a, rows, lam, ("naive", "ibu_d", "ibu_hist", "tdm", "filter"))
+        a.set(xlabel="Bias of the patient's detector [SD]", title=t)
+    ax[0].set_ylabel(XVIOL)
+    h, lab = ax[0].get_legend_handles_labels()
+    fig.legend(h, lab, loc="lower center", ncol=3, bbox_to_anchor=(0.5, -0.24), columnspacing=1.0, handlelength=1.6)
+    save(fig, "figA_mechanism")
+    numbers["mechanism"] = mechanism_numbers(rows)
+
+
+def fig_calibration():
+    rows, cal = load("mechanism_ramp.json"), load("monitor/calibrated_N10_ramp.json")
+    r, es = load("monitor/reference_N10_ramp.json"), {lam: load(f"monitor/estimators_N10_lam{lam:g}_ramp.json") for lam in (0.5, 0.9)}
+    if not rows or not cal or not r or not all(es.values()):
+        return
+    fig, ax = plt.subplots(1, 3, figsize=(7.2, 2.2), gridspec_kw={"wspace": 0.32})
+    by_bias(ax[0], rows, 0.9, ("naive", "ibu_d", "ibu_hist", "tdm"))
+    ax[0].set(xlabel="Bias of the patient's detector [SD]", ylabel=XVIOL, title=r"(a) No calibration, $\lambda$ = 0.9")
+    amber = {20.0: "#d8b46a", 10.0: "#a77a1c", 0.0: "#5c4008"}  # darker = better calibrated
+    for a, lam, t in zip(ax[1:], (0.9, 0.5), ("b", "c")):
+        front(a, r["unknown"]["blind"], "blind")
+        front(a, r["unknown"]["true"], "true")
+        for k in ("naive", "tdm"):
+            front(a, es[lam][k], k)
+        for sb, c in amber.items():
+            q = cal.get(f"naive_lam{lam:g}_sb{sb:g}")
+            if q:
+                v, d = 100 * np.array(q["viol"]), 100 * np.array(q["dev"])
+                o = np.argsort(v)
+                a.plot(v[o], d[o], color=c, marker="v", ls="-", label=f"Naive, calibrated to {sb:g} ms", markeredgecolor="white", markeredgewidth=0.4)
+        symlog_x(a)
+        a.set(xlabel=XVIOL, title=rf"({t}) $\lambda$ = {lam:g}", ylim=(16.5, 26.0), xlim=(-0.02, 30))
+    ax[1].set_ylabel(YDEV)
+    h = {lb: q for a in ax for q, lb in zip(*a.get_legend_handles_labels())}
+    fig.legend(h.values(), h.keys(), loc="lower center", ncol=5, bbox_to_anchor=(0.5, -0.27), columnspacing=0.9, handlelength=1.5, fontsize=6.5)
+    save(fig, "figB_calibration")
+    numbers["mechanism_ramp"] = mechanism_numbers(rows)
+    numbers["calibrated_ramp"] = {}
+    ref_v, ref_d = episodes_of(r["unknown"]["true"])
+    bl_v, bl_d = episodes_of(r["unknown"]["blind"])
+    for name, q in cal.items():
+        v, d = episodes_of(q)
+        numbers["calibrated_ramp"][name] = {"viol": 100 * v.mean(), "dev": 100 * d.mean(), "w5": 100 * np.sort(v)[-len(v) // 20 :].mean(), "met": bool(min(q["val2_viol"]) <= 0.01),
+                                            "dev_minus_true": paired(d - ref_d), "viol_minus_true": paired(v - ref_v),
+                                            "dev_minus_blind": paired(d - bl_d), "viol_minus_blind": paired(v - bl_v)}
+
+
+def episodes_of(e):
+    from phase7_tables import episodes
+
+    v, d, _, _ = episodes(e)
+    return v, d
+
+
+def paired(x, b=2000):
+    rng = np.random.default_rng(0)
+    m = [x[rng.integers(0, len(x), len(x))].mean() for _ in range(b)]
+    return [100 * float(x.mean()), 100 * float(np.percentile(m, 2.5)), 100 * float(np.percentile(m, 97.5))]
+
+
+def fig_real():
+    af, pvc = load("realdata_af.json"), load("realdata_pvc.json")
+    if not af or not pvc:
+        return
+    kinds = ("naive", "ibu", "ibu_w16", "ibu_hist", "tdm")
+    lab = {"ibu": "IBU, one interval", "ibu_w16": "IBU, 16-beat window"}
+    sty = STYLE | {"ibu_w16": ("#a61e1d", "v", "--", "")}
+    fig, ax = plt.subplots(1, 3, figsize=(7.2, 2.2), gridspec_kw={"wspace": 0.28})
+    for a, (res, part, t) in zip(ax, ((af, "test", "(a) AF, same database"), (af, "external", "(b) AF, another database"), (pvc, "test", "(c) Ventricular beats"))):
+        a.axhline(1, color=INK, lw=0.9)
+        n = len(next(iter(res.values()))[part]["truth"])
+        ks = np.arange(1, n + 1) if n <= 10 else np.array([1, 2, 3, 5, 10, 15, 20, 25, 30])
+        for e in kinds:
+            y = np.array([r[part]["est"][e]["ratio"] for r in res.values()])[:, ks - 1]
+            c, m, ls, lb = sty[e]
+            a.plot(ks, y.mean(0), color=c, marker=m, ls=ls, label=lab.get(e, lb), markeredgecolor="white", markeredgewidth=0.4)
+            a.fill_between(ks, y.min(0), y.max(0), color=c, alpha=0.15, lw=0)
+        a.set_yscale("log")
+        a.set(xlabel="Length of the run k", title=t, ylim=(0.005, 20) if part == "test" and n <= 10 else (0.02, 2))
+    ax[0].set_ylabel("Mean belief / truth\nof a run of k beats")
+    h, lb = ax[0].get_legend_handles_labels()
+    fig.legend(h, lb, loc="lower center", ncol=5, bbox_to_anchor=(0.5, -0.18), columnspacing=1.0, handlelength=1.6)
+    save(fig, "figA_real")
+    num = {}
+    for task, res in (("af", af), ("pvc", pvc)):
+        for part in ("test", "external"):
+            rs = [r[part] for r in res.values() if part in r]
+            if not rs:
+                continue
+            num[f"{task}_{part}"] = {"splits": len(rs), "records": rs[0]["records"], "truth_last": [float(np.mean([r["truth"][-1] for r in rs]))]}
+            for e in rs[0]["est"]:
+                q = np.array([r["est"][e]["ratio"] for r in rs])
+                num[f"{task}_{part}"][e] = {f"ratio_k{k}": [float(q[:, k - 1].mean()), float(q[:, k - 1].min()), float(q[:, k - 1].max())] for k in (1, 2, 3, 5, 10, 30) if k <= q.shape[1]} | {
+                    f"negative_ci_k{k}": int(sum(r["est"][e]["beta_hi"][k - 1] < 0 for r in rs)) for k in (3, 5, 30) if k <= q.shape[1]} | {
+                    f"positive_ci_k{k}": int(sum(r["est"][e]["beta_lo"][k - 1] > 0 for r in rs)) for k in (3, 5, 30) if k <= q.shape[1]} | {
+                    "missed": [float(np.mean([r["est"][e]["missed"] for r in rs])), min(r["est"][e]["missed"] for r in rs), max(r["est"][e]["missed"] for r in rs)],
+                    "realized": [float(np.mean([r["est"][e]["realized"] for r in rs])), min(r["est"][e]["realized"] for r in rs), max(r["est"][e]["realized"] for r in rs)]}
+            num[f"{task}_{part}"]["persistence"] = {p: {f: [float(np.mean([r["persistence"][p][f] for r in rs])), min(r["persistence"][p][f] for r in rs), max(r["persistence"][p][f] for r in rs)]
+                                                        for f in ("rate", "latent")} for p in rs[0]["persistence"]}
+        num[f"{task}_lag1"] = [[r["lag1"]["cov_m"], r["lag1"]["cov_C"]] for r in res.values()]
+    numbers["real"] = num
+
+
 def fig_n():
     res = {}
     for n in (5, 10, 20):
@@ -349,7 +482,7 @@ def fig_n():
 
 
 def main() -> None:
-    for f in (fig_map, fig_ladder, fig_lambda, fig_cinc, fig_agents, fig_theory, fig_beliefs, fig_bias, fig_n):
+    for f in (fig_map, fig_ladder, fig_lambda, fig_cinc, fig_agents, fig_theory, fig_beliefs, fig_bias, fig_mechanism, fig_calibration, fig_real, fig_n):
         f()
     (OUT / "numbers.json").write_text(json.dumps(numbers, indent=1))
 

@@ -16,12 +16,15 @@ flow, speed, heart rate, last actions):
     filter    Bayes filter on (patient threshold speed, detector bias, counter), no recurrent network
     window    the last N detections (no reward machine)
     last      the last detection (for recurrent policies; no reward machine)
+    voteKW    the counter of debounced detections: an opening counts if at least K of the last W beats are detected open
+    tdm_win   a feedforward network that predicts the counter from the last WINDOW beats (TDM without a recurrent memory)
 The vector given to the policy is the estimate followed by the current detection.
 """
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+import re
+from dataclasses import dataclass, replace
 from typing import Any, NamedTuple
 
 import flax.linen as nn
@@ -34,6 +37,7 @@ from lvadrm.agents.belief import Belief
 from lvadrm.inference import TDM, ibu_update, initial_belief, naive_update
 
 SENS, SPEC = 0.86, 0.93  # Clifford et al. (2019)
+WINDOW = 16  # beats seen by tdm_win
 KINDS = ("true", "naive", "ibu_d", "ibu", "ibu_hist", "tdm", "filter", "window", "last")
 
 
@@ -56,6 +60,53 @@ class LambdaDetector:
             return avo
         eps = jax.random.normal(key, jnp.shape(t_open_s)) * np.sqrt(1.0 - self.lam) * self.sigma
         return 1000.0 * t_open_s + b + eps > self.tau
+
+    def advance(self, key, b):
+        """State of the bias before the next beat (constant in this class)."""
+        return b
+
+
+@dataclass(frozen=True)
+class DriftingDetector(LambdaDetector):
+    """The bias changes during the episode with autocorrelation exp(-t / theta) and the same variance lam * sigma^2, so that
+    the per-beat rates do not change: either slowly (a first-order autoregression) or abruptly (it is drawn again with
+    probability 1 - exp(-1 / theta) in every beat). If ``cal_err`` is not None the bias is measured at the start of the
+    episode, and again every ``cal_every`` beats (0: never), with a Gaussian error of SD ``cal_err`` [ms], and subtracted.
+    State: (bias, last measurement, beats since the start)."""
+
+    theta: float = 1e9  # [beats]
+    jumps: bool = False
+    cal_err: float | None = None
+    cal_every: int = 0
+
+    def _measure(self, key, b):
+        return b + self.cal_err * jax.random.normal(key, ())
+
+    def init(self, key):
+        b = super().init(key)
+        est = jnp.zeros(()) if self.cal_err is None else self._measure(jax.random.fold_in(key, 1), b)
+        return b, est.astype(b.dtype), jnp.zeros((), jnp.int32)
+
+    def detect(self, key, state, avo, t_open_s):
+        return super().detect(key, state[0] - state[1], avo, t_open_s)
+
+    def advance(self, key, state):
+        b, est, t = state
+        k1, k2, k3 = jax.random.split(key, 3)
+        fresh = jax.random.normal(k1, ()) * np.sqrt(self.lam) * self.sigma
+        rho = float(np.exp(-1.0 / self.theta))
+        b = jnp.where(jax.random.uniform(k2) < 1.0 - rho, fresh, b) if self.jumps else rho * b + np.sqrt(1.0 - rho**2) * fresh
+        t = t + 1
+        if self.cal_err is not None and self.cal_every:
+            est = jnp.where(t % self.cal_every == 0, self._measure(k3, b), est)
+        return b.astype(state[0].dtype), est.astype(state[1].dtype), t
+
+
+def calibrated_detector(det: LambdaDetector, s_b: float) -> LambdaDetector:
+    """The detector of a patient whose bias was measured with a residual error of SD ``s_b`` [ms] (at most the SD of the bias)."""
+    s_b = min(float(s_b), float(np.sqrt(det.lam) * det.sigma))
+    s2 = (1.0 - det.lam) * det.sigma**2 + s_b**2
+    return replace(det, sigma=float(np.sqrt(max(s2, 1e-6))), lam=float(s_b**2 / s2) if s2 > 0 else 0.0)
 
 
 def fit_detector(t_open_s, avo, sens: float = SENS, spec: float = SPEC):
@@ -85,6 +136,27 @@ class BeatClassifier(nn.Module):
         x = nn.relu(nn.Dense(self.hidden)(x))
         x = nn.relu(nn.Dense(self.hidden)(x))
         return nn.Dense(1)(x)[..., 0]
+
+
+class WindowTDM(nn.Module):
+    """Counter (logits) from the inputs of the last beats, newest first: [..., W, d]."""
+
+    n_states: int
+    hidden: int = 128
+
+    @nn.compact
+    def __call__(self, x):
+        x = x.reshape(x.shape[:-2] + (-1,))
+        for _ in range(3):
+            x = nn.relu(nn.Dense(self.hidden)(x))
+        return nn.Dense(self.n_states)(x)
+
+
+def windows(x, w: int = WINDOW):
+    """[E, T, d] -> [E, T, w, d + 1]: the last w inputs, newest first, and an indicator of the beats of the episode."""
+    e, t, d = x.shape
+    pad = np.concatenate([np.zeros((e, w - 1, d + 1), x.dtype), np.concatenate([x, np.ones((e, t, 1), x.dtype)], -1)], 1)
+    return np.stack([pad[:, w - 1 - i : w - 1 - i + t] for i in range(w)], 2)
 
 
 def beat_input(d, obs_next):
@@ -142,6 +214,7 @@ def filter_belief(det: LambdaDetector, n: int, fm: FilterModel, n_b: int = 21, l
         up = jnp.concatenate([new[:, :1], new[:, :-1]], axis=1)
         dn = jnp.concatenate([new[:, 1:], new[:, -1:]], axis=1)
         new = (1.0 - 2.0 * e) * new + e * (up + dn)
+        b_true = det.advance(jax.random.fold_in(key, 1), b_true)
         return (new / (new.sum() + 1e-30)).astype(B.dtype), b_true, w_eff.astype(bs[2].dtype), d.astype(bs[3].dtype)
 
     return Belief(init, update, lambda bs: jnp.concatenate([bs[0].sum((0, 1)), bs[3][None]]))
@@ -161,6 +234,7 @@ def make_estimator(kind: str, det: LambdaDetector, n: int, models: dict | None =
         def update(key, bs, obs_next, info):
             est, b, d_old = bs
             d = det.detect(key, b, info["labels"][0], info["t_open"])
+            b = det.advance(jax.random.fold_in(key, 1), b)
             return step_est(est, d, obs_next, info), b, d.astype(d_old.dtype)
 
         return Belief(init, update, lambda bs: jnp.concatenate([est_vec(bs[0]), bs[2][None]]))
@@ -178,6 +252,14 @@ def make_estimator(kind: str, det: LambdaDetector, n: int, models: dict | None =
         return wrap(lambda: jnp.int32(0), lambda u, d, o, info: info["u_next"].astype(jnp.int32), onehot)
     if kind == "naive":
         return wrap(lambda: jnp.int32(0), lambda u, d, o, info: naive_update(u, d, n, True).astype(jnp.int32), onehot)
+    if vote := re.fullmatch(r"vote(\d)(\d)", kind):
+        k, w = (int(c) for c in vote.groups())
+
+        def step_vote(s, d, o, info):
+            past = jnp.concatenate([d.astype(jnp.int32)[None], s[1][:-1]])
+            return naive_update(s[0], past.sum() >= k, n, True).astype(jnp.int32), past
+
+        return wrap(lambda: (jnp.int32(0), jnp.zeros(w, jnp.int32)), step_vote, lambda s: onehot(s[0]))
     if kind == "window":
         return wrap(lambda: jnp.ones(n), lambda w, d, o, info: jnp.concatenate([d.astype(w.dtype)[None], w[:-1]]), ident)
     if kind == "last":
@@ -204,6 +286,16 @@ def make_estimator(kind: str, det: LambdaDetector, n: int, models: dict | None =
             return h2.astype(s[0].dtype), jax.nn.softmax(lg).astype(s[1].dtype)
 
         return wrap(lambda: (jnp.zeros(hidden), initial_belief(n)), step_tdm, lambda s: s[1])
+    if kind == "tdm_win":
+        net = WindowTDM(n_states=n)
+        dim = models["win"]["params"]["Dense_0"]["kernel"].shape[0] // WINDOW
+
+        def step_win(s, d, o, info):
+            x = jnp.concatenate([beat_input(d, o), jnp.ones(1, o.dtype)]).astype(s[0].dtype)
+            buf = jnp.concatenate([x[None], s[0][:-1]])
+            return buf, jax.nn.softmax(net.apply(models["win"], buf)).astype(s[1].dtype)
+
+        return wrap(lambda: (jnp.zeros((WINDOW, dim)), initial_belief(n)), step_win, lambda s: s[1])
     if kind == "filter":
         return filter_belief(det, n, models["filter"], **kw)
     raise ValueError(kind)

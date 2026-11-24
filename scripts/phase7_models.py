@@ -1,12 +1,14 @@
 """Phase 7, stage 3: data and learned estimators (per-beat classifier, recurrent classifier, TDM) for each lambda (GPU).
 
     python scripts/phase7_models.py --lams 0 0.5 0.9 --n 10
+    python scripts/phase7_models.py --lams 0.9 --sb 10 --skip-quality     models for a detector calibrated in each patient
+    python scripts/phase7_models.py --lams 0 0.5 0.9 --window             only the window network, on the same episodes
 
 Two rounds (as in DAgger): round 1 uses controllers driven by nothing (blind, random) or by estimators without
 learned parts (naive, ibu_d, filter); round 2 adds controllers driven by the round-1 models. No data comes
 from a controller that sees the true label, because its actions would give the label away. All models of a
 (lambda, N) pair are trained on exactly the same episodes.
-Writes results/phase7/models/lam<lam>_N<n>_r{1,2}.pkl and beliefs_*.json (held-out belief quality).
+Writes results/phase7/models/lam<lam>[_sb<sb>]_N<n>[_s<seed>]_r{1,2}.pkl, *_win.pkl and beliefs_*.json (held-out quality).
 """
 
 from __future__ import annotations
@@ -20,9 +22,20 @@ import jax.numpy as jnp
 import numpy as np
 import optax
 from phase7_calibrate import random_fns
-from phase7_common import OUT, detector, load_filter, load_models, model_path, rollout, scenarios, start_speeds
+from phase7_common import OUT, detector, load_filter, load_models, model_path, pause_point, rollout, scenarios, start_speeds, window_path, write_atomic
 
-from lvadrm.estimators import BeatClassifier, BlindParams, MonitorParams, blind_fns, make_estimator, monitor_fns
+from lvadrm.estimators import (
+    WINDOW,
+    BeatClassifier,
+    BlindParams,
+    MonitorParams,
+    WindowTDM,
+    blind_fns,
+    calibrated_detector,
+    make_estimator,
+    monitor_fns,
+    windows,
+)
 from lvadrm.inference import ibu_update, rm_state_sequence, tdm_sequence_logits, train_tdm
 from lvadrm.presets import env_v3
 
@@ -30,9 +43,9 @@ HIDDEN = 64
 KEEP = ("avo", "t_open", "obs", "u_next", "co", "back")
 
 
-def collect(key, cfg, n, lam, kinds, models, e_each, rng):
+def collect(key, cfg, n, det, kinds, models, e_each, rng):
     """Episodes [E, T]: x (beat inputs), avo, u. Randomized controller parameters."""
-    det = detector(lam)
+    lam = det.lam
     parts = []
     for kind, e in zip(kinds, e_each):
         key, k1, k2, k3, k4 = jax.random.split(key, 5)
@@ -83,6 +96,39 @@ def train_beat(x, y, xv, yv, steps=6000, seed=0):
     val = optax.sigmoid_binary_cross_entropy(net.apply(params, jnp.asarray(xv)), jnp.asarray(yv, jnp.float32)).mean()
     print(f"    beat classifier: val BCE {float(val):.4f}", flush=True)
     return params
+
+
+def train_window(x, u, xv, uv, n, steps=20000, batch=4096, seed=0):
+    """Feedforward network on the last WINDOW beats, the same targets and episodes as TDM; the best of 10 checkpoints."""
+    net = WindowTDM(n_states=n)
+    X, Y = jnp.asarray(np.concatenate([x, np.ones(x.shape[:2] + (1,), x.dtype)], -1)), jnp.asarray(u)
+    params = net.init(jax.random.PRNGKey(seed), jnp.zeros((1, WINDOW, X.shape[-1])))
+    tx = optax.adam(optax.cosine_decay_schedule(1e-3, steps))
+    opt = tx.init(params)
+    back = jnp.arange(WINDOW)
+
+    @jax.jit
+    def step(params, opt, key):
+        k1, k2 = jax.random.split(key)
+        e, t = jax.random.randint(k1, (batch,), 0, X.shape[0]), jax.random.randint(k2, (batch,), 0, X.shape[1])
+        pos = t[:, None] - back
+        xb = jnp.where((pos >= 0)[..., None], X[e[:, None], jnp.maximum(pos, 0)], 0.0)
+        loss, g = jax.value_and_grad(lambda p: optax.softmax_cross_entropy_with_integer_labels(net.apply(p, xb), Y[e, t]).mean())(params)
+        up, opt = tx.update(g, opt)
+        return optax.apply_updates(params, up), opt, loss
+
+    val = jax.jit(lambda p, xb, yb: optax.softmax_cross_entropy_with_integer_labels(net.apply(p, xb), yb).mean())
+    key, best = jax.random.PRNGKey(seed + 1), (np.inf, params)
+    for i in range(steps):
+        key, k = jax.random.split(key)
+        params, opt, loss = step(params, opt, k)
+        if (i + 1) % (steps // 10) == 0:
+            m = len(xv) // 32 * 32
+            nll = float(np.mean([val(params, jnp.asarray(windows(xv[j : j + 32])), jnp.asarray(uv[j : j + 32])) for j in range(0, m, 32)]))
+            if nll < best[0]:
+                best = (nll, params)
+            print(f"    window {i + 1}: train NLL {float(loss):.4f}, val NLL {nll:.4f}", flush=True)
+    return best[1]
 
 
 def replay(kind, x, n, det, models):
@@ -159,6 +205,10 @@ def main() -> None:
     ap.add_argument("--n", type=int, default=10)
     ap.add_argument("--scale", type=float, default=1.0)
     ap.add_argument("--eval-only", action="store_true", help="only the held-out belief quality, with saved models")
+    ap.add_argument("--sb", type=float, default=None, help="train for a detector calibrated in each patient: residual SD of the bias [ms]")
+    ap.add_argument("--seed", type=int, default=0, help="seed of the episodes and the networks")
+    ap.add_argument("--window", action="store_true", help="only the window network; the episodes are collected again with the saved round-1 models")
+    ap.add_argument("--skip-quality", action="store_true")
     args = ap.parse_args()
     n = args.n
     (OUT / "models").mkdir(parents=True, exist_ok=True)
@@ -166,34 +216,45 @@ def main() -> None:
     sz = lambda v: [int(v_ * args.scale) for v_ in v]  # noqa: E731
     for lam in args.lams:
         print(f"== lambda {lam} N {n}", flush=True)
-        det = detector(lam)
-        rng = np.random.default_rng(int(1000 * lam) + n)
-        key = jax.random.PRNGKey(int(1000 * lam) + 7 * n)
+        det = detector(lam) if args.sb is None else calibrated_detector(detector(lam), args.sb)
+        rng = np.random.default_rng(int(1000 * lam) + n + 100000 * args.seed)
+        key = jax.random.PRNGKey(int(1000 * lam) + 7 * n + 100000 * args.seed)
         k1, k2, k3 = jax.random.split(key, 3)
         models = {"filter": load_filter()}
         if args.eval_only:
-            models = load_models(lam, n)
+            models = load_models(lam, n, 2, args.sb, args.seed)
         else:
-            data = collect(k1, cfg, n, lam, ("blind", "random", "naive", "ibu_d", "filter"), models, sz((1024, 384, 768, 768, 768)), rng)
+            data = collect(k1, cfg, n, det, ("blind", "random", "naive", "ibu_d", "filter"), models, sz((1024, 384, 768, 768, 768)), rng)
             for rnd in (1, 2):
                 if rnd == 2:
-                    extra = collect(k2, cfg, n, lam, ("ibu", "ibu_hist", "tdm", "filter"), models, sz((1024, 1024, 1024, 512)), rng)
+                    pause_point()
+                    extra = collect(k2, cfg, n, det, ("ibu", "ibu_hist", "tdm", "filter"), models, sz((1024, 1024, 1024, 512)), rng)
                     data = [np.concatenate(z) for z in zip(data, extra)]
                 x, avo, u = data
                 perm = np.random.default_rng(rnd).permutation(len(x))
                 nv = max(64, len(x) // 12)
                 tr, va = perm[nv:], perm[:nv]
-                models["beat"] = train_beat(x[tr], avo[tr], x[va], avo[va])
-                _, models["hist"], _ = train_tdm(x[tr], avo[tr].astype(np.int32), x[va], avo[va].astype(np.int32), 2, hidden=HIDDEN, epochs=20)
-                _, models["tdm"], _ = train_tdm(x[tr], u[tr], x[va], u[va], n, hidden=HIDDEN, epochs=30)
-                model_path(lam, n, rnd).write_bytes(pickle.dumps({k: jax.tree.map(np.asarray, models[k]) for k in ("beat", "hist", "tdm")}))
+                if args.window:
+                    if rnd == 1:
+                        models = load_models(lam, n, 1, args.sb, args.seed)
+                    else:
+                        win = train_window(x[tr], u[tr], x[va], u[va], n, seed=args.seed)
+                        write_atomic(window_path(lam, n, args.sb, args.seed), pickle.dumps({"win": jax.tree.map(np.asarray, win)}))
+                    continue
+                models["beat"] = train_beat(x[tr], avo[tr], x[va], avo[va], seed=args.seed)
+                _, models["hist"], _ = train_tdm(x[tr], avo[tr].astype(np.int32), x[va], avo[va].astype(np.int32), 2, hidden=HIDDEN, epochs=20, seed=args.seed)
+                _, models["tdm"], _ = train_tdm(x[tr], u[tr], x[va], u[va], n, hidden=HIDDEN, epochs=30, seed=args.seed)
+                write_atomic(model_path(lam, n, rnd, args.sb, args.seed), pickle.dumps({k: jax.tree.map(np.asarray, models[k]) for k in ("beat", "hist", "tdm")}))
+        if args.window or args.skip_quality:
+            continue
         # held-out quality, on episodes of controllers driven by every estimator
-        test = collect(k3, cfg, n, lam, ("blind", "naive", "ibu", "tdm", "filter"), models, sz((256, 256, 256, 256, 256)), rng)
+        test = collect(k3, cfg, n, det, ("blind", "naive", "ibu", "tdm", "filter"), models, sz((256, 256, 256, 256, 256)), rng)
         x, avo, u = test
         res = {k: quality(replay(k, x, n, det, models)[:, 20:], u[:, 20:], n) for k in EVAL_KINDS}
         for k, v in res.items():
             print(f"  {k:14s} LL {v['ll']:.3f}  risk {v['risk_pred']:.3f} / {v['risk_true']:.3f}  ECE {v['ece']:.3f}  missed {v['missed']:.2f}  worst 5% {v['missed_worst5']:.2f}", flush=True)
-        (OUT / "models" / f"beliefs_lam{lam:g}_N{n}.json").write_text(json.dumps(res, indent=1))
+        name = model_path(lam, n, 2, args.sb, args.seed).stem.removesuffix("_r2")
+        write_atomic(OUT / "models" / f"beliefs_{name}.json", json.dumps(res, indent=1))
 
 
 if __name__ == "__main__":

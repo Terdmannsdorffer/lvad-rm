@@ -9,19 +9,25 @@ detection), "press" and "press_mlp" (recurrent and memoryless policies that also
 the valve pressure difference of the last two beats, no detector: the invasive reference) and "<kind>_rnn" (recurrent policy with that estimator: same memory and information as "last", plus the
 reward-machine structure). Without --lam the detection is the true label. All agents share the reduced observation.
 Writes results/phase7/runs/<run>/{params.msgpack, config.json, train_log.json}.
+
+The complete training state goes to results/phase7/ckpt/<run>.npz every CKPT_EVERY updates (about one minute) and when a
+pause is requested (file results/phase7/PAUSE); a run that finds its checkpoint continues from it.
 """
 
 from __future__ import annotations
 
 import argparse
+import io
 import itertools
 import json
 import time
+import zipfile
 
 import jax
+import jax.numpy as jnp
 import numpy as np
 from flax import serialization
-from phase7_common import OUT, detector, load_filter, load_models
+from phase7_common import OUT, PAUSE, detector, load_filter, load_models, pause_point, write_atomic
 
 from lvadrm.agents.ppo import PPOConfig, make_ppo
 from lvadrm.agents.specs import FIVE_ACTIONS, AgentSpec, env_config_for
@@ -29,6 +35,7 @@ from lvadrm.estimators import make_estimator
 from lvadrm.presets import env_v3
 
 RECURRENT = ("last", "none", "press")
+CKPT, CKPT_EVERY = OUT / "ckpt", 12
 PRESSURE = ("press", "press_mlp")  # no detector: the pressures show the state of the valve
 
 
@@ -53,25 +60,62 @@ def run_name(regime, lam, kind, n, rv, seed):
     return f"{regime}_{lam_s}_{kind}_N{n}_rv{rv:g}_s{seed}"
 
 
+def save_checkpoint(path, ts, log, meta):
+    buf = io.BytesIO()
+    leaves = {f"a{i:04d}": np.asarray(x) for i, x in enumerate(jax.tree.leaves(ts))}
+    np.savez(buf, meta=np.array(json.dumps(meta, sort_keys=True)), log=np.array(json.dumps(log)), **leaves)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    write_atomic(path, buf.getvalue())
+
+
+def load_checkpoint(path, template, meta):
+    """(training state, log) of a checkpoint of the same run, or None. ``template`` gives the structure."""
+    if not path.exists():
+        return None
+    try:
+        with np.load(path) as z:
+            if str(z["meta"]) != json.dumps(meta, sort_keys=True):
+                raise ValueError("it belongs to another configuration")
+            leaves, tree = jax.tree.flatten(template)
+            new = [z[f"a{i:04d}"] for i in range(len(leaves))]
+            if f"a{len(leaves):04d}" in z.files or any(a.shape != b.shape or a.dtype != b.dtype for a, b in zip(new, leaves)):
+                raise ValueError("the structure of the state changed")
+            return jax.tree.unflatten(tree, [jnp.asarray(a) for a in new]), json.loads(str(z["log"]))
+    except (ValueError, KeyError, OSError, EOFError, zipfile.BadZipFile) as e:
+        print(f"{path.name}: checkpoint ignored, {e}", flush=True)
+        return None
+
+
 def train(regime, lam, kind, n, rv, seed, beats, out, tag="", **ppo_kw):
     run = out / (run_name(regime, lam, kind, n, rv, seed) + tag)
     if (run / "params.msgpack").exists():
         return
+    pause_point()
     run.mkdir(parents=True, exist_ok=True)
     cfg = env_config_for(spec_for(kind), env_v3(n, regime, rv))
     ppo = PPOConfig(total_beats=int(beats), vf_clip=None, **ppo_kw)
     init, update, _ = make_ppo(spec_for(kind), cfg, ppo, belief_for(kind, lam, n))
-    t0, log = time.perf_counter(), []
-    ts = init(jax.random.PRNGKey(seed))
-    for i in range(ppo.n_updates):
+    meta = dict(regime=regime, lam=lam, kind=kind, n=n, rv=rv, seed=seed, beats=beats, ppo=ppo_kw)
+    ckpt = CKPT / f"{out.name}_{run.name}.npz"
+    ts, log = init(jax.random.PRNGKey(seed)), []
+    saved = load_checkpoint(ckpt, ts, meta)
+    if saved is not None:
+        ts, log = saved
+        print(f"{run.name}: continues from update {len(log)} of {ppo.n_updates}", flush=True)
+    t0 = time.perf_counter() - (log[-1]["seconds"] if log else 0.0)
+    for i in range(len(log), ppo.n_updates):
         ts, m = update(ts)
         log.append({k: float(v) for k, v in m.items()} | {"beats": (i + 1) * ppo.n_envs * ppo.n_steps, "seconds": time.perf_counter() - t0})
         if i % 24 == 23 or i == ppo.n_updates - 1:
             s = {k: np.mean([x[k] for x in log[-12:]]) for k in ("reward", "violations_per_100", "avo", "back", "co", "omega", "entropy")}
             print(f"{run.name} [{log[-1]['seconds']:5.0f}s] {log[-1]['beats'] / 1e6:5.1f}M  " + "  ".join(f"{k} {v:.3f}" for k, v in s.items()), flush=True)
-    (run / "params.msgpack").write_bytes(serialization.to_bytes(ts.params))
-    (run / "train_log.json").write_text(json.dumps(log))
-    (run / "config.json").write_text(json.dumps(dict(regime=regime, lam=lam, kind=kind, n=n, rv=rv, seed=seed, beats=beats, ppo=ppo_kw)))
+        if i < ppo.n_updates - 1 and (i % CKPT_EVERY == CKPT_EVERY - 1 or PAUSE.exists()):
+            save_checkpoint(ckpt, ts, log, meta)
+            pause_point()
+    write_atomic(run / "train_log.json", json.dumps(log))
+    write_atomic(run / "config.json", json.dumps(meta))
+    write_atomic(run / "params.msgpack", serialization.to_bytes(ts.params))  # last: it marks the run as finished
+    ckpt.unlink(missing_ok=True)
 
 
 def main() -> None:

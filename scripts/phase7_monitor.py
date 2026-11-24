@@ -19,7 +19,7 @@ import time
 import jax
 import jax.numpy as jnp
 import numpy as np
-from phase7_common import OUT, detector, load_filter, load_models, model_path, outcome, rollout, scenarios, start_speeds
+from phase7_common import OUT, detector, load_filter, load_models, model_path, outcome, pause_point, rollout, scenarios, start_speeds, write_atomic
 
 from lvadrm.baselines.constant import avc_speed
 from lvadrm.env import reset_with_scenario
@@ -137,18 +137,25 @@ def main() -> None:
         res = json.loads(path.read_text()) if path.exists() else {}
         for regime in ("fixed", "unknown"):
             cfg = env_v3(n, regime, episode_beats=BEATS)
-            if regime in res:
+            r = res.setdefault(regime, {})
+            if all(k in r for k in ("constant", "blind", "true")):
                 continue
-            r = res[regime] = {}
             kw = dict(ref_val=threshold_speeds(cfg, VAL_SEED, N_VAL), ref_test=threshold_speeds(cfg, TEST_SEED, N_TEST)) if ramp else {}
             f = grid(np.r_[np.arange(0.85, 1.0, 0.03), np.arange(1.0, 1.4, 0.04)])
-            select_and_test("constant", const_fns(), None, f, cfg, n, r, threshold_speeds(cfg, VAL_SEED, N_VAL), threshold_speeds(cfg, TEST_SEED, N_TEST))
+            if "constant" not in r:
+                pause_point()
+                select_and_test("constant", const_fns(), None, f, cfg, n, r, threshold_speeds(cfg, VAL_SEED, N_VAL), threshold_speeds(cfg, TEST_SEED, N_TEST))
+                write_atomic(path, json.dumps(res))
             blind = grid(first if ramp else Q_SET[::2], sorted({4, 6, 8, 9, 10, 11, 12, 14, 18, 24}), range(1, 7))
             blind = blind[(blind[:, 2] < blind[:, 1] - 1) & (blind[:, 1] <= 2 * n)]
-            select_and_test("blind", blind_fns(cfg), bli, blind, cfg, n, r, **kw)
+            if "blind" not in r:
+                pause_point()
+                select_and_test("blind", blind_fns(cfg), bli, blind, cfg, n, r, **kw)
+                write_atomic(path, json.dumps(res))
+            pause_point()
             det = detector(0.0, perfect=True)
             select_and_test("true", monitor_fns(make_estimator("true", det, n), cfg, n), mon, hard, cfg, n, r, **kw)
-            path.write_text(json.dumps(res))
+            write_atomic(path, json.dumps(res))
         return
     path = OUT / "monitor" / f"estimators_N{n}_lam{args.lam:g}{sfx}.json"
     res = json.loads(path.read_text()) if path.exists() else {}
@@ -160,9 +167,10 @@ def main() -> None:
     for kind in kinds:
         if kind in res:
             continue
+        pause_point()
         est = make_estimator(kind.split("@")[0], det, n, models, **({"lam": float(kind.split("@")[1])} if "@" in kind else {}))
         select_and_test(kind, monitor_fns(est, cfg, n), mon, hard if kind == "naive" else soft, cfg, n, res, **kw)
-        path.write_text(json.dumps(res))
+        write_atomic(path, json.dumps(res))
 
 
 if __name__ == "__main__":
