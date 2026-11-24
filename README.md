@@ -1,7 +1,8 @@
 # lvad-rm
 
 LVAD speed control with noisy reward machines. Course project for IIC3675 (PUC Chile).
-Project context, decisions and plan: [HANDOFF.md](HANDOFF.md).
+Decisions and results of each phase are in [docs/](docs). "HANDOFF section N" in the code and the docs refers to
+the design notes of the project, which are not part of the repository.
 
 ## Model
 
@@ -53,3 +54,7 @@ Agents (`lvadrm.agents`): PureJaxRL-style PPO and recurrent PPO (GRU) in Flax/Op
 
 Validation scripts run in float64 on CPU; benchmarks and environment rollouts run in float32 on the GPU.
 Decisions and assumptions: [docs/phase1_decisions.md](docs/phase1_decisions.md), [docs/phase2_decisions.md](docs/phase2_decisions.md), [docs/phase3_decisions.md](docs/phase3_decisions.md), [docs/phase4_decisions.md](docs/phase4_decisions.md), [docs/phase5_decisions.md](docs/phase5_decisions.md), [docs/phase6_decisions.md](docs/phase6_decisions.md).
+
+## License
+
+MIT, see [LICENSE](LICENSE).
