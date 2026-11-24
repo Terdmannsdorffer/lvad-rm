@@ -62,15 +62,17 @@ def rm_transition(u, avo, n: int):
     return u_next, violation
 
 
-def rm_rewards(u, avo, suc, back, co, omega_prev, omega, cfg: RMConfig):
-    """Next RM state and reward components for one beat."""
+def rm_rewards(u, avo, suc, back, co, omega_prev, omega, cfg: RMConfig, co_target=None):
+    """Next RM state and reward components for one beat. ``co_target`` overrides the fixed
+    cfg.co_target (e.g. a Starling-like target that depends on the preload, Phase 6.5)."""
     u_next, violation = rm_transition(u, avo, cfg.n)
     dtype = jnp.result_type(co)
+    target = cfg.co_target if co_target is None else co_target
     comps = RewardComponents(
         viol=cfg.r_viol * violation.astype(dtype),
         suc=cfg.r_suc * suc.astype(dtype),
         back=cfg.r_back * back.astype(dtype),
-        perf=-cfg.w_perf * jnp.abs(co - cfg.co_target) / cfg.co_target,
+        perf=-cfg.w_perf * jnp.abs(co - target) / target,
         act=-cfg.w_act * jnp.abs(omega - omega_prev) / omega_prev,
     )
     return u_next, violation, comps

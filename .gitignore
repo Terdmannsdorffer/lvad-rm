@@ -9,6 +9,7 @@ papers/*.pdf
 # large generated data
 results/phase4/data/
 results/phase6/data/
+results/phase6_5/data/
 
 # run logs
 logs/

@@ -8,6 +8,11 @@ A ``Belief`` keeps a per-environment state and is updated after every beat from 
     ibu     exact belief update assuming independent detector errors
     tdm     a GRU trained to output the RM-state distribution from the detector and observation history
     tdm_det the same with only the detector output and the non-flow observations (speed, HR, actions)
+    ibu_hist IBU fed by a recurrent proposition model: the TDM network trained to predict AVO (2 classes)
+            from the same inputs and history as tdm (Phase 6.5: isolates "predict the RM state" from
+            "use the history")
+
+Detector names starting with "v2_" are Phase 6.5 learned detectors (results/phase6_5/detectors).
 
 Every episode starts in u_0, which is known, so all beliefs start as one-hot(0).
 """
@@ -27,6 +32,7 @@ from lvadrm.inference import TDM, ibu_update, initial_belief, naive_update, tdm_
 
 DET_DIR = Path("results/phase4/detectors")
 DET_DIR_P6 = Path("results/phase6/detectors")
+DET_DIR_P65 = Path("results/phase6_5/detectors")
 TDM_DIR = Path("results/phase4/tdm")
 OBS_DIM = 13
 WAVE_DIM = 64
@@ -77,6 +83,22 @@ def tdm_belief(det: Detector, n: int, model: TDM, params, features: str = "full"
     return Belief(init, update, lambda bs: bs[2])
 
 
+def ibu_hist_belief(det: Detector, n: int, model: TDM, params) -> Belief:
+    """IBU update with p(AVO) from a recurrent 2-class model over the detector + observation history."""
+
+    def init(key):
+        return jnp.zeros(model.hidden), det.init(key), initial_belief(n)
+
+    def update(key, bs, obs_next, info):
+        h, ds, b = bs
+        p, _, ds = det.step(key, ds, obs_next, info)
+        h_new, logits = model.apply(params, h, tdm_input(p, obs_next, "full"))
+        p_avo = jax.nn.softmax(logits)[..., 1]
+        return h_new.astype(h.dtype), ds, ibu_update(b, p_avo, n).astype(b.dtype)
+
+    return Belief(init, update, lambda bs: bs[2])
+
+
 def synthetic_config(name: str) -> dict:
     """Calibrated synthetic detector configuration (Phase 4 file first, then Phase 6 additions)."""
     for f in (DET_DIR / "detectors.json", DET_DIR_P6 / "detectors.json"):
@@ -88,10 +110,11 @@ def synthetic_config(name: str) -> dict:
 
 
 def load_detector(name: str) -> Detector:
-    if name in LEARNED:
-        model = LEARNED[name]()
+    base, folder = (name[3:], DET_DIR_P65) if name.startswith("v2_") else (name, DET_DIR)
+    if base in LEARNED:
+        model = LEARNED[base]()
         tmpl = model.init(jax.random.PRNGKey(0), jnp.zeros((1, OBS_DIM)), jnp.zeros((1, WAVE_DIM)))
-        return learned_detector(model, serialization.from_bytes(tmpl, (DET_DIR / f"{name}.msgpack").read_bytes()))
+        return learned_detector(model, serialization.from_bytes(tmpl, (folder / f"{name}.msgpack").read_bytes()))
     return synthetic_detector(SyntheticDetector(**synthetic_config(name)))
 
 
@@ -119,4 +142,6 @@ def make_belief(kind: str, n: int, detector: str | None = None, tdm_path: str | 
         return tdm_belief(det, n, *load_tdm(detector, n, path=tdm_path))
     if kind == "tdm_det":
         return tdm_belief(det, n, *load_tdm(detector, n, features="detector", path=tdm_path), features="detector")
+    if kind == "ibu_hist":
+        return ibu_hist_belief(det, n, *load_tdm(detector, 2, path=tdm_path))
     raise ValueError(kind)

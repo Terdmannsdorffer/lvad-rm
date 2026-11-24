@@ -1,0 +1,27 @@
+{
+  "naive": {
+    "log_likelihood": -0.9566522240638733,
+    "accuracy": 0.792265625,
+    "mass_on_u0_when_closed": 0.534784197807312
+  },
+  "ibu": {
+    "log_likelihood": -0.5092374682426453,
+    "accuracy": 0.7888932291666667,
+    "mass_on_u0_when_closed": 0.5104184746742249
+  },
+  "ibu_hist": {
+    "log_likelihood": -0.3977315127849579,
+    "accuracy": 0.81421875,
+    "mass_on_u0_when_closed": 0.4065447449684143
+  },
+  "tdm_det": {
+    "log_likelihood": -0.3594636619091034,
+    "accuracy": 0.8288802083333333,
+    "mass_on_u0_when_closed": 0.4100673496723175
+  },
+  "tdm": {
+    "log_likelihood": -0.3565962016582489,
+    "accuracy": 0.8263541666666666,
+    "mass_on_u0_when_closed": 0.40721356868743896
+  }
+}

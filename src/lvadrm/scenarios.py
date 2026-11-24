@@ -140,6 +140,41 @@ def make_scenario(base: dict[str, float], events: list[tuple[str, float, float]]
     )
 
 
+# ------------------------------------------------------------------------ stress families (6.5)
+def stress_family(key, patient: Patient, kind: str, n: int, k: int = 3) -> Scenario:
+    """Randomized stress scenarios (Phase 6.5): a resting patient (Rs, Emax 0.8-1.2 x, Vtot 0.95-1.05 x,
+    HR 65-95) and one stress event starting at 60-240 s:
+      hypertension  Rs -> 1.5-2.0 x the patient's
+      exercise      Rs -> 0.5-0.8 x and HR -> 100-135
+      hypovolemia   Vtot -> 0.75-0.88 x (preload drop; suction risk)
+    Unused event slots are inactive (``k`` slots for stacking with other scenarios)."""
+    kb, kh, ke, kt, k1, k2 = jax.random.split(key, 6)
+    u = lambda kk, lo, hi: jax.random.uniform(kk, (n,), minval=lo, maxval=hi)  # noqa: E731
+    kb1, kb2, kb3 = jax.random.split(kb, 3)
+    base = jnp.stack([u(kb1, 0.8, 1.2) * patient.rs, u(kh, 65.0, 95.0), u(kb2, 0.8, 1.2) * patient.emax,
+                      u(kb3, 0.95, 1.05) * patient.vtot], axis=-1)
+    t0 = u(kt, 60.0, 240.0)
+    if kind == "hypertension":
+        params, targets = [RS], [u(k1, 1.5, 2.0) * patient.rs]
+    elif kind == "exercise":
+        params, targets = [RS, HR], [u(k1, 0.5, 0.8) * patient.rs, u(k2, 100.0, 135.0)]
+    elif kind == "hypovolemia":
+        params, targets = [VTOT], [u(k1, 0.75, 0.88) * patient.vtot]
+    else:
+        raise ValueError(kind)
+    m = len(params)
+    pad = k - m
+    ev_param = jnp.asarray(params + [0] * pad, jnp.int32)
+    return Scenario(
+        base=base.astype(jnp.float32),
+        ev_param=jnp.broadcast_to(ev_param, (n, k)),
+        ev_start=jnp.concatenate([jnp.stack([t0] * m, -1), jnp.zeros((n, pad))], -1).astype(jnp.float32),
+        ev_dur=jnp.broadcast_to(jnp.asarray([TRANSITION_S[p] for p in params] + [1.0] * pad, jnp.float32), (n, k)),
+        ev_target=jnp.concatenate([jnp.stack(targets, -1), jnp.zeros((n, pad))], -1).astype(jnp.float32),
+        ev_active=jnp.broadcast_to(jnp.arange(k) < m, (n, k)),
+    )
+
+
 # ------------------------------------------------------------------------------ protocols
 def protocol_batch(patient: Patient) -> tuple[list[str], Scenario]:
     """The three evaluation protocols stacked into one batch (event slots padded with inactive events)."""

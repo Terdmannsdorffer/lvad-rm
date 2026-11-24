@@ -78,3 +78,35 @@ def test_observation_modes():
         obs2, *_ = step(jax.random.PRNGKey(1), st, 0, cfg)
         assert obs.shape == obs2.shape == (obs_size(cfg),)
         assert bool(jnp.all(jnp.isfinite(obs2)))
+
+
+def test_estimated_flow_observation_and_starling_target():
+    """Phase 6.5 options: per-episode flow errors stay fixed, the observation differs from the measured
+    mode, and the reward uses the preload-dependent target."""
+    from dataclasses import replace
+
+    from lvadrm.env import starling_target
+
+    cfg = replace(CFG, obs_model="estimated", perf_target="starling", flow_noise_scale=2.0)
+    obs, st = reset(jax.random.PRNGKey(0), cfg)
+    obs_m, st_m = reset(jax.random.PRNGKey(0), CFG)
+    assert float(jnp.abs(st.flow_err).sum()) > 0 and not np.allclose(np.asarray(obs), np.asarray(obs_m))
+    np.testing.assert_array_equal(np.asarray(st.y), np.asarray(st_m.y))  # same physiology
+    obs2, st2, r, _, info = step(jax.random.PRNGKey(1), st, 2, cfg)
+    np.testing.assert_array_equal(np.asarray(st2.flow_err), np.asarray(st.flow_err))
+    np.testing.assert_allclose(float(info["co_target"]), float(starling_target(info["edp"], cfg)), rtol=1e-6)
+    expected = -cfg.rm.w_perf * abs(float(info["co"]) - float(info["co_target"])) / float(info["co_target"])
+    np.testing.assert_allclose(float(info["reward_components"].perf), expected, rtol=1e-5)
+
+
+def test_stress_family_and_closure_runs():
+    from lvadrm.evaluation import closure_runs
+    from lvadrm.scenarios import RS, stress_family
+
+    fam = stress_family(jax.random.PRNGKey(0), HF_PATIENT, "hypertension", 8)
+    assert fam.base.shape == (8, 4) and fam.ev_param.shape == (8, 3)
+    assert bool(jnp.all(fam.ev_param[:, 0] == RS)) and bool(jnp.all(fam.ev_target[:, 0] >= 1.5 * HF_PATIENT.rs))
+    assert int(fam.ev_active.sum()) == 8
+    avo = np.array([[1, 0, 0, 1, 0]], dtype=bool).T
+    tc = np.full((5, 1), 0.5)
+    np.testing.assert_allclose(closure_runs(avo, tc)[0], [1.0, 0.5])

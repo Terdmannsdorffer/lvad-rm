@@ -23,8 +23,9 @@ from lvadrm.agents.belief import make_belief
 from lvadrm.agents.ppo import PPOConfig, make_ppo
 from lvadrm.agents.specs import SPECS, env_config_for
 from lvadrm.env import EnvConfig
-from lvadrm.patients import HF_PATIENT
-from lvadrm.reward_machine import RMConfig
+from lvadrm.patients import HF_PATIENT  # noqa: F401
+from lvadrm.presets import env_for_preset
+from lvadrm.reward_machine import RMConfig  # noqa: F401
 
 RUNS = Path("results/phase3/runs")
 
@@ -42,6 +43,7 @@ def main() -> None:
     ap.add_argument("--out-dir", default=None, help="directory for the run folder (default: results/phase3|4/runs)")
     ap.add_argument("--tdm-path", default=None, help="TDM parameters for tdm agents (default: Phase 4 file of the detector)")
     ap.add_argument("--no-vf-clip", action="store_true", help="turn off PPO value clipping")
+    ap.add_argument("--env", choices=["v1", "v2"], default="v1", help="environment preset (v2: Phase 6.5, lvadrm.presets)")
     args = ap.parse_args()
 
     spec = SPECS[args.agent]
@@ -52,7 +54,7 @@ def main() -> None:
         belief = make_belief(spec.belief, args.rm_n, args.detector, args.tdm_path)
         runs = Path("results/phase4/runs")
         args.tag = f"_{args.detector}{args.tag}"
-    env_cfg = env_config_for(spec, EnvConfig(patient=HF_PATIENT, episode_beats=300, rm=RMConfig(n=args.rm_n)))
+    env_cfg = env_config_for(spec, env_for_preset(args.env, 300, args.rm_n))
     cfg = PPOConfig(n_envs=args.n_envs, n_steps=args.n_steps, total_beats=int(args.beats),
                     vf_clip=None if args.no_vf_clip else 0.2)
     runs = Path(args.out_dir) if args.out_dir else runs
@@ -62,6 +64,7 @@ def main() -> None:
         "agent": dataclasses.asdict(spec), "ppo": dataclasses.asdict(cfg), "seed": args.seed, "rm_n": args.rm_n,
         "detector": args.detector,
         "tdm_path": args.tdm_path,
+        "env_preset": args.env,
         "env": {"episode_beats": env_cfg.episode_beats, "snr_db": env_cfg.snr_db, "back_ml": env_cfg.back_ml,
                 "omega_min": env_cfg.omega_min, "omega_max": env_cfg.omega_max, "rm": dataclasses.asdict(env_cfg.rm)},
     }, indent=2))

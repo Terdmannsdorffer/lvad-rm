@@ -18,7 +18,7 @@ from lvadrm.baselines import simaan_minflow as smf
 from lvadrm.baselines.constant import CLINICIAN_MARGIN, avc_speed
 from lvadrm.env import EnvConfig, reset_with_scenario, step_speed
 
-INFO_KEYS = ("labels", "violation", "omega", "co", "qlv", "v_back", "lvp_min", "u")
+INFO_KEYS = ("labels", "violation", "omega", "co", "qlv", "v_back", "lvp_min", "u", "tc", "lap_mean", "co_target")
 N_LIST = (3, 5, 10)
 SKIP_BEATS = 20
 
@@ -101,6 +101,51 @@ def rollout(policy: Policy, scns, cfg: EnvConfig, key, omega0) -> dict[str, np.n
     out["reward"] = np.asarray(r)
     out["omega0"] = np.asarray(omega0)
     return out
+
+
+def closure_runs(avo: np.ndarray, tc: np.ndarray):
+    """Durations [s] of the runs of consecutive beats without aortic valve opening, per episode.
+    avo, tc: [T, n_env]. Returns a list (one per episode) of arrays of run durations."""
+    out = []
+    for e in range(avo.shape[1]):
+        closed = ~avo[:, e]
+        edges = np.diff(np.concatenate([[0], closed.astype(np.int8), [0]]))
+        starts, ends = np.flatnonzero(edges == 1), np.flatnonzero(edges == -1)
+        csum = np.concatenate([[0.0], np.cumsum(tc[:, e])])
+        out.append(csum[ends] - csum[starts])
+    return out
+
+
+def clinical_metrics(o: dict, cfg: EnvConfig, lap_congestion: float = 20.0) -> dict[str, float]:
+    """Time-based clinical metrics (Phase 6.5): opening ratio, closure durations, suction events per hour,
+    congestion and actuator activity. Episode means; ``o`` from ``rollout`` (with tc, lap_mean, co_target)."""
+    lab, tc = o["labels"], o["tc"]
+    avo, suc, back = lab[..., 0], lab[..., 1], lab[..., 2]
+    total_s = tc.sum(axis=0)  # per episode
+    runs = closure_runs(avo, tc)
+    max_closure = np.array([r.max() if len(r) else 0.0 for r in runs])
+    m = {
+        "opening_ratio": float(avo.mean()),
+        "max_closure_s": float(max_closure.mean()),
+        "max_closure_s_p95": float(np.percentile(max_closure, 95)),
+    }
+    for x in (10, 30, 60):
+        frac = np.array([r[r > x].sum() for r in runs]) / total_s
+        m[f"time_closed_gt{x}s"] = float(frac.mean())
+        m[f"episodes_closed_gt{x}s"] = float((max_closure > x).mean())
+    onsets = (suc[1:] & ~suc[:-1]).sum(axis=0) + suc[0]
+    m["suction_per_hour"] = float((onsets / total_s * 3600.0).mean())
+    m["suction_frac"] = float(suc.mean())
+    m["back_frac"] = float(back.mean())
+    m["congestion_frac"] = float((o["lap_mean"] > lap_congestion).mean())
+    m["co_mean"] = float(o["co"].mean())
+    m["co_abs_err"] = float(np.abs(o["co"] - o["co_target"]).mean())
+    dw = np.abs(np.diff(o["omega"], axis=0)) / o["omega"][:-1]
+    m["speed_changes_per_min"] = float(((dw > 0.005).sum(axis=0) / total_s * 60.0).mean())
+    v = count_violations(avo, cfg.rm.n)
+    m[f"violations_per_hour_N{cfg.rm.n}"] = float((v.sum(axis=0) / total_s * 3600.0).mean())
+    m[f"return_mean_N{cfg.rm.n}"] = float(o["reward"].sum(axis=0).mean())
+    return m
 
 
 def count_violations(avo: np.ndarray, n: int) -> np.ndarray:

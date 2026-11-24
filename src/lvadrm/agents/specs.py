@@ -50,6 +50,7 @@ SPECS = {
     "ibu": AgentSpec("ibu", "pump", True, "rm", FIVE_ACTIONS, False, belief="ibu"),
     "tdm": AgentSpec("tdm", "pump", True, "rm", FIVE_ACTIONS, False, belief="tdm"),
     "tdm_det": AgentSpec("tdm_det", "pump", True, "rm", FIVE_ACTIONS, False, belief="tdm_det"),
+    "ibu_hist": AgentSpec("ibu_hist", "pump", True, "rm", FIVE_ACTIONS, False, belief="ibu_hist"),
 }
 
 

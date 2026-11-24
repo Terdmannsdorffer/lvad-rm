@@ -31,6 +31,7 @@ from lvadrm.agents.specs import SPECS, agent_obs, env_config_for  # noqa: E402
 from lvadrm.env import EnvConfig, reset  # noqa: E402
 from lvadrm.evaluation import classical_policy, initial_speeds, metrics, rollout  # noqa: E402
 from lvadrm.patients import HF_PATIENT  # noqa: E402
+from lvadrm.presets import env_for_preset  # noqa: E402
 from lvadrm.reward_machine import RMConfig  # noqa: E402
 from lvadrm.scenarios import WIDE_SCENARIOS, ScenarioConfig, protocol_batch, sample_scenario  # noqa: E402
 
@@ -49,7 +50,7 @@ def load_agent(run_dir: Path):
     conf = json.loads((run_dir / "config.json").read_text())
     spec = SPECS[conf["agent"]["name"]]
     ppo = PPOConfig(hidden=conf["ppo"]["hidden"])
-    env_cfg = env_config_for(spec, EnvConfig(patient=HF_PATIENT, episode_beats=300, rm=RMConfig(n=conf["rm_n"])))
+    env_cfg = env_config_for(spec, env_for_preset(conf.get("env_preset"), 300, conf["rm_n"]))
     net = make_network(spec, ppo)
     obs, st = reset(jax.random.PRNGKey(0), env_cfg)
     x = agent_obs(spec, obs, st, env_cfg)

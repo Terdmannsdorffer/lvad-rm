@@ -1,0 +1,6056 @@
+{
+  "summary": {
+    "const_clinician": {
+      "random": {
+        "time_closed_gt10s": {
+          "iqm": 0.1497455744100647,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.1497455744100647,
+          "se": 0.0,
+          "n": 1
+        },
+        "time_closed_gt30s": {
+          "iqm": 0.149612566604781,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.149612566604781,
+          "se": 0.0,
+          "n": 1
+        },
+        "opening_ratio": {
+          "iqm": 0.8452018229166667,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.8452018229166667,
+          "se": 0.0,
+          "n": 1
+        },
+        "max_closure_s": {
+          "iqm": 128.24139945488423,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 128.24139945488423,
+          "se": 0.0,
+          "n": 1
+        },
+        "violations_per_hour": {
+          "iqm": 269.35578343516755,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 269.35578343516755,
+          "se": 0.0,
+          "n": 1
+        },
+        "suction_per_hour": {
+          "iqm": 0.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "back_frac": {
+          "iqm": 0.15724527994791668,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.15724527994791668,
+          "se": 0.0,
+          "n": 1
+        },
+        "congestion_frac": {
+          "iqm": 0.0016373697916666667,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0016373697916666667,
+          "se": 0.0,
+          "n": 1
+        },
+        "co_abs_err": {
+          "iqm": 1.3411496877670288,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 1.3411496877670288,
+          "se": 0.0,
+          "n": 1
+        },
+        "speed_changes_per_min": {
+          "iqm": 0.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "return_mean": {
+          "iqm": -151.38819885253906,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": -151.38819885253906,
+          "se": 0.0,
+          "n": 1
+        }
+      },
+      "hypertension": {
+        "time_closed_gt10s": {
+          "iqm": 0.5629600438343744,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.5629600438343744,
+          "se": 0.0,
+          "n": 1
+        },
+        "time_closed_gt30s": {
+          "iqm": 0.5629600438343744,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.5629600438343744,
+          "se": 0.0,
+          "n": 1
+        },
+        "opening_ratio": {
+          "iqm": 0.43703993055555557,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.43703993055555557,
+          "se": 0.0,
+          "n": 1
+        },
+        "max_closure_s": {
+          "iqm": 378.5617696046829,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 378.5617696046829,
+          "se": 0.0,
+          "n": 1
+        },
+        "violations_per_hour": {
+          "iqm": 913.2768480511277,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 913.2768480511277,
+          "se": 0.0,
+          "n": 1
+        },
+        "suction_per_hour": {
+          "iqm": 0.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "back_frac": {
+          "iqm": 0.5397178819444445,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.5397178819444445,
+          "se": 0.0,
+          "n": 1
+        },
+        "congestion_frac": {
+          "iqm": 0.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "co_abs_err": {
+          "iqm": 1.083741545677185,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 1.083741545677185,
+          "se": 0.0,
+          "n": 1
+        },
+        "speed_changes_per_min": {
+          "iqm": 0.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "return_mean": {
+          "iqm": -334.719970703125,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": -334.719970703125,
+          "se": 0.0,
+          "n": 1
+        }
+      },
+      "exercise": {
+        "time_closed_gt10s": {
+          "iqm": 0.02341084897128457,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.02341084897128457,
+          "se": 0.0,
+          "n": 1
+        },
+        "time_closed_gt30s": {
+          "iqm": 0.015641011918240147,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.015641011918240147,
+          "se": 0.0,
+          "n": 1
+        },
+        "opening_ratio": {
+          "iqm": 0.971015625,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.971015625,
+          "se": 0.0,
+          "n": 1
+        },
+        "max_closure_s": {
+          "iqm": 12.193217366933823,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 12.193217366933823,
+          "se": 0.0,
+          "n": 1
+        },
+        "violations_per_hour": {
+          "iqm": 63.52807349431131,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 63.52807349431131,
+          "se": 0.0,
+          "n": 1
+        },
+        "suction_per_hour": {
+          "iqm": 0.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "back_frac": {
+          "iqm": 0.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "congestion_frac": {
+          "iqm": 0.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "co_abs_err": {
+          "iqm": 1.8575053215026855,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 1.8575053215026855,
+          "se": 0.0,
+          "n": 1
+        },
+        "speed_changes_per_min": {
+          "iqm": 0.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "return_mean": {
+          "iqm": -42.024620056152344,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": -42.024620056152344,
+          "se": 0.0,
+          "n": 1
+        }
+      },
+      "hypovolemia": {
+        "time_closed_gt10s": {
+          "iqm": 0.7557249463119762,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.7557249463119762,
+          "se": 0.0,
+          "n": 1
+        },
+        "time_closed_gt30s": {
+          "iqm": 0.7557249463119762,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.7557249463119762,
+          "se": 0.0,
+          "n": 1
+        },
+        "opening_ratio": {
+          "iqm": 0.24427517361111112,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.24427517361111112,
+          "se": 0.0,
+          "n": 1
+        },
+        "max_closure_s": {
+          "iqm": 517.307099044323,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 517.307099044323,
+          "se": 0.0,
+          "n": 1
+        },
+        "violations_per_hour": {
+          "iqm": 1205.053786749339,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 1205.053786749339,
+          "se": 0.0,
+          "n": 1
+        },
+        "suction_per_hour": {
+          "iqm": 0.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "back_frac": {
+          "iqm": 0.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "congestion_frac": {
+          "iqm": 0.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "co_abs_err": {
+          "iqm": 0.8013523817062378,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.8013523817062378,
+          "se": 0.0,
+          "n": 1
+        },
+        "speed_changes_per_min": {
+          "iqm": 0.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "return_mean": {
+          "iqm": -244.76919555664062,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": -244.76919555664062,
+          "se": 0.0,
+          "n": 1
+        }
+      }
+    },
+    "simaan_minflow": {
+      "random": {
+        "time_closed_gt10s": {
+          "iqm": 0.21006132451614523,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.21006132451614523,
+          "se": 0.0,
+          "n": 1
+        },
+        "time_closed_gt30s": {
+          "iqm": 0.20987757938955737,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.20987757938955737,
+          "se": 0.0,
+          "n": 1
+        },
+        "opening_ratio": {
+          "iqm": 0.7819490559895833,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.7819490559895833,
+          "se": 0.0,
+          "n": 1
+        },
+        "max_closure_s": {
+          "iqm": 177.15261695813388,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 177.15261695813388,
+          "se": 0.0,
+          "n": 1
+        },
+        "violations_per_hour": {
+          "iqm": 381.85255527724934,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 381.85255527724934,
+          "se": 0.0,
+          "n": 1
+        },
+        "suction_per_hour": {
+          "iqm": 4.6218712173780805,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 4.6218712173780805,
+          "se": 0.0,
+          "n": 1
+        },
+        "back_frac": {
+          "iqm": 0.23974283854166667,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.23974283854166667,
+          "se": 0.0,
+          "n": 1
+        },
+        "congestion_frac": {
+          "iqm": 0.0064453125,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0064453125,
+          "se": 0.0,
+          "n": 1
+        },
+        "co_abs_err": {
+          "iqm": 1.619109034538269,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 1.619109034538269,
+          "se": 0.0,
+          "n": 1
+        },
+        "speed_changes_per_min": {
+          "iqm": 1.5205849599172927,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 1.5205849599172927,
+          "se": 0.0,
+          "n": 1
+        },
+        "return_mean": {
+          "iqm": -231.55682373046875,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": -231.55682373046875,
+          "se": 0.0,
+          "n": 1
+        }
+      },
+      "hypertension": {
+        "time_closed_gt10s": {
+          "iqm": 0.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "time_closed_gt30s": {
+          "iqm": 0.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "opening_ratio": {
+          "iqm": 1.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 1.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "max_closure_s": {
+          "iqm": 0.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "violations_per_hour": {
+          "iqm": 0.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "suction_per_hour": {
+          "iqm": 0.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "back_frac": {
+          "iqm": 0.7622352430555556,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.7622352430555556,
+          "se": 0.0,
+          "n": 1
+        },
+        "congestion_frac": {
+          "iqm": 0.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "co_abs_err": {
+          "iqm": 2.1509206295013428,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 2.1509206295013428,
+          "se": 0.0,
+          "n": 1
+        },
+        "speed_changes_per_min": {
+          "iqm": 2.316555953839491,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 2.316555953839491,
+          "se": 0.0,
+          "n": 1
+        },
+        "return_mean": {
+          "iqm": -241.48550415039062,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": -241.48550415039062,
+          "se": 0.0,
+          "n": 1
+        }
+      },
+      "exercise": {
+        "time_closed_gt10s": {
+          "iqm": 0.5270512855659817,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.5270512855659817,
+          "se": 0.0,
+          "n": 1
+        },
+        "time_closed_gt30s": {
+          "iqm": 0.5270512855659817,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.5270512855659817,
+          "se": 0.0,
+          "n": 1
+        },
+        "opening_ratio": {
+          "iqm": 0.41375868055555554,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.41375868055555554,
+          "se": 0.0,
+          "n": 1
+        },
+        "max_closure_s": {
+          "iqm": 268.12805846333504,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 268.12805846333504,
+          "se": 0.0,
+          "n": 1
+        },
+        "violations_per_hour": {
+          "iqm": 1247.7378041853485,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 1247.7378041853485,
+          "se": 0.0,
+          "n": 1
+        },
+        "suction_per_hour": {
+          "iqm": 0.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "back_frac": {
+          "iqm": 0.07997395833333333,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.07997395833333333,
+          "se": 0.0,
+          "n": 1
+        },
+        "congestion_frac": {
+          "iqm": 0.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "co_abs_err": {
+          "iqm": 3.4387848377227783,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 3.4387848377227783,
+          "se": 0.0,
+          "n": 1
+        },
+        "speed_changes_per_min": {
+          "iqm": 11.544292883735352,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 11.544292883735352,
+          "se": 0.0,
+          "n": 1
+        },
+        "return_mean": {
+          "iqm": -271.34588623046875,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": -271.34588623046875,
+          "se": 0.0,
+          "n": 1
+        }
+      },
+      "hypovolemia": {
+        "time_closed_gt10s": {
+          "iqm": 0.7648004606849577,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.7648004606849577,
+          "se": 0.0,
+          "n": 1
+        },
+        "time_closed_gt30s": {
+          "iqm": 0.7648004606849577,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.7648004606849577,
+          "se": 0.0,
+          "n": 1
+        },
+        "opening_ratio": {
+          "iqm": 0.23519965277777777,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.23519965277777777,
+          "se": 0.0,
+          "n": 1
+        },
+        "max_closure_s": {
+          "iqm": 523.4419673085213,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 523.4419673085213,
+          "se": 0.0,
+          "n": 1
+        },
+        "violations_per_hour": {
+          "iqm": 1219.5292291841888,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 1219.5292291841888,
+          "se": 0.0,
+          "n": 1
+        },
+        "suction_per_hour": {
+          "iqm": 10.302708486577071,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 10.302708486577071,
+          "se": 0.0,
+          "n": 1
+        },
+        "back_frac": {
+          "iqm": 0.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "congestion_frac": {
+          "iqm": 0.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "co_abs_err": {
+          "iqm": 2.392871379852295,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 2.392871379852295,
+          "se": 0.0,
+          "n": 1
+        },
+        "speed_changes_per_min": {
+          "iqm": 0.8579670215502603,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.8579670215502603,
+          "se": 0.0,
+          "n": 1
+        },
+        "return_mean": {
+          "iqm": -298.1157531738281,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": -298.1157531738281,
+          "se": 0.0,
+          "n": 1
+        }
+      }
+    },
+    "mod_open_loop": {
+      "random": {
+        "time_closed_gt10s": {
+          "iqm": 0.06902329954120882,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.06902329954120882,
+          "se": 0.0,
+          "n": 1
+        },
+        "time_closed_gt30s": {
+          "iqm": 0.06895242292769913,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.06895242292769913,
+          "se": 0.0,
+          "n": 1
+        },
+        "opening_ratio": {
+          "iqm": 0.8779134114583333,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.8779134114583333,
+          "se": 0.0,
+          "n": 1
+        },
+        "max_closure_s": {
+          "iqm": 60.117016861215234,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 60.117016861215234,
+          "se": 0.0,
+          "n": 1
+        },
+        "violations_per_hour": {
+          "iqm": 209.50073953290558,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 209.50073953290558,
+          "se": 0.0,
+          "n": 1
+        },
+        "suction_per_hour": {
+          "iqm": 0.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "back_frac": {
+          "iqm": 0.22451009114583334,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.22451009114583334,
+          "se": 0.0,
+          "n": 1
+        },
+        "congestion_frac": {
+          "iqm": 0.0016373697916666667,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0016373697916666667,
+          "se": 0.0,
+          "n": 1
+        },
+        "co_abs_err": {
+          "iqm": 1.409244179725647,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 1.409244179725647,
+          "se": 0.0,
+          "n": 1
+        },
+        "speed_changes_per_min": {
+          "iqm": 32.890485459532066,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 32.890485459532066,
+          "se": 0.0,
+          "n": 1
+        },
+        "return_mean": {
+          "iqm": -163.96426391601562,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": -163.96426391601562,
+          "se": 0.0,
+          "n": 1
+        }
+      },
+      "hypertension": {
+        "time_closed_gt10s": {
+          "iqm": 0.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "time_closed_gt30s": {
+          "iqm": 0.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "opening_ratio": {
+          "iqm": 0.659453125,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.659453125,
+          "se": 0.0,
+          "n": 1
+        },
+        "max_closure_s": {
+          "iqm": 1.7319331169128418,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 1.7319331169128418,
+          "se": 0.0,
+          "n": 1
+        },
+        "violations_per_hour": {
+          "iqm": 548.6413097531288,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 548.6413097531288,
+          "se": 0.0,
+          "n": 1
+        },
+        "suction_per_hour": {
+          "iqm": 0.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "back_frac": {
+          "iqm": 0.6339887152777778,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.6339887152777778,
+          "se": 0.0,
+          "n": 1
+        },
+        "congestion_frac": {
+          "iqm": 0.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "co_abs_err": {
+          "iqm": 1.2219750881195068,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 1.2219750881195068,
+          "se": 0.0,
+          "n": 1
+        },
+        "speed_changes_per_min": {
+          "iqm": 32.16981902045694,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 32.16981902045694,
+          "se": 0.0,
+          "n": 1
+        },
+        "return_mean": {
+          "iqm": -295.36029052734375,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": -295.36029052734375,
+          "se": 0.0,
+          "n": 1
+        }
+      },
+      "exercise": {
+        "time_closed_gt10s": {
+          "iqm": 0.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "time_closed_gt30s": {
+          "iqm": 0.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "opening_ratio": {
+          "iqm": 0.9821831597222223,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.9821831597222223,
+          "se": 0.0,
+          "n": 1
+        },
+        "max_closure_s": {
+          "iqm": 0.6227724254131317,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.6227724254131317,
+          "se": 0.0,
+          "n": 1
+        },
+        "violations_per_hour": {
+          "iqm": 37.95737327452648,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 37.95737327452648,
+          "se": 0.0,
+          "n": 1
+        },
+        "suction_per_hour": {
+          "iqm": 0.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "back_frac": {
+          "iqm": 0.01937934027777778,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.01937934027777778,
+          "se": 0.0,
+          "n": 1
+        },
+        "congestion_frac": {
+          "iqm": 0.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "co_abs_err": {
+          "iqm": 1.8216068744659424,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 1.8216068744659424,
+          "se": 0.0,
+          "n": 1
+        },
+        "speed_changes_per_min": {
+          "iqm": 42.11577018121844,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 42.11577018121844,
+          "se": 0.0,
+          "n": 1
+        },
+        "return_mean": {
+          "iqm": -43.39374923706055,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": -43.39374923706055,
+          "se": 0.0,
+          "n": 1
+        }
+      },
+      "hypovolemia": {
+        "time_closed_gt10s": {
+          "iqm": 0.651232729072705,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.651232729072705,
+          "se": 0.0,
+          "n": 1
+        },
+        "time_closed_gt30s": {
+          "iqm": 0.651232729072705,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.651232729072705,
+          "se": 0.0,
+          "n": 1
+        },
+        "opening_ratio": {
+          "iqm": 0.28516493055555553,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.28516493055555553,
+          "se": 0.0,
+          "n": 1
+        },
+        "max_closure_s": {
+          "iqm": 445.8839360177517,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 445.8839360177517,
+          "se": 0.0,
+          "n": 1
+        },
+        "violations_per_hour": {
+          "iqm": 1136.762002429669,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 1136.762002429669,
+          "se": 0.0,
+          "n": 1
+        },
+        "suction_per_hour": {
+          "iqm": 0.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "back_frac": {
+          "iqm": 0.01954861111111111,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.01954861111111111,
+          "se": 0.0,
+          "n": 1
+        },
+        "congestion_frac": {
+          "iqm": 0.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "co_abs_err": {
+          "iqm": 0.8858401775360107,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.8858401775360107,
+          "se": 0.0,
+          "n": 1
+        },
+        "speed_changes_per_min": {
+          "iqm": 31.966958772286556,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 31.966958772286556,
+          "se": 0.0,
+          "n": 1
+        },
+        "return_mean": {
+          "iqm": -239.07980346679688,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": -239.07980346679688,
+          "se": 0.0,
+          "n": 1
+        }
+      }
+    },
+    "mod_rule_v2_mlp": {
+      "random": {
+        "time_closed_gt10s": {
+          "iqm": 0.6802778264605599,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.6802778264605599,
+          "se": 0.0,
+          "n": 1
+        },
+        "time_closed_gt30s": {
+          "iqm": 0.6685194889076393,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.6685194889076393,
+          "se": 0.0,
+          "n": 1
+        },
+        "opening_ratio": {
+          "iqm": 0.298935546875,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.298935546875,
+          "se": 0.0,
+          "n": 1
+        },
+        "max_closure_s": {
+          "iqm": 259.91064758598804,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 259.91064758598804,
+          "se": 0.0,
+          "n": 1
+        },
+        "violations_per_hour": {
+          "iqm": 1142.520565315527,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 1142.520565315527,
+          "se": 0.0,
+          "n": 1
+        },
+        "suction_per_hour": {
+          "iqm": 0.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "back_frac": {
+          "iqm": 0.021089680989583335,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.021089680989583335,
+          "se": 0.0,
+          "n": 1
+        },
+        "congestion_frac": {
+          "iqm": 0.001959635416666667,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.001959635416666667,
+          "se": 0.0,
+          "n": 1
+        },
+        "co_abs_err": {
+          "iqm": 1.1936919689178467,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 1.1936919689178467,
+          "se": 0.0,
+          "n": 1
+        },
+        "speed_changes_per_min": {
+          "iqm": 8.018302651314665,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 8.018302651314665,
+          "se": 0.0,
+          "n": 1
+        },
+        "return_mean": {
+          "iqm": -315.59893798828125,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": -315.59893798828125,
+          "se": 0.0,
+          "n": 1
+        }
+      },
+      "hypertension": {
+        "time_closed_gt10s": {
+          "iqm": 0.825121523792931,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.825121523792931,
+          "se": 0.0,
+          "n": 1
+        },
+        "time_closed_gt30s": {
+          "iqm": 0.814809014763201,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.814809014763201,
+          "se": 0.0,
+          "n": 1
+        },
+        "opening_ratio": {
+          "iqm": 0.1542361111111111,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.1542361111111111,
+          "se": 0.0,
+          "n": 1
+        },
+        "max_closure_s": {
+          "iqm": 251.32269890606403,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 251.32269890606403,
+          "se": 0.0,
+          "n": 1
+        },
+        "violations_per_hour": {
+          "iqm": 1351.1510190098938,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 1351.1510190098938,
+          "se": 0.0,
+          "n": 1
+        },
+        "suction_per_hour": {
+          "iqm": 0.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "back_frac": {
+          "iqm": 0.10384982638888889,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.10384982638888889,
+          "se": 0.0,
+          "n": 1
+        },
+        "congestion_frac": {
+          "iqm": 0.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "co_abs_err": {
+          "iqm": 0.72225421667099,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.72225421667099,
+          "se": 0.0,
+          "n": 1
+        },
+        "speed_changes_per_min": {
+          "iqm": 7.230007437837747,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 7.230007437837747,
+          "se": 0.0,
+          "n": 1
+        },
+        "return_mean": {
+          "iqm": -293.3348083496094,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": -293.3348083496094,
+          "se": 0.0,
+          "n": 1
+        }
+      },
+      "exercise": {
+        "time_closed_gt10s": {
+          "iqm": 0.3219948350169314,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.3219948350169314,
+          "se": 0.0,
+          "n": 1
+        },
+        "time_closed_gt30s": {
+          "iqm": 0.3037587693469916,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.3037587693469916,
+          "se": 0.0,
+          "n": 1
+        },
+        "opening_ratio": {
+          "iqm": 0.6733506944444444,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.6733506944444444,
+          "se": 0.0,
+          "n": 1
+        },
+        "max_closure_s": {
+          "iqm": 94.02684444189072,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 94.02684444189072,
+          "se": 0.0,
+          "n": 1
+        },
+        "violations_per_hour": {
+          "iqm": 670.285873444432,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 670.285873444432,
+          "se": 0.0,
+          "n": 1
+        },
+        "suction_per_hour": {
+          "iqm": 0.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "back_frac": {
+          "iqm": 0.0014453125,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0014453125,
+          "se": 0.0,
+          "n": 1
+        },
+        "congestion_frac": {
+          "iqm": 0.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "co_abs_err": {
+          "iqm": 1.969368577003479,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 1.969368577003479,
+          "se": 0.0,
+          "n": 1
+        },
+        "speed_changes_per_min": {
+          "iqm": 11.971358966644493,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 11.971358966644493,
+          "se": 0.0,
+          "n": 1
+        },
+        "return_mean": {
+          "iqm": -131.69384765625,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": -131.69384765625,
+          "se": 0.0,
+          "n": 1
+        }
+      },
+      "hypovolemia": {
+        "time_closed_gt10s": {
+          "iqm": 0.8279991985935051,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.8279991985935051,
+          "se": 0.0,
+          "n": 1
+        },
+        "time_closed_gt30s": {
+          "iqm": 0.8076129061829662,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.8076129061829662,
+          "se": 0.0,
+          "n": 1
+        },
+        "opening_ratio": {
+          "iqm": 0.1416623263888889,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.1416623263888889,
+          "se": 0.0,
+          "n": 1
+        },
+        "max_closure_s": {
+          "iqm": 240.33715911209583,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 240.33715911209583,
+          "se": 0.0,
+          "n": 1
+        },
+        "violations_per_hour": {
+          "iqm": 1357.4627409313514,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 1357.4627409313514,
+          "se": 0.0,
+          "n": 1
+        },
+        "suction_per_hour": {
+          "iqm": 0.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "back_frac": {
+          "iqm": 0.0017621527777777778,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0017621527777777778,
+          "se": 0.0,
+          "n": 1
+        },
+        "congestion_frac": {
+          "iqm": 0.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "co_abs_err": {
+          "iqm": 0.8897746205329895,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.8897746205329895,
+          "se": 0.0,
+          "n": 1
+        },
+        "speed_changes_per_min": {
+          "iqm": 9.001855415223122,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 9.001855415223122,
+          "se": 0.0,
+          "n": 1
+        },
+        "return_mean": {
+          "iqm": -275.349609375,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": -275.349609375,
+          "se": 0.0,
+          "n": 1
+        }
+      }
+    },
+    "mod_rule_oracle": {
+      "random": {
+        "time_closed_gt10s": {
+          "iqm": 0.00026671262788450134,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.00026671262788450134,
+          "se": 0.0,
+          "n": 1
+        },
+        "time_closed_gt30s": {
+          "iqm": 0.00026671262788450134,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.00026671262788450134,
+          "se": 0.0,
+          "n": 1
+        },
+        "opening_ratio": {
+          "iqm": 0.9181876627604166,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.9181876627604166,
+          "se": 0.0,
+          "n": 1
+        },
+        "max_closure_s": {
+          "iqm": 1.8220226634293795,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 1.8220226634293795,
+          "se": 0.0,
+          "n": 1
+        },
+        "violations_per_hour": {
+          "iqm": 1.7278352203528649,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 1.7278352203528649,
+          "se": 0.0,
+          "n": 1
+        },
+        "suction_per_hour": {
+          "iqm": 0.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "back_frac": {
+          "iqm": 0.0414794921875,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0414794921875,
+          "se": 0.0,
+          "n": 1
+        },
+        "congestion_frac": {
+          "iqm": 0.0016373697916666667,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0016373697916666667,
+          "se": 0.0,
+          "n": 1
+        },
+        "co_abs_err": {
+          "iqm": 1.4092806577682495,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 1.4092806577682495,
+          "se": 0.0,
+          "n": 1
+        },
+        "speed_changes_per_min": {
+          "iqm": 10.167488560669002,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 10.167488560669002,
+          "se": 0.0,
+          "n": 1
+        },
+        "return_mean": {
+          "iqm": -50.42845153808594,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": -50.42845153808594,
+          "se": 0.0,
+          "n": 1
+        }
+      },
+      "hypertension": {
+        "time_closed_gt10s": {
+          "iqm": 0.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "time_closed_gt30s": {
+          "iqm": 0.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "opening_ratio": {
+          "iqm": 0.9163498263888888,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.9163498263888888,
+          "se": 0.0,
+          "n": 1
+        },
+        "max_closure_s": {
+          "iqm": 1.5061994194984436,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 1.5061994194984436,
+          "se": 0.0,
+          "n": 1
+        },
+        "violations_per_hour": {
+          "iqm": 0.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "suction_per_hour": {
+          "iqm": 0.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "back_frac": {
+          "iqm": 0.6368359375,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.6368359375,
+          "se": 0.0,
+          "n": 1
+        },
+        "congestion_frac": {
+          "iqm": 0.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "co_abs_err": {
+          "iqm": 1.1692030429840088,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 1.1692030429840088,
+          "se": 0.0,
+          "n": 1
+        },
+        "speed_changes_per_min": {
+          "iqm": 9.889630455052224,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 9.889630455052224,
+          "se": 0.0,
+          "n": 1
+        },
+        "return_mean": {
+          "iqm": -193.82884216308594,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": -193.82884216308594,
+          "se": 0.0,
+          "n": 1
+        }
+      },
+      "exercise": {
+        "time_closed_gt10s": {
+          "iqm": 0.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "time_closed_gt30s": {
+          "iqm": 0.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "opening_ratio": {
+          "iqm": 0.9227560763888889,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.9227560763888889,
+          "se": 0.0,
+          "n": 1
+        },
+        "max_closure_s": {
+          "iqm": 1.5195440500974655,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 1.5195440500974655,
+          "se": 0.0,
+          "n": 1
+        },
+        "violations_per_hour": {
+          "iqm": 0.031105192184253443,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.031105192184253443,
+          "se": 0.0,
+          "n": 1
+        },
+        "suction_per_hour": {
+          "iqm": 0.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "back_frac": {
+          "iqm": 0.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "congestion_frac": {
+          "iqm": 0.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "co_abs_err": {
+          "iqm": 2.0561892986297607,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 2.0561892986297607,
+          "se": 0.0,
+          "n": 1
+        },
+        "speed_changes_per_min": {
+          "iqm": 12.358627075880378,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 12.358627075880378,
+          "se": 0.0,
+          "n": 1
+        },
+        "return_mean": {
+          "iqm": -37.58832550048828,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": -37.58832550048828,
+          "se": 0.0,
+          "n": 1
+        }
+      },
+      "hypovolemia": {
+        "time_closed_gt10s": {
+          "iqm": 0.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "time_closed_gt30s": {
+          "iqm": 0.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "opening_ratio": {
+          "iqm": 0.8961892361111111,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.8961892361111111,
+          "se": 0.0,
+          "n": 1
+        },
+        "max_closure_s": {
+          "iqm": 1.6235927045345306,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 1.6235927045345306,
+          "se": 0.0,
+          "n": 1
+        },
+        "violations_per_hour": {
+          "iqm": 3.388318626892394,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 3.388318626892394,
+          "se": 0.0,
+          "n": 1
+        },
+        "suction_per_hour": {
+          "iqm": 0.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "back_frac": {
+          "iqm": 0.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "congestion_frac": {
+          "iqm": 0.0,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 1
+        },
+        "co_abs_err": {
+          "iqm": 0.4603880047798157,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 0.4603880047798157,
+          "se": 0.0,
+          "n": 1
+        },
+        "speed_changes_per_min": {
+          "iqm": 11.359735278926635,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": 11.359735278926635,
+          "se": 0.0,
+          "n": 1
+        },
+        "return_mean": {
+          "iqm": -10.337005615234375,
+          "ci": [
+            NaN,
+            NaN
+          ],
+          "mean": -10.337005615234375,
+          "se": 0.0,
+          "n": 1
+        }
+      }
+    },
+    "ibu_v2_mlp": {
+      "random": {
+        "time_closed_gt10s": {
+          "iqm": 0.027730390293868683,
+          "ci": [
+            0.020404892353345746,
+            0.037268901545511074
+          ],
+          "mean": 0.02902300985359635,
+          "se": 0.0035679874230412616,
+          "n": 10
+        },
+        "time_closed_gt30s": {
+          "iqm": 0.023465312789860762,
+          "ci": [
+            0.017268054736291415,
+            0.03228643136950216
+          ],
+          "mean": 0.02483066688005146,
+          "se": 0.003143438372931426,
+          "n": 10
+        },
+        "opening_ratio": {
+          "iqm": 0.9673502604166667,
+          "ci": [
+            0.957493865966797,
+            0.975932345920139
+          ],
+          "mean": 0.966341796875,
+          "se": 0.004123482233345326,
+          "n": 10
+        },
+        "max_closure_s": {
+          "iqm": 14.7134698414496,
+          "ci": [
+            11.08202005471685,
+            19.594755260861223
+          ],
+          "mean": 15.306880355888278,
+          "se": 1.7524931625409217,
+          "n": 10
+        },
+        "violations_per_hour": {
+          "iqm": 49.87509427819921,
+          "ci": [
+            35.97551465649534,
+            66.18682161670058
+          ],
+          "mean": 51.61940726409347,
+          "se": 6.485970856123094,
+          "n": 10
+        },
+        "suction_per_hour": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 10
+        },
+        "back_frac": {
+          "iqm": 0.4894429524739583,
+          "ci": [
+            0.43839909532335075,
+            0.5444373914930555
+          ],
+          "mean": 0.4896180013020833,
+          "se": 0.02172858807162006,
+          "n": 10
+        },
+        "congestion_frac": {
+          "iqm": 0.014335394965277777,
+          "ci": [
+            0.013150092230902778,
+            0.015623491075303819
+          ],
+          "mean": 0.014424316406249998,
+          "se": 0.00047467479033092675,
+          "n": 10
+        },
+        "co_abs_err": {
+          "iqm": 1.1421163082122803,
+          "ci": [
+            1.1224830756584803,
+            1.1618112723032634
+          ],
+          "mean": 1.1422653555870057,
+          "se": 0.008172189448404088,
+          "n": 10
+        },
+        "speed_changes_per_min": {
+          "iqm": 30.22426100089341,
+          "ci": [
+            23.117810432963893,
+            36.55364416695766
+          ],
+          "mean": 30.42685311407695,
+          "se": 3.5821083730570153,
+          "n": 10
+        },
+        "return_mean": {
+          "iqm": -214.89796447753906,
+          "ci": [
+            -231.7668046951294,
+            -200.01725260416666
+          ],
+          "mean": -215.38839874267578,
+          "se": 6.470288444343036,
+          "n": 10
+        }
+      },
+      "hypertension": {
+        "time_closed_gt10s": {
+          "iqm": 0.06574363539197597,
+          "ci": [
+            0.05525246991664312,
+            0.07919053831453803
+          ],
+          "mean": 0.06750130357661824,
+          "se": 0.005943174735491636,
+          "n": 10
+        },
+        "time_closed_gt30s": {
+          "iqm": 0.05488933668421229,
+          "ci": [
+            0.046834519467044346,
+            0.06830384138888052
+          ],
+          "mean": 0.05760071074631516,
+          "se": 0.005246997834468161,
+          "n": 10
+        },
+        "opening_ratio": {
+          "iqm": 0.9218786168981481,
+          "ci": [
+            0.9077744864004629,
+            0.9345205258969906
+          ],
+          "mean": 0.9209301215277778,
+          "se": 0.006822713701668988,
+          "n": 10
+        },
+        "max_closure_s": {
+          "iqm": 28.274961784482002,
+          "ci": [
+            24.769917249679565,
+            34.04445956647396
+          ],
+          "mean": 29.28751756846905,
+          "se": 2.0979868476821935,
+          "n": 10
+        },
+        "violations_per_hour": {
+          "iqm": 114.58085883533452,
+          "ci": [
+            95.53122322798215,
+            136.9434973392767
+          ],
+          "mean": 116.63927998989921,
+          "se": 10.189910901331622,
+          "n": 10
+        },
+        "suction_per_hour": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 10
+        },
+        "back_frac": {
+          "iqm": 0.8675665509259259,
+          "ci": [
+            0.8490813078703704,
+            0.8831687102141205
+          ],
+          "mean": 0.8656614583333333,
+          "se": 0.007591225221316525,
+          "n": 10
+        },
+        "congestion_frac": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 10
+        },
+        "co_abs_err": {
+          "iqm": 1.4802706837654114,
+          "ci": [
+            1.4461313684781392,
+            1.5148504485686618
+          ],
+          "mean": 1.4801855564117432,
+          "se": 0.015905212069200658,
+          "n": 10
+        },
+        "speed_changes_per_min": {
+          "iqm": 36.327688278321695,
+          "ci": [
+            29.350015467029692,
+            42.94230651487227
+          ],
+          "mean": 36.86118830414238,
+          "se": 3.6578271995111162,
+          "n": 10
+        },
+        "return_mean": {
+          "iqm": -281.8303934733073,
+          "ci": [
+            -283.2219543457031,
+            -280.92662556966144
+          ],
+          "mean": -282.01323852539065,
+          "se": 0.5302830888577457,
+          "n": 10
+        }
+      },
+      "exercise": {
+        "time_closed_gt10s": {
+          "iqm": 0.0006016298859023477,
+          "ci": [
+            0.00018653935481300967,
+            0.0014029865393362063
+          ],
+          "mean": 0.000780991744207172,
+          "se": 0.0002565547275768259,
+          "n": 10
+        },
+        "time_closed_gt30s": {
+          "iqm": 0.0002994866673614875,
+          "ci": [
+            0.0,
+            0.0011106735547015071
+          ],
+          "mean": 0.0005298690231154078,
+          "se": 0.00024365457904767474,
+          "n": 10
+        },
+        "opening_ratio": {
+          "iqm": 0.9992259837962961,
+          "ci": [
+            0.9984563078703704,
+            0.9996274594907407
+          ],
+          "mean": 0.9990473090277778,
+          "se": 0.0002552841457086679,
+          "n": 10
+        },
+        "max_closure_s": {
+          "iqm": 0.23055032889048258,
+          "ci": [
+            0.09612127641836803,
+            0.5809156177255014
+          ],
+          "mean": 0.32960913171991707,
+          "se": 0.10563576246129538,
+          "n": 10
+        },
+        "violations_per_hour": {
+          "iqm": 1.3086099654460175,
+          "ci": [
+            0.5820748057196118,
+            2.693045145335515
+          ],
+          "mean": 1.6194313718355744,
+          "se": 0.44795329695631886,
+          "n": 10
+        },
+        "suction_per_hour": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 10
+        },
+        "back_frac": {
+          "iqm": 0.29721932870370366,
+          "ci": [
+            0.22567341218171294,
+            0.397134693287037
+          ],
+          "mean": 0.3137282986111111,
+          "se": 0.03704682277113356,
+          "n": 10
+        },
+        "congestion_frac": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 10
+        },
+        "co_abs_err": {
+          "iqm": 1.0630247791608174,
+          "ci": [
+            1.0202274372180302,
+            1.103041152159373
+          ],
+          "mean": 1.06103076338768,
+          "se": 0.018553842457341332,
+          "n": 10
+        },
+        "speed_changes_per_min": {
+          "iqm": 33.10016871789022,
+          "ci": [
+            24.328242436440338,
+            39.90050257831835
+          ],
+          "mean": 32.94223626229227,
+          "se": 4.53051427259337,
+          "n": 10
+        },
+        "return_mean": {
+          "iqm": -98.41274515787761,
+          "ci": [
+            -124.51784483591716,
+            -80.03270610173546
+          ],
+          "mean": -102.88580551147462,
+          "se": 9.609221165713308,
+          "n": 10
+        }
+      },
+      "hypovolemia": {
+        "time_closed_gt10s": {
+          "iqm": 0.01638383528119444,
+          "ci": [
+            0.010913634659645332,
+            0.024046171680708908
+          ],
+          "mean": 0.01744879339846874,
+          "se": 0.002748649755773386,
+          "n": 10
+        },
+        "time_closed_gt30s": {
+          "iqm": 0.013253776854394746,
+          "ci": [
+            0.008049705974556065,
+            0.019881380159816758
+          ],
+          "mean": 0.013881956798731008,
+          "se": 0.002331959128586591,
+          "n": 10
+        },
+        "opening_ratio": {
+          "iqm": 0.9803074363425927,
+          "ci": [
+            0.971253616898148,
+            0.9863217411747686
+          ],
+          "mean": 0.9789171006944445,
+          "se": 0.003301296374048347,
+          "n": 10
+        },
+        "max_closure_s": {
+          "iqm": 6.056789830327034,
+          "ci": [
+            3.9339998364448547,
+            8.984514594078064
+          ],
+          "mean": 6.393335086107254,
+          "se": 1.0134620558108014,
+          "n": 10
+        },
+        "violations_per_hour": {
+          "iqm": 29.315942876946504,
+          "ci": [
+            19.785331601435853,
+            43.04708270468038
+          ],
+          "mean": 31.188920062559028,
+          "se": 4.985470556755394,
+          "n": 10
+        },
+        "suction_per_hour": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 10
+        },
+        "back_frac": {
+          "iqm": 0.3734367766203704,
+          "ci": [
+            0.301121238425926,
+            0.44948517071759253
+          ],
+          "mean": 0.3744557291666667,
+          "se": 0.029332785092135154,
+          "n": 10
+        },
+        "congestion_frac": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 10
+        },
+        "co_abs_err": {
+          "iqm": 0.631972461938858,
+          "ci": [
+            0.5874641525248686,
+            0.6787399550278982
+          ],
+          "mean": 0.6323636531829834,
+          "se": 0.01821627050027737,
+          "n": 10
+        },
+        "speed_changes_per_min": {
+          "iqm": 29.349599984310128,
+          "ci": [
+            22.10198132991938,
+            35.98179336241886
+          ],
+          "mean": 29.508393837104155,
+          "se": 3.538168114155057,
+          "n": 10
+        },
+        "return_mean": {
+          "iqm": -118.73684946695964,
+          "ci": [
+            -138.35938886006673,
+            -100.90286382039388
+          ],
+          "mean": -119.34465179443359,
+          "se": 7.408581124431101,
+          "n": 10
+        }
+      }
+    },
+    "oracle": {
+      "random": {
+        "time_closed_gt10s": {
+          "iqm": 0.0004033170256913115,
+          "ci": [
+            0.0003564920513355764,
+            0.00043416323672815026
+          ],
+          "mean": 0.000394297978250385,
+          "se": 1.72609061488598e-05,
+          "n": 10
+        },
+        "time_closed_gt30s": {
+          "iqm": 0.00030680021474691847,
+          "ci": [
+            0.0002773228684937642,
+            0.00033867705154238165
+          ],
+          "mean": 0.00030952970524478375,
+          "se": 1.3163500008376606e-05,
+          "n": 10
+        },
+        "opening_ratio": {
+          "iqm": 0.850780029296875,
+          "ci": [
+            0.844033203125,
+            0.8560137261284723
+          ],
+          "mean": 0.8494485677083334,
+          "se": 0.002938266283955889,
+          "n": 10
+        },
+        "max_closure_s": {
+          "iqm": 1.609282980595405,
+          "ci": [
+            1.5439375072911692,
+            1.6733608701867828
+          ],
+          "mean": 1.612541836523451,
+          "se": 0.03020762295343482,
+          "n": 10
+        },
+        "violations_per_hour": {
+          "iqm": 1.0765515587433143,
+          "ci": [
+            0.9722204617118203,
+            1.2685654017010324
+          ],
+          "mean": 1.1245528502786253,
+          "se": 0.07133644874542275,
+          "n": 10
+        },
+        "suction_per_hour": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 10
+        },
+        "back_frac": {
+          "iqm": 0.040576443142361106,
+          "ci": [
+            0.03659951443142361,
+            0.04323499891493055
+          ],
+          "mean": 0.039928466796875,
+          "se": 0.001515007935588184,
+          "n": 10
+        },
+        "congestion_frac": {
+          "iqm": 0.006081000434027778,
+          "ci": [
+            0.0053304951985677085,
+            0.006652628580729166
+          ],
+          "mean": 0.006007893880208333,
+          "se": 0.00032015033833847215,
+          "n": 10
+        },
+        "co_abs_err": {
+          "iqm": 1.1351793209711711,
+          "ci": [
+            1.1276873096823692,
+            1.1488998333613079
+          ],
+          "mean": 1.1383522987365722,
+          "se": 0.004954575428764162,
+          "n": 10
+        },
+        "speed_changes_per_min": {
+          "iqm": 53.63208128196927,
+          "ci": [
+            51.26500799360221,
+            56.469952370154864
+          ],
+          "mean": 53.930975553909434,
+          "se": 1.2035741514033342,
+          "n": 10
+        },
+        "return_mean": {
+          "iqm": -42.66689427693685,
+          "ci": [
+            -43.432529576619466,
+            -41.592400868733726
+          ],
+          "mean": -42.51503143310547,
+          "se": 0.40558429394242285,
+          "n": 10
+        }
+      },
+      "hypertension": {
+        "time_closed_gt10s": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 10
+        },
+        "time_closed_gt30s": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 10
+        },
+        "opening_ratio": {
+          "iqm": 0.7456589988425925,
+          "ci": [
+            0.7352207392939815,
+            0.7552271773726852
+          ],
+          "mean": 0.7443333333333333,
+          "se": 0.004549887163376085,
+          "n": 10
+        },
+        "max_closure_s": {
+          "iqm": 1.682270159944892,
+          "ci": [
+            1.639179236566027,
+            1.760810177695627
+          ],
+          "mean": 1.7035474091768266,
+          "se": 0.030653769139049707,
+          "n": 10
+        },
+        "violations_per_hour": {
+          "iqm": 0.6113451006742828,
+          "ci": [
+            0.5122686843285277,
+            0.8570504652028713
+          ],
+          "mean": 0.6910234709012586,
+          "se": 0.08739064829304631,
+          "n": 10
+        },
+        "suction_per_hour": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 10
+        },
+        "back_frac": {
+          "iqm": 0.6198386863425925,
+          "ci": [
+            0.6177915219907407,
+            0.6210575810185185
+          ],
+          "mean": 0.6193849826388889,
+          "se": 0.0007441019305322001,
+          "n": 10
+        },
+        "congestion_frac": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 10
+        },
+        "co_abs_err": {
+          "iqm": 1.1367076834042866,
+          "ci": [
+            1.1356614430745442,
+            1.1382280985514324
+          ],
+          "mean": 1.1368954062461853,
+          "se": 0.0005032207451899682,
+          "n": 10
+        },
+        "speed_changes_per_min": {
+          "iqm": 59.633700121362985,
+          "ci": [
+            58.311618478831726,
+            60.8254329153367
+          ],
+          "mean": 59.61478310138127,
+          "se": 0.5398610078504306,
+          "n": 10
+        },
+        "return_mean": {
+          "iqm": -188.77297719319662,
+          "ci": [
+            -189.12914530436197,
+            -188.26978791554768
+          ],
+          "mean": -188.67767944335938,
+          "se": 0.18720472547815528,
+          "n": 10
+        }
+      },
+      "exercise": {
+        "time_closed_gt10s": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 10
+        },
+        "time_closed_gt30s": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 10
+        },
+        "opening_ratio": {
+          "iqm": 0.9749782986111111,
+          "ci": [
+            0.971867042824074,
+            0.9774052372685186
+          ],
+          "mean": 0.9744375,
+          "se": 0.0012956047352861225,
+          "n": 10
+        },
+        "max_closure_s": {
+          "iqm": 0.8408071243514618,
+          "ci": [
+            0.7942584674960623,
+            0.9362680629516641
+          ],
+          "mean": 0.8659780528396368,
+          "se": 0.03315538061637215,
+          "n": 10
+        },
+        "violations_per_hour": {
+          "iqm": 0.06407689149367843,
+          "ci": [
+            0.03308034540257172,
+            0.12756962113241435
+          ],
+          "mean": 0.08735134093303512,
+          "se": 0.02688007660807496,
+          "n": 10
+        },
+        "suction_per_hour": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 10
+        },
+        "back_frac": {
+          "iqm": 0.0035358796296296297,
+          "ci": [
+            0.0024334129050925927,
+            0.004191261574074075
+          ],
+          "mean": 0.0032803819444444443,
+          "se": 0.00039796757772123803,
+          "n": 10
+        },
+        "congestion_frac": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 10
+        },
+        "co_abs_err": {
+          "iqm": 1.3749136726061504,
+          "ci": [
+            1.3647086024284363,
+            1.3929174542427063
+          ],
+          "mean": 1.378660261631012,
+          "se": 0.006610090204807598,
+          "n": 10
+        },
+        "speed_changes_per_min": {
+          "iqm": 66.06077878294553,
+          "ci": [
+            57.33281241396721,
+            72.79019794677902
+          ],
+          "mean": 65.11154614935603,
+          "se": 3.288146685958214,
+          "n": 10
+        },
+        "return_mean": {
+          "iqm": -25.038207689921062,
+          "ci": [
+            -25.23270543416341,
+            -24.839274724324543
+          ],
+          "mean": -25.03247241973877,
+          "se": 0.08047329880284375,
+          "n": 10
+        }
+      },
+      "hypovolemia": {
+        "time_closed_gt10s": {
+          "iqm": 0.0005295093136521681,
+          "ci": [
+            0.0003428790871058816,
+            0.0007241165251741771
+          ],
+          "mean": 0.0005264723851263253,
+          "se": 8.43100738976616e-05,
+          "n": 10
+        },
+        "time_closed_gt30s": {
+          "iqm": 5.42534446830345e-05,
+          "ci": [
+            0.0,
+            0.00016709997327206874
+          ],
+          "mean": 8.376672658279145e-05,
+          "se": 3.558553293588052e-05,
+          "n": 10
+        },
+        "opening_ratio": {
+          "iqm": 0.8107696759259259,
+          "ci": [
+            0.8019143337673612,
+            0.8162898401331019
+          ],
+          "mean": 0.8084461805555556,
+          "se": 0.0033141582272066972,
+          "n": 10
+        },
+        "max_closure_s": {
+          "iqm": 1.994402223887543,
+          "ci": [
+            1.8496862688567488,
+            2.228213394309084
+          ],
+          "mean": 2.031087618879974,
+          "se": 0.09067428584972848,
+          "n": 10
+        },
+        "violations_per_hour": {
+          "iqm": 1.6201844548824471,
+          "ci": [
+            1.2539824020055537,
+            2.3899380121464726
+          ],
+          "mean": 1.8098558864531349,
+          "se": 0.2784064854019342,
+          "n": 10
+        },
+        "suction_per_hour": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 10
+        },
+        "back_frac": {
+          "iqm": 0.0040885416666666665,
+          "ci": [
+            0.003566966869212963,
+            0.004401041666666667
+          ],
+          "mean": 0.004002604166666667,
+          "se": 0.00020707749866802016,
+          "n": 10
+        },
+        "congestion_frac": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 10
+        },
+        "co_abs_err": {
+          "iqm": 0.4016164590915044,
+          "ci": [
+            0.39860691130161285,
+            0.4069169263044993
+          ],
+          "mean": 0.40274501740932467,
+          "se": 0.0018802576071129979,
+          "n": 10
+        },
+        "speed_changes_per_min": {
+          "iqm": 52.20020894973195,
+          "ci": [
+            50.64562647987645,
+            54.65414744163564
+          ],
+          "mean": 52.641511316139294,
+          "se": 0.9795692173938279,
+          "n": 10
+        },
+        "return_mean": {
+          "iqm": -9.853482882181803,
+          "ci": [
+            -10.030356919765472,
+            -9.748330903053285
+          ],
+          "mean": -9.89584665298462,
+          "se": 0.07294544675840851,
+          "n": 10
+        }
+      }
+    },
+    "rnn": {
+      "random": {
+        "time_closed_gt10s": {
+          "iqm": 0.1653982658633332,
+          "ci": [
+            0.08604629303095854,
+            0.3687139071054714
+          ],
+          "mean": 0.22723518185644626,
+          "se": 0.0760215038217949,
+          "n": 10
+        },
+        "time_closed_gt30s": {
+          "iqm": 0.15106219849301553,
+          "ci": [
+            0.07667509672525856,
+            0.3535714464853102
+          ],
+          "mean": 0.2154067297381031,
+          "se": 0.07609820628714774,
+          "n": 10
+        },
+        "opening_ratio": {
+          "iqm": 0.8242631022135417,
+          "ci": [
+            0.6219403957790799,
+            0.9081430392795139
+          ],
+          "mean": 0.7639248860677084,
+          "se": 0.07609604559891976,
+          "n": 10
+        },
+        "max_closure_s": {
+          "iqm": 120.28845993656432,
+          "ci": [
+            58.6629312298736,
+            300.30307582731666
+          ],
+          "mean": 178.81743325036368,
+          "se": 68.05630696897425,
+          "n": 10
+        },
+        "violations_per_hour": {
+          "iqm": 273.6298285440728,
+          "ci": [
+            139.7163802518726,
+            610.3604863264701
+          ],
+          "mean": 377.4490545793196,
+          "se": 125.88753551636336,
+          "n": 10
+        },
+        "suction_per_hour": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.1018313121192409
+          ],
+          "mean": 0.06109878727154454,
+          "se": 0.06109878727154454,
+          "n": 10
+        },
+        "back_frac": {
+          "iqm": 0.317125244140625,
+          "ci": [
+            0.21132561577690975,
+            0.4882501898871528
+          ],
+          "mean": 0.351625244140625,
+          "se": 0.06976683382137762,
+          "n": 10
+        },
+        "congestion_frac": {
+          "iqm": 0.009013264973958332,
+          "ci": [
+            0.0056084764268663195,
+            0.014070773654513887
+          ],
+          "mean": 0.009894938151041666,
+          "se": 0.0018811647867438125,
+          "n": 10
+        },
+        "co_abs_err": {
+          "iqm": 1.1107999682426453,
+          "ci": [
+            1.0046893656253815,
+            1.297995136181513
+          ],
+          "mean": 1.157409393787384,
+          "se": 0.0631531329171878,
+          "n": 10
+        },
+        "speed_changes_per_min": {
+          "iqm": 20.720965219113555,
+          "ci": [
+            4.292956274534142,
+            49.33527492858324
+          ],
+          "mean": 27.752505262900762,
+          "se": 9.574586218835712,
+          "n": 10
+        },
+        "return_mean": {
+          "iqm": -238.3518091837565,
+          "ci": [
+            -293.0288772583008,
+            -197.5870157877604
+          ],
+          "mean": -247.40942840576173,
+          "se": 20.878046789929517,
+          "n": 10
+        }
+      },
+      "hypertension": {
+        "time_closed_gt10s": {
+          "iqm": 0.18287614769279134,
+          "ci": [
+            0.10161740182694284,
+            0.34265534842521594
+          ],
+          "mean": 0.23058246174985095,
+          "se": 0.08124678913085454,
+          "n": 10
+        },
+        "time_closed_gt30s": {
+          "iqm": 0.15768735418806934,
+          "ci": [
+            0.08695603765523192,
+            0.31315518898149636
+          ],
+          "mean": 0.20983896771834698,
+          "se": 0.08176490963626856,
+          "n": 10
+        },
+        "opening_ratio": {
+          "iqm": 0.7916145833333332,
+          "ci": [
+            0.6262543402777778,
+            0.8892203233506943
+          ],
+          "mean": 0.7508923611111111,
+          "se": 0.0812241563578468,
+          "n": 10
+        },
+        "max_closure_s": {
+          "iqm": 94.60260544030461,
+          "ci": [
+            52.4099611564908,
+            197.814536865723
+          ],
+          "mean": 132.78840770702809,
+          "se": 55.84142184900939,
+          "n": 10
+        },
+        "violations_per_hour": {
+          "iqm": 311.68850122824887,
+          "ci": [
+            165.5130072989178,
+            577.6359234796422
+          ],
+          "mean": 383.58517975576376,
+          "se": 131.0697478632366,
+          "n": 10
+        },
+        "suction_per_hour": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 10
+        },
+        "back_frac": {
+          "iqm": 0.7318851273148148,
+          "ci": [
+            0.5774998010706018,
+            0.8464756944444445
+          ],
+          "mean": 0.70298046875,
+          "se": 0.08411979908974396,
+          "n": 10
+        },
+        "congestion_frac": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 10
+        },
+        "co_abs_err": {
+          "iqm": 1.3576823870340984,
+          "ci": [
+            1.1587593585252762,
+            1.6332217261195174
+          ],
+          "mean": 1.408903855085373,
+          "se": 0.13081898325705588,
+          "n": 10
+        },
+        "speed_changes_per_min": {
+          "iqm": 27.80317305123813,
+          "ci": [
+            6.181383673095318,
+            54.84110971443645
+          ],
+          "mean": 31.91359166766996,
+          "se": 9.57043386326793,
+          "n": 10
+        },
+        "return_mean": {
+          "iqm": -289.8755798339844,
+          "ci": [
+            -297.434076944987,
+            -278.08380457560224
+          ],
+          "mean": -287.4140197753906,
+          "se": 4.71208511859056,
+          "n": 10
+        }
+      },
+      "exercise": {
+        "time_closed_gt10s": {
+          "iqm": 0.023357585472449604,
+          "ci": [
+            0.0046706152951625024,
+            0.24629933222098002
+          ],
+          "mean": 0.12023183834612561,
+          "se": 0.07606331213602578,
+          "n": 10
+        },
+        "time_closed_gt30s": {
+          "iqm": 0.01137336890143279,
+          "ci": [
+            0.0029699916833635298,
+            0.22280270772375121
+          ],
+          "mean": 0.10871592546262734,
+          "se": 0.07573427706473483,
+          "n": 10
+        },
+        "opening_ratio": {
+          "iqm": 0.9792679398148146,
+          "ci": [
+            0.747308865017361,
+            0.995164207175926
+          ],
+          "mean": 0.8785078125,
+          "se": 0.07708697554463931,
+          "n": 10
+        },
+        "max_closure_s": {
+          "iqm": 12.122805410646833,
+          "ci": [
+            1.9286255913320929,
+            113.45512206705651
+          ],
+          "mean": 57.99631894228514,
+          "se": 38.32652597089231,
+          "n": 10
+        },
+        "violations_per_hour": {
+          "iqm": 40.359907691987154,
+          "ci": [
+            8.868930383575318,
+            521.9403856676029
+          ],
+          "mean": 250.90401688014464,
+          "se": 161.2187700186832,
+          "n": 10
+        },
+        "suction_per_hour": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 10
+        },
+        "back_frac": {
+          "iqm": 0.1919408275462963,
+          "ci": [
+            0.08118778935185185,
+            0.44736328124999997
+          ],
+          "mean": 0.2650633680555555,
+          "se": 0.0857150855932802,
+          "n": 10
+        },
+        "congestion_frac": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 10
+        },
+        "co_abs_err": {
+          "iqm": 1.1654590765635173,
+          "ci": [
+            1.0402823487917583,
+            1.6185480336348215
+          ],
+          "mean": 1.3293418645858766,
+          "se": 0.1606435257606543,
+          "n": 10
+        },
+        "speed_changes_per_min": {
+          "iqm": 18.63994891316391,
+          "ci": [
+            4.972777244788504,
+            57.68839503603322
+          ],
+          "mean": 31.401094341526836,
+          "se": 12.22259262146595,
+          "n": 10
+        },
+        "return_mean": {
+          "iqm": -119.19835789998372,
+          "ci": [
+            -191.54060084025065,
+            -66.04621435801204
+          ],
+          "mean": -130.59434432983397,
+          "se": 26.394898799827647,
+          "n": 10
+        }
+      },
+      "hypovolemia": {
+        "time_closed_gt10s": {
+          "iqm": 0.20137302136402005,
+          "ci": [
+            0.07920140067597743,
+            0.4751320106743277
+          ],
+          "mean": 0.2741931816100473,
+          "se": 0.09613517688953394,
+          "n": 10
+        },
+        "time_closed_gt30s": {
+          "iqm": 0.1798662161140032,
+          "ci": [
+            0.0626663821454561,
+            0.4550152446833047
+          ],
+          "mean": 0.2571037666650332,
+          "se": 0.09632811026534487,
+          "n": 10
+        },
+        "opening_ratio": {
+          "iqm": 0.7822294560185186,
+          "ci": [
+            0.5125208333333334,
+            0.906367802372685
+          ],
+          "mean": 0.7130946180555555,
+          "se": 0.09543033784306026,
+          "n": 10
+        },
+        "max_closure_s": {
+          "iqm": 107.6444218008158,
+          "ci": [
+            31.71484585745493,
+            296.53717347991187
+          ],
+          "mean": 164.89362484100275,
+          "se": 65.76836208984572,
+          "n": 10
+        },
+        "violations_per_hour": {
+          "iqm": 329.07596381596136,
+          "ci": [
+            136.82412099108296,
+            763.2804788370598
+          ],
+          "mean": 445.2446248096373,
+          "se": 153.04965780670074,
+          "n": 10
+        },
+        "suction_per_hour": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 10
+        },
+        "back_frac": {
+          "iqm": 0.15726634837962963,
+          "ci": [
+            0.07358796296296295,
+            0.3736335358796296
+          ],
+          "mean": 0.2306558159722223,
+          "se": 0.07902061195667544,
+          "n": 10
+        },
+        "congestion_frac": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 10
+        },
+        "co_abs_err": {
+          "iqm": 0.5403887877861658,
+          "ci": [
+            0.4156722115973632,
+            0.8925815677891166
+          ],
+          "mean": 0.6710720926523208,
+          "se": 0.13009142296745196,
+          "n": 10
+        },
+        "speed_changes_per_min": {
+          "iqm": 19.663917533112727,
+          "ci": [
+            4.540603993521686,
+            48.70372324386845
+          ],
+          "mean": 27.202354979193853,
+          "se": 9.437521232119023,
+          "n": 10
+        },
+        "return_mean": {
+          "iqm": -148.8764762878418,
+          "ci": [
+            -219.51211547851562,
+            -94.99753163655609
+          ],
+          "mean": -160.78580322265626,
+          "se": 26.568102915138365,
+          "n": 10
+        }
+      }
+    },
+    "tdm_v2_mlp": {
+      "random": {
+        "time_closed_gt10s": {
+          "iqm": 0.07174609715131709,
+          "ci": [
+            0.06153331711302096,
+            0.08624541321924835
+          ],
+          "mean": 0.07365765460330925,
+          "se": 0.005619873747697189,
+          "n": 10
+        },
+        "time_closed_gt30s": {
+          "iqm": 0.06622270549189342,
+          "ci": [
+            0.056870541435057646,
+            0.08136013523002561
+          ],
+          "mean": 0.06873436733308569,
+          "se": 0.0054907700745851894,
+          "n": 10
+        },
+        "opening_ratio": {
+          "iqm": 0.925635036892361,
+          "ci": [
+            0.9114767795138888,
+            0.9364556511773003
+          ],
+          "mean": 0.9242620442708332,
+          "se": 0.005652490816843683,
+          "n": 10
+        },
+        "max_closure_s": {
+          "iqm": 45.26206984941382,
+          "ci": [
+            38.486447384889466,
+            57.143248953167735
+          ],
+          "mean": 48.05658219904872,
+          "se": 4.308954510999047,
+          "n": 10
+        },
+        "violations_per_hour": {
+          "iqm": 114.6087726097126,
+          "ci": [
+            97.80879600878693,
+            137.49759997471804
+          ],
+          "mean": 117.1508629405329,
+          "se": 8.914207930729773,
+          "n": 10
+        },
+        "suction_per_hour": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 10
+        },
+        "back_frac": {
+          "iqm": 0.3987383355034722,
+          "ci": [
+            0.3560375162760417,
+            0.43007649739583337
+          ],
+          "mean": 0.39482128906249997,
+          "se": 0.01598924726100119,
+          "n": 10
+        },
+        "congestion_frac": {
+          "iqm": 0.012993842230902775,
+          "ci": [
+            0.011922471788194444,
+            0.01370456271701389
+          ],
+          "mean": 0.012833821614583333,
+          "se": 0.0003735814047674833,
+          "n": 10
+        },
+        "co_abs_err": {
+          "iqm": 1.0729128122329712,
+          "ci": [
+            1.056385080019633,
+            1.0894614259401958
+          ],
+          "mean": 1.0737208127975464,
+          "se": 0.007058053280358701,
+          "n": 10
+        },
+        "speed_changes_per_min": {
+          "iqm": 5.51860947830108,
+          "ci": [
+            4.468820408911314,
+            6.410629738888769
+          ],
+          "mean": 5.447110367434243,
+          "se": 0.4826034717553262,
+          "n": 10
+        },
+        "return_mean": {
+          "iqm": -197.6875025431315,
+          "ci": [
+            -205.11450958251953,
+            -187.93829269409179
+          ],
+          "mean": -196.94796905517578,
+          "se": 3.6951742813415214,
+          "n": 10
+        }
+      },
+      "hypertension": {
+        "time_closed_gt10s": {
+          "iqm": 0.16908275161702668,
+          "ci": [
+            0.15144094719467782,
+            0.1953175846770154
+          ],
+          "mean": 0.17243576180625816,
+          "se": 0.009783044906433449,
+          "n": 10
+        },
+        "time_closed_gt30s": {
+          "iqm": 0.15368198873857847,
+          "ci": [
+            0.13549114922433148,
+            0.18253572016834413
+          ],
+          "mean": 0.15833071730896603,
+          "se": 0.009789600431248727,
+          "n": 10
+        },
+        "opening_ratio": {
+          "iqm": 0.8206134259259259,
+          "ci": [
+            0.7969034830729168,
+            0.8392174840856482
+          ],
+          "mean": 0.8189830729166667,
+          "se": 0.009692832658685995,
+          "n": 10
+        },
+        "max_closure_s": {
+          "iqm": 88.46264460434516,
+          "ci": [
+            77.6825937356179,
+            107.92138243404521
+          ],
+          "mean": 92.14484657943248,
+          "se": 6.483638958213251,
+          "n": 10
+        },
+        "violations_per_hour": {
+          "iqm": 273.78889806051683,
+          "ci": [
+            246.02556628165766,
+            312.4804935212794
+          ],
+          "mean": 277.7299827050325,
+          "se": 15.116685122126356,
+          "n": 10
+        },
+        "suction_per_hour": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 10
+        },
+        "back_frac": {
+          "iqm": 0.7782125289351852,
+          "ci": [
+            0.7473213252314815,
+            0.7961935763888889
+          ],
+          "mean": 0.7733216145833334,
+          "se": 0.01099450464218672,
+          "n": 10
+        },
+        "congestion_frac": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 10
+        },
+        "co_abs_err": {
+          "iqm": 1.320875306924184,
+          "ci": [
+            1.2859288200736045,
+            1.3470657661557197
+          ],
+          "mean": 1.3187314867973328,
+          "se": 0.014043628169215927,
+          "n": 10
+        },
+        "speed_changes_per_min": {
+          "iqm": 8.08946362496763,
+          "ci": [
+            6.245283957307992,
+            9.650378586173886
+          ],
+          "mean": 8.045520561528125,
+          "se": 0.8076070662960643,
+          "n": 10
+        },
+        "return_mean": {
+          "iqm": -285.86835225423175,
+          "ci": [
+            -287.470219930013,
+            -284.0023498535156
+          ],
+          "mean": -285.60854187011716,
+          "se": 0.826286020127431,
+          "n": 10
+        }
+      },
+      "exercise": {
+        "time_closed_gt10s": {
+          "iqm": 0.0035244522102746852,
+          "ci": [
+            0.002694473005835932,
+            0.004666339269811886
+          ],
+          "mean": 0.003701499035491821,
+          "se": 0.000429079524428016,
+          "n": 10
+        },
+        "time_closed_gt30s": {
+          "iqm": 0.002968482938021055,
+          "ci": [
+            0.002239785332479963,
+            0.0041540046633393975
+          ],
+          "mean": 0.0031864366513630225,
+          "se": 0.00041533404475131025,
+          "n": 10
+        },
+        "opening_ratio": {
+          "iqm": 0.9968070023148149,
+          "ci": [
+            0.9958593750000001,
+            0.9973531539351853
+          ],
+          "mean": 0.9966245659722223,
+          "se": 0.000348302025903913,
+          "n": 10
+        },
+        "max_closure_s": {
+          "iqm": 1.6964841144314657,
+          "ci": [
+            1.3357720638935764,
+            2.319768559494211
+          ],
+          "mean": 1.8249769534915685,
+          "se": 0.21820449476219209,
+          "n": 10
+        },
+        "violations_per_hour": {
+          "iqm": 5.911114368773987,
+          "ci": [
+            4.726798617232942,
+            7.79500429983671
+          ],
+          "mean": 6.254471948284307,
+          "se": 0.6903374410629692,
+          "n": 10
+        },
+        "suction_per_hour": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 10
+        },
+        "back_frac": {
+          "iqm": 0.3660951967592592,
+          "ci": [
+            0.28973824508101853,
+            0.4169408275462963
+          ],
+          "mean": 0.3519800347222222,
+          "se": 0.02617650678539135,
+          "n": 10
+        },
+        "congestion_frac": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 10
+        },
+        "co_abs_err": {
+          "iqm": 0.9813350439071655,
+          "ci": [
+            0.9640607635180155,
+            1.0143824733793736
+          ],
+          "mean": 0.988894808292389,
+          "se": 0.010739245563755327,
+          "n": 10
+        },
+        "speed_changes_per_min": {
+          "iqm": 7.415574344406989,
+          "ci": [
+            5.992369213150074,
+            8.63474208217838
+          ],
+          "mean": 7.373049006622331,
+          "se": 0.6785756835235828,
+          "n": 10
+        },
+        "return_mean": {
+          "iqm": -116.31939951578777,
+          "ci": [
+            -129.59177271525064,
+            -96.39641472498577
+          ],
+          "mean": -112.64216537475586,
+          "se": 6.8189141621472835,
+          "n": 10
+        }
+      },
+      "hypovolemia": {
+        "time_closed_gt10s": {
+          "iqm": 0.05950233594470402,
+          "ci": [
+            0.04932221822970815,
+            0.08120444614254194
+          ],
+          "mean": 0.0661601767848879,
+          "se": 0.0076092050171395744,
+          "n": 10
+        },
+        "time_closed_gt30s": {
+          "iqm": 0.05321905870313098,
+          "ci": [
+            0.043123070531234924,
+            0.07510853455299314
+          ],
+          "mean": 0.06021139227162784,
+          "se": 0.00772357304962217,
+          "n": 10
+        },
+        "opening_ratio": {
+          "iqm": 0.937296730324074,
+          "ci": [
+            0.9154198314525464,
+            0.9479087094907408
+          ],
+          "mean": 0.9310529513888888,
+          "se": 0.007658265333946903,
+          "n": 10
+        },
+        "max_closure_s": {
+          "iqm": 27.16151051223278,
+          "ci": [
+            22.02567368745804,
+            39.72469518085321
+          ],
+          "mean": 31.739867889881133,
+          "se": 4.811409842064404,
+          "n": 10
+        },
+        "violations_per_hour": {
+          "iqm": 95.88028425286768,
+          "ci": [
+            79.45743455288182,
+            130.0423747626357
+          ],
+          "mean": 105.7937530224173,
+          "se": 11.95701275971226,
+          "n": 10
+        },
+        "suction_per_hour": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 10
+        },
+        "back_frac": {
+          "iqm": 0.24826750578703705,
+          "ci": [
+            0.19633604600694443,
+            0.2821593967013889
+          ],
+          "mean": 0.23668359374999998,
+          "se": 0.01907806616373812,
+          "n": 10
+        },
+        "congestion_frac": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 10
+        },
+        "co_abs_err": {
+          "iqm": 0.5172552963097891,
+          "ci": [
+            0.4827495250850916,
+            0.5431323945522308
+          ],
+          "mean": 0.5115494042634964,
+          "se": 0.013350624475320576,
+          "n": 10
+        },
+        "speed_changes_per_min": {
+          "iqm": 5.128190734194704,
+          "ci": [
+            4.366885233465233,
+            5.913163055677277
+          ],
+          "mean": 5.130318656442107,
+          "se": 0.3964381159196473,
+          "n": 10
+        },
+        "return_mean": {
+          "iqm": -96.30853525797527,
+          "ci": [
+            -102.39537175496419,
+            -86.75039663314821
+          ],
+          "mean": -94.27169342041016,
+          "se": 3.3181454294562904,
+          "n": 10
+        }
+      }
+    },
+    "ibu_hist_v2_mlp": {
+      "random": {
+        "time_closed_gt10s": {
+          "iqm": 0.06510081973524907,
+          "ci": [
+            0.051237307924115495,
+            0.08522013809806643
+          ],
+          "mean": 0.06698610399591458,
+          "se": 0.007344697310516302,
+          "n": 5
+        },
+        "time_closed_gt30s": {
+          "iqm": 0.05743960512659282,
+          "ci": [
+            0.04474212241661255,
+            0.0775362088785827
+          ],
+          "mean": 0.059824914658770725,
+          "se": 0.007243008969851195,
+          "n": 5
+        },
+        "opening_ratio": {
+          "iqm": 0.9290421549479166,
+          "ci": [
+            0.9087505425347221,
+            0.9441297743055554
+          ],
+          "mean": 0.9276772460937499,
+          "se": 0.007576055794373187,
+          "n": 5
+        },
+        "max_closure_s": {
+          "iqm": 32.24605863465695,
+          "ci": [
+            24.443134802083176,
+            45.06575308660589
+          ],
+          "mean": 33.75810001315549,
+          "se": 4.566225807134948,
+          "n": 5
+        },
+        "violations_per_hour": {
+          "iqm": 110.14993340262828,
+          "ci": [
+            86.62753174967152,
+            144.93947030420154
+          ],
+          "mean": 113.37041783131319,
+          "se": 12.577219311121008,
+          "n": 5
+        },
+        "suction_per_hour": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 5
+        },
+        "back_frac": {
+          "iqm": 0.37688639322916667,
+          "ci": [
+            0.33100016276041666,
+            0.4304109700520833
+          ],
+          "mean": 0.37767561848958336,
+          "se": 0.021494539565800257,
+          "n": 5
+        },
+        "congestion_frac": {
+          "iqm": 0.01013427734375,
+          "ci": [
+            0.009039442274305556,
+            0.01140597873263889
+          ],
+          "mean": 0.010189290364583334,
+          "se": 0.0005032246766692546,
+          "n": 5
+        },
+        "co_abs_err": {
+          "iqm": 1.0984763304392497,
+          "ci": [
+            1.074231505393982,
+            1.119881550470988
+          ],
+          "mean": 1.0971959590911866,
+          "se": 0.009942022657414085,
+          "n": 5
+        },
+        "speed_changes_per_min": {
+          "iqm": 10.904347737900146,
+          "ci": [
+            8.9371788904097,
+            17.274778318594247
+          ],
+          "mean": 12.2144842185611,
+          "se": 2.075575170000245,
+          "n": 5
+        },
+        "return_mean": {
+          "iqm": -188.63248697916666,
+          "ci": [
+            -202.25678507486978,
+            -179.4442138671875
+          ],
+          "mean": -189.54438171386718,
+          "se": 5.0085207555877265,
+          "n": 5
+        }
+      },
+      "hypertension": {
+        "time_closed_gt10s": {
+          "iqm": 0.11036457263620192,
+          "ci": [
+            0.0929325903140274,
+            0.11944879165096661
+          ],
+          "mean": 0.10828559103128113,
+          "se": 0.005972880723834128,
+          "n": 5
+        },
+        "time_closed_gt30s": {
+          "iqm": 0.10028066464510405,
+          "ci": [
+            0.0826880822512989,
+            0.11213831285938514
+          ],
+          "mean": 0.0994097213593154,
+          "se": 0.006690654965286714,
+          "n": 5
+        },
+        "opening_ratio": {
+          "iqm": 0.8851490162037038,
+          "ci": [
+            0.8721383101851852,
+            0.8993026620370369
+          ],
+          "mean": 0.8851605902777777,
+          "se": 0.0058336394698934695,
+          "n": 5
+        },
+        "max_closure_s": {
+          "iqm": 48.87711951136589,
+          "ci": [
+            38.082588801781334,
+            62.36713437239329
+          ],
+          "mean": 50.33076238632202,
+          "se": 5.810683429475462,
+          "n": 5
+        },
+        "violations_per_hour": {
+          "iqm": 177.90861928150193,
+          "ci": [
+            151.71709475499293,
+            194.45932923008058
+          ],
+          "mean": 175.636758547523,
+          "se": 9.393605147545763,
+          "n": 5
+        },
+        "suction_per_hour": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 5
+        },
+        "back_frac": {
+          "iqm": 0.8366594328703703,
+          "ci": [
+            0.7970457175925926,
+            0.8700694444444445
+          ],
+          "mean": 0.8347395833333333,
+          "se": 0.015915950052589056,
+          "n": 5
+        },
+        "congestion_frac": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 5
+        },
+        "co_abs_err": {
+          "iqm": 1.4087177912394206,
+          "ci": [
+            1.3694990078608196,
+            1.4451278845469158
+          ],
+          "mean": 1.4076117753982544,
+          "se": 0.016362429801105124,
+          "n": 5
+        },
+        "speed_changes_per_min": {
+          "iqm": 13.102638868000424,
+          "ci": [
+            9.731343860488947,
+            19.500200515378477
+          ],
+          "mean": 14.151108978778387,
+          "se": 2.218136034879159,
+          "n": 5
+        },
+        "return_mean": {
+          "iqm": -285.2219543457031,
+          "ci": [
+            -290.0453389485677,
+            -275.17417399088544
+          ],
+          "mean": -283.9197204589844,
+          "se": 3.3457824220741252,
+          "n": 5
+        }
+      },
+      "exercise": {
+        "time_closed_gt10s": {
+          "iqm": 0.002399319725809543,
+          "ci": [
+            0.0013506441621940226,
+            0.0036007302041430743
+          ],
+          "mean": 0.002431741385505489,
+          "se": 0.0004797956863245083,
+          "n": 5
+        },
+        "time_closed_gt30s": {
+          "iqm": 0.0019172831195269082,
+          "ci": [
+            0.0010759268981128717,
+            0.0034642582507412884
+          ],
+          "mean": 0.0021198668444190423,
+          "se": 0.0005240355623028927,
+          "n": 5
+        },
+        "opening_ratio": {
+          "iqm": 0.9977662037037037,
+          "ci": [
+            0.9968214699074074,
+            0.9987543402777778
+          ],
+          "mean": 0.9977942708333334,
+          "se": 0.0004149074007079456,
+          "n": 5
+        },
+        "max_closure_s": {
+          "iqm": 1.1841103072899084,
+          "ci": [
+            0.5927353425261875,
+            1.9050056010795136
+          ],
+          "mean": 1.2217706624418496,
+          "se": 0.28007507251956937,
+          "n": 5
+        },
+        "violations_per_hour": {
+          "iqm": 4.236378741597764,
+          "ci": [
+            2.3175037107809113,
+            6.252174389074274
+          ],
+          "mean": 4.241079225536585,
+          "se": 0.8393876481832848,
+          "n": 5
+        },
+        "suction_per_hour": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 5
+        },
+        "back_frac": {
+          "iqm": 0.22101562500000002,
+          "ci": [
+            0.14496961805555555,
+            0.2537760416666667
+          ],
+          "mean": 0.20774218749999998,
+          "se": 0.024566838169059992,
+          "n": 5
+        },
+        "congestion_frac": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 5
+        },
+        "co_abs_err": {
+          "iqm": 1.1817100445429485,
+          "ci": [
+            1.1242676575978596,
+            1.2436922788619995
+          ],
+          "mean": 1.1822078227996826,
+          "se": 0.025475491753732694,
+          "n": 5
+        },
+        "speed_changes_per_min": {
+          "iqm": 7.862714610714984,
+          "ci": [
+            6.262847358486103,
+            19.90704721294708
+          ],
+          "mean": 10.950141937690388,
+          "se": 3.687233332369391,
+          "n": 5
+        },
+        "return_mean": {
+          "iqm": -80.50696818033855,
+          "ci": [
+            -87.9404296875,
+            -61.19759877522787
+          ],
+          "mean": -76.8652099609375,
+          "se": 6.134950418331353,
+          "n": 5
+        }
+      },
+      "hypovolemia": {
+        "time_closed_gt10s": {
+          "iqm": 0.06799337296629947,
+          "ci": [
+            0.03568288237748185,
+            0.1054456235506267
+          ],
+          "mean": 0.06878647772912781,
+          "se": 0.015539776870530925,
+          "n": 5
+        },
+        "time_closed_gt30s": {
+          "iqm": 0.05914351827660815,
+          "ci": [
+            0.029312795619241255,
+            0.09880500271994941
+          ],
+          "mean": 0.06098178562636014,
+          "se": 0.01581053235924424,
+          "n": 5
+        },
+        "opening_ratio": {
+          "iqm": 0.9266203703703703,
+          "ci": [
+            0.8910575810185185,
+            0.9603153935185186
+          ],
+          "mean": 0.9264453125,
+          "se": 0.015250174877505107,
+          "n": 5
+        },
+        "max_closure_s": {
+          "iqm": 29.057144115368526,
+          "ci": [
+            13.168763180573782,
+            54.80584393938383
+          ],
+          "mean": 31.815005230903626,
+          "se": 9.943595654827817,
+          "n": 5
+        },
+        "violations_per_hour": {
+          "iqm": 113.43861125355174,
+          "ci": [
+            60.425258058907644,
+            173.71316365775616
+          ],
+          "mean": 114.63152447290913,
+          "se": 25.08849329942346,
+          "n": 5
+        },
+        "suction_per_hour": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 5
+        },
+        "back_frac": {
+          "iqm": 0.24079716435185183,
+          "ci": [
+            0.17345630787037036,
+            0.30350260416666663
+          ],
+          "mean": 0.23817968750000001,
+          "se": 0.028150660956285767,
+          "n": 5
+        },
+        "congestion_frac": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 5
+        },
+        "co_abs_err": {
+          "iqm": 0.5431168874104818,
+          "ci": [
+            0.49500105778376263,
+            0.5826735099156698
+          ],
+          "mean": 0.5408829152584076,
+          "se": 0.019077258580903683,
+          "n": 5
+        },
+        "speed_changes_per_min": {
+          "iqm": 12.182344798875278,
+          "ci": [
+            10.081321897600485,
+            17.764559314357914
+          ],
+          "mean": 13.201054663711052,
+          "se": 1.9010673303436139,
+          "n": 5
+        },
+        "return_mean": {
+          "iqm": -96.79456837972005,
+          "ci": [
+            -106.10775756835938,
+            -85.39811452229817
+          ],
+          "mean": -96.20525360107422,
+          "se": 4.424724815429061,
+          "n": 5
+        }
+      }
+    },
+    "tdm_det_v2_mlp": {
+      "random": {
+        "time_closed_gt10s": {
+          "iqm": 0.06045175910973736,
+          "ci": [
+            0.035234154673711174,
+            0.07641371555688162
+          ],
+          "mean": 0.0562220764186801,
+          "se": 0.010787886565402464,
+          "n": 5
+        },
+        "time_closed_gt30s": {
+          "iqm": 0.05385170047031007,
+          "ci": [
+            0.032616237766879226,
+            0.06783429953182941
+          ],
+          "mean": 0.050300247375907214,
+          "se": 0.009232343892379384,
+          "n": 5
+        },
+        "opening_ratio": {
+          "iqm": 0.9359393988715278,
+          "ci": [
+            0.9180045572916667,
+            0.9637706163194445
+          ],
+          "mean": 0.9406329752604167,
+          "se": 0.011808604632545176,
+          "n": 5
+        },
+        "max_closure_s": {
+          "iqm": 35.745847597174965,
+          "ci": [
+            21.85100141361666,
+            45.64839064097032
+          ],
+          "mean": 33.60978231956251,
+          "se": 5.898801352746877,
+          "n": 5
+        },
+        "violations_per_hour": {
+          "iqm": 100.34333234756083,
+          "ci": [
+            56.542340594821326,
+            128.4885006397725
+          ],
+          "mean": 93.0589326236595,
+          "se": 18.53304904917377,
+          "n": 5
+        },
+        "suction_per_hour": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 5
+        },
+        "back_frac": {
+          "iqm": 0.44073594835069446,
+          "ci": [
+            0.39269938151041667,
+            0.5523863389756944
+          ],
+          "mean": 0.4661064453125,
+          "se": 0.04288524474550493,
+          "n": 5
+        },
+        "congestion_frac": {
+          "iqm": 0.014477810329861111,
+          "ci": [
+            0.013688151041666667,
+            0.01610053168402778
+          ],
+          "mean": 0.014827799479166667,
+          "se": 0.0006385639292583884,
+          "n": 5
+        },
+        "co_abs_err": {
+          "iqm": 1.0870685974756877,
+          "ci": [
+            1.0661468903223674,
+            1.1506731907526653
+          ],
+          "mean": 1.102537488937378,
+          "se": 0.023124298890449976,
+          "n": 5
+        },
+        "speed_changes_per_min": {
+          "iqm": 6.560695067149375,
+          "ci": [
+            3.592024514922715,
+            12.87152016727345
+          ],
+          "mean": 7.4255160960078275,
+          "se": 2.0799425146008854,
+          "n": 5
+        },
+        "return_mean": {
+          "iqm": -209.08292134602866,
+          "ci": [
+            -240.17103576660156,
+            -198.09550984700522
+          ],
+          "mean": -216.64714660644532,
+          "se": 11.399024347937601,
+          "n": 5
+        }
+      },
+      "hypertension": {
+        "time_closed_gt10s": {
+          "iqm": 0.11819878265562474,
+          "ci": [
+            0.07672019753809751,
+            0.14381073663315277
+          ],
+          "mean": 0.11076995358419302,
+          "se": 0.017556303876089117,
+          "n": 5
+        },
+        "time_closed_gt30s": {
+          "iqm": 0.10371671668076897,
+          "ci": [
+            0.07134550582950172,
+            0.12674185288840203
+          ],
+          "mean": 0.09881161945042219,
+          "se": 0.01462576292719164,
+          "n": 5
+        },
+        "opening_ratio": {
+          "iqm": 0.8739424189814815,
+          "ci": [
+            0.845925925925926,
+            0.9207798032407407
+          ],
+          "mean": 0.8827430555555555,
+          "se": 0.019570909339254795,
+          "n": 5
+        },
+        "max_closure_s": {
+          "iqm": 57.92759984731674,
+          "ci": [
+            40.3471993903319,
+            76.93749432762463
+          ],
+          "mean": 57.20726906061172,
+          "se": 8.741580288936472,
+          "n": 5
+        },
+        "violations_per_hour": {
+          "iqm": 193.62949678148303,
+          "ci": [
+            122.81664084836312,
+            237.0921811213428
+          ],
+          "mean": 180.66996020034517,
+          "se": 29.83995965492827,
+          "n": 5
+        },
+        "suction_per_hour": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 5
+        },
+        "back_frac": {
+          "iqm": 0.8546831597222222,
+          "ci": [
+            0.8220920138888889,
+            0.8996831597222222
+          ],
+          "mean": 0.8602326388888889,
+          "se": 0.01920482914361642,
+          "n": 5
+        },
+        "congestion_frac": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 5
+        },
+        "co_abs_err": {
+          "iqm": 1.3959150711695354,
+          "ci": [
+            1.3400630950927734,
+            1.5235734383265178
+          ],
+          "mean": 1.4242416381835938,
+          "se": 0.04925480725265161,
+          "n": 5
+        },
+        "speed_changes_per_min": {
+          "iqm": 7.202560294937707,
+          "ci": [
+            4.353474605240859,
+            12.03393464472776
+          ],
+          "mean": 7.708646700441338,
+          "se": 1.7645398779062964,
+          "n": 5
+        },
+        "return_mean": {
+          "iqm": -291.84398396809894,
+          "ci": [
+            -293.4449768066406,
+            -290.9625244140625
+          ],
+          "mean": -292.0674743652344,
+          "se": 0.5693978442826266,
+          "n": 5
+        }
+      },
+      "exercise": {
+        "time_closed_gt10s": {
+          "iqm": 0.0009550801379517784,
+          "ci": [
+            0.0002672502092633216,
+            0.001482433796598389
+          ],
+          "mean": 0.0008738243188292497,
+          "se": 0.0002938584704196756,
+          "n": 5
+        },
+        "time_closed_gt30s": {
+          "iqm": 0.0004300175214233379,
+          "ci": [
+            0.00011391081537013648,
+            0.0007746691723386287
+          ],
+          "mean": 0.00042617237006606476,
+          "se": 0.00014523847880464836,
+          "n": 5
+        },
+        "opening_ratio": {
+          "iqm": 0.9990234375,
+          "ci": [
+            0.9984505208333333,
+            0.9996730324074075
+          ],
+          "mean": 0.9990946180555556,
+          "se": 0.00029779366673833796,
+          "n": 5
+        },
+        "max_closure_s": {
+          "iqm": 0.3724718739589055,
+          "ci": [
+            0.11261386175950368,
+            0.6139001200596491
+          ],
+          "mean": 0.35165890157222746,
+          "se": 0.11582669018444937,
+          "n": 5
+        },
+        "violations_per_hour": {
+          "iqm": 1.7019360818285776,
+          "ci": [
+            0.5530888837577709,
+            2.75206455436693
+          ],
+          "mean": 1.5860592556683748,
+          "se": 0.5324991283854346,
+          "n": 5
+        },
+        "suction_per_hour": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 5
+        },
+        "back_frac": {
+          "iqm": 0.31124421296296295,
+          "ci": [
+            0.23681712962962964,
+            0.44068721064814814
+          ],
+          "mean": 0.32926041666666667,
+          "se": 0.050730724983670664,
+          "n": 5
+        },
+        "congestion_frac": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 5
+        },
+        "co_abs_err": {
+          "iqm": 1.0532526175181072,
+          "ci": [
+            1.0085173447926838,
+            1.0961455901463826
+          ],
+          "mean": 1.0532711029052735,
+          "se": 0.019814822897476814,
+          "n": 5
+        },
+        "speed_changes_per_min": {
+          "iqm": 10.863699363424992,
+          "ci": [
+            5.1349767670689275,
+            22.476827551175074
+          ],
+          "mean": 12.262095944604738,
+          "se": 3.916053508275337,
+          "n": 5
+        },
+        "return_mean": {
+          "iqm": -102.05841827392578,
+          "ci": [
+            -135.9813232421875,
+            -82.92771911621094
+          ],
+          "mean": -106.90052490234375,
+          "se": 13.253192131535139,
+          "n": 5
+        }
+      },
+      "hypovolemia": {
+        "time_closed_gt10s": {
+          "iqm": 0.04007957960827991,
+          "ci": [
+            0.020979457144015955,
+            0.05706742603396422
+          ],
+          "mean": 0.03915191282992842,
+          "se": 0.008610208899910746,
+          "n": 5
+        },
+        "time_closed_gt30s": {
+          "iqm": 0.031694173001267235,
+          "ci": [
+            0.017141213499461443,
+            0.04718751323195086
+          ],
+          "mean": 0.03161198967853686,
+          "se": 0.00690448373175633,
+          "n": 5
+        },
+        "opening_ratio": {
+          "iqm": 0.9553804976851851,
+          "ci": [
+            0.9361357060185185,
+            0.9775028935185185
+          ],
+          "mean": 0.9569027777777779,
+          "se": 0.009755553506374507,
+          "n": 5
+        },
+        "max_closure_s": {
+          "iqm": 14.830204516649246,
+          "ci": [
+            9.345748196045557,
+            20.651286751031876
+          ],
+          "mean": 14.639934372901916,
+          "se": 2.6165465885043115,
+          "n": 5
+        },
+        "violations_per_hour": {
+          "iqm": 67.45099012918467,
+          "ci": [
+            33.83851142349186,
+            96.68596644691804
+          ],
+          "mean": 65.30297520491902,
+          "se": 14.807023889700288,
+          "n": 5
+        },
+        "suction_per_hour": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 5
+        },
+        "back_frac": {
+          "iqm": 0.3106611689814815,
+          "ci": [
+            0.26679832175925927,
+            0.41128038194444444
+          ],
+          "mean": 0.3344435763888889,
+          "se": 0.04119503231576577,
+          "n": 5
+        },
+        "congestion_frac": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 5
+        },
+        "co_abs_err": {
+          "iqm": 0.5596386790275574,
+          "ci": [
+            0.528215765953064,
+            0.6367135643959045
+          ],
+          "mean": 0.5780085563659668,
+          "se": 0.030442551657535923,
+          "n": 5
+        },
+        "speed_changes_per_min": {
+          "iqm": 6.094328687156882,
+          "ci": [
+            3.6498381700818143,
+            11.702355667327714
+          ],
+          "mean": 6.935258247789667,
+          "se": 1.8124706218957205,
+          "n": 5
+        },
+        "return_mean": {
+          "iqm": -107.81763458251953,
+          "ci": [
+            -131.28966267903647,
+            -100.63732147216797
+          ],
+          "mean": -114.09153594970704,
+          "se": 9.050826696971637,
+          "n": 5
+        }
+      }
+    },
+    "naive_v2_mlp": {
+      "random": {
+        "time_closed_gt10s": {
+          "iqm": 0.06654525684686428,
+          "ci": [
+            0.060421203601444935,
+            0.07660857655245835
+          ],
+          "mean": 0.06794767688325536,
+          "se": 0.004074115147522715,
+          "n": 5
+        },
+        "time_closed_gt30s": {
+          "iqm": 0.054123926422091066,
+          "ci": [
+            0.050270231037572354,
+            0.06325596677916841
+          ],
+          "mean": 0.056294988476384644,
+          "se": 0.003717015825505641,
+          "n": 5
+        },
+        "opening_ratio": {
+          "iqm": 0.9190161132812499,
+          "ci": [
+            0.9075499131944444,
+            0.9283553059895833
+          ],
+          "mean": 0.9187014973958334,
+          "se": 0.004802755810754955,
+          "n": 5
+        },
+        "max_closure_s": {
+          "iqm": 29.262581594909232,
+          "ci": [
+            25.867077127331868,
+            37.05906920608444
+          ],
+          "mean": 30.980058173229917,
+          "se": 2.9234940620802186,
+          "n": 5
+        },
+        "violations_per_hour": {
+          "iqm": 123.08970939408566,
+          "ci": [
+            108.79668834563931,
+            141.58199567355675
+          ],
+          "mean": 124.11704815839839,
+          "se": 7.686729238242603,
+          "n": 5
+        },
+        "suction_per_hour": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 5
+        },
+        "back_frac": {
+          "iqm": 0.36245225694444444,
+          "ci": [
+            0.33219482421874996,
+            0.3922840711805555
+          ],
+          "mean": 0.36342496744791664,
+          "se": 0.013294202033103691,
+          "n": 5
+        },
+        "congestion_frac": {
+          "iqm": 0.012827419704861112,
+          "ci": [
+            0.012418619791666667,
+            0.013525933159722224
+          ],
+          "mean": 0.012912923177083336,
+          "se": 0.00024070149866699494,
+          "n": 5
+        },
+        "co_abs_err": {
+          "iqm": 1.0811939636866252,
+          "ci": [
+            1.0697050094604492,
+            1.0851192077000935
+          ],
+          "mean": 1.0785834550857545,
+          "se": 0.003951114969501549,
+          "n": 5
+        },
+        "speed_changes_per_min": {
+          "iqm": 50.68338035870573,
+          "ci": [
+            43.03245936639496,
+            66.77853981522442
+          ],
+          "mean": 52.981667434658426,
+          "se": 5.345041131438528,
+          "n": 5
+        },
+        "return_mean": {
+          "iqm": -186.21586100260416,
+          "ci": [
+            -193.4837443033854,
+            -179.1453653971354
+          ],
+          "mean": -186.41615600585936,
+          "se": 3.0903305982157554,
+          "n": 5
+        }
+      },
+      "hypertension": {
+        "time_closed_gt10s": {
+          "iqm": 0.12961806621361263,
+          "ci": [
+            0.1225332908258963,
+            0.14991902142219374
+          ],
+          "mean": 0.13465887470853324,
+          "se": 0.007589373490808239,
+          "n": 5
+        },
+        "time_closed_gt30s": {
+          "iqm": 0.10192996744290965,
+          "ci": [
+            0.09670429627380611,
+            0.1257393177324089
+          ],
+          "mean": 0.10809115244965775,
+          "se": 0.007931362070758122,
+          "n": 5
+        },
+        "opening_ratio": {
+          "iqm": 0.8405237268518518,
+          "ci": [
+            0.8217158564814815,
+            0.8503197337962963
+          ],
+          "mean": 0.8373559027777778,
+          "se": 0.007445786869101983,
+          "n": 5
+        },
+        "max_closure_s": {
+          "iqm": 43.00937576095263,
+          "ci": [
+            41.43582407633463,
+            56.29860897858938
+          ],
+          "mean": 46.56775509417057,
+          "se": 4.036134655563729,
+          "n": 5
+        },
+        "violations_per_hour": {
+          "iqm": 233.2911124792444,
+          "ci": [
+            218.77079762599305,
+            263.9953005911793
+          ],
+          "mean": 239.65609121874542,
+          "se": 12.228154534531512,
+          "n": 5
+        },
+        "suction_per_hour": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 5
+        },
+        "back_frac": {
+          "iqm": 0.7963787615740742,
+          "ci": [
+            0.7704195601851852,
+            0.8134953703703705
+          ],
+          "mean": 0.7939470486111111,
+          "se": 0.010392453376045213,
+          "n": 5
+        },
+        "congestion_frac": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 5
+        },
+        "co_abs_err": {
+          "iqm": 1.350968639055888,
+          "ci": [
+            1.324877103169759,
+            1.363430420557658
+          ],
+          "mean": 1.3452401399612426,
+          "se": 0.010790917035837557,
+          "n": 5
+        },
+        "speed_changes_per_min": {
+          "iqm": 57.4368311777387,
+          "ci": [
+            48.35638192153885,
+            70.00586580438683
+          ],
+          "mean": 58.19502130919783,
+          "se": 4.834972438710419,
+          "n": 5
+        },
+        "return_mean": {
+          "iqm": -283.9413350423177,
+          "ci": [
+            -285.7605387369792,
+            -281.42104085286456
+          ],
+          "mean": -283.721435546875,
+          "se": 0.9328749258093136,
+          "n": 5
+        }
+      },
+      "exercise": {
+        "time_closed_gt10s": {
+          "iqm": 0.0026792238080863093,
+          "ci": [
+            0.0022369892711314467,
+            0.0034682591095231232
+          ],
+          "mean": 0.002762116057361589,
+          "se": 0.0002724483285121682,
+          "n": 5
+        },
+        "time_closed_gt30s": {
+          "iqm": 0.0019386965381064877,
+          "ci": [
+            0.0012611764731794346,
+            0.003068253851407738
+          ],
+          "mean": 0.0020615758279774756,
+          "se": 0.0003989722369700525,
+          "n": 5
+        },
+        "opening_ratio": {
+          "iqm": 0.9968561921296296,
+          "ci": [
+            0.9961328125,
+            0.9974276620370371
+          ],
+          "mean": 0.9968289930555555,
+          "se": 0.00028001553608414896,
+          "n": 5
+        },
+        "max_closure_s": {
+          "iqm": 1.0926847578957677,
+          "ci": [
+            0.6590886910756429,
+            1.8810153181354206
+          ],
+          "mean": 1.173441300354898,
+          "se": 0.2735197668008575,
+          "n": 5
+        },
+        "violations_per_hour": {
+          "iqm": 5.4626955786695275,
+          "ci": [
+            4.321117594183926,
+            6.907160055751683
+          ],
+          "mean": 5.513991953153185,
+          "se": 0.5600661173426895,
+          "n": 5
+        },
+        "suction_per_hour": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 5
+        },
+        "back_frac": {
+          "iqm": 0.19411892361111113,
+          "ci": [
+            0.1525607638888889,
+            0.24048032407407408
+          ],
+          "mean": 0.19631770833333334,
+          "se": 0.018818923754055947,
+          "n": 5
+        },
+        "congestion_frac": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 5
+        },
+        "co_abs_err": {
+          "iqm": 1.1130670309066772,
+          "ci": [
+            1.0814541578292847,
+            1.1570004224777222
+          ],
+          "mean": 1.1161925554275514,
+          "se": 0.016506499975836177,
+          "n": 5
+        },
+        "speed_changes_per_min": {
+          "iqm": 60.07399204659378,
+          "ci": [
+            47.62428390364854,
+            85.15202307860453
+          ],
+          "mean": 62.88512868458538,
+          "se": 8.63607551308503,
+          "n": 5
+        },
+        "return_mean": {
+          "iqm": -72.1847915649414,
+          "ci": [
+            -83.95274098714192,
+            -62.0086924235026
+          ],
+          "mean": -72.8466583251953,
+          "se": 4.703290557293582,
+          "n": 5
+        }
+      },
+      "hypovolemia": {
+        "time_closed_gt10s": {
+          "iqm": 0.04506802514710201,
+          "ci": [
+            0.03592449712957538,
+            0.05910593315116999
+          ],
+          "mean": 0.04655123986918506,
+          "se": 0.005681890727144612,
+          "n": 5
+        },
+        "time_closed_gt30s": {
+          "iqm": 0.03227142279106069,
+          "ci": [
+            0.024398157002015308,
+            0.04452402548937843
+          ],
+          "mean": 0.03354688448551531,
+          "se": 0.0048478613899502225,
+          "n": 5
+        },
+        "opening_ratio": {
+          "iqm": 0.9390248842592593,
+          "ci": [
+            0.9245341435185185,
+            0.9515263310185186
+          ],
+          "mean": 0.9387769097222222,
+          "se": 0.006189354417552088,
+          "n": 5
+        },
+        "max_closure_s": {
+          "iqm": 13.843720376491547,
+          "ci": [
+            10.40654989083608,
+            18.89727411667506
+          ],
+          "mean": 14.503119564056396,
+          "se": 2.064395028695411,
+          "n": 5
+        },
+        "violations_per_hour": {
+          "iqm": 87.61164921783934,
+          "ci": [
+            69.16792445004772,
+            110.79279482612615
+          ],
+          "mean": 88.6490856131779,
+          "se": 9.736823400805205,
+          "n": 5
+        },
+        "suction_per_hour": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 5
+        },
+        "back_frac": {
+          "iqm": 0.22830873842592592,
+          "ci": [
+            0.19897569444444443,
+            0.26342447916666667
+          ],
+          "mean": 0.2302795138888889,
+          "se": 0.014160395452162255,
+          "n": 5
+        },
+        "congestion_frac": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 5
+        },
+        "co_abs_err": {
+          "iqm": 0.5289677580197653,
+          "ci": [
+            0.5104082028071085,
+            0.5469779769579569
+          ],
+          "mean": 0.5277784943580628,
+          "se": 0.008665982442922864,
+          "n": 5
+        },
+        "speed_changes_per_min": {
+          "iqm": 48.99413953855153,
+          "ci": [
+            41.20528450254469,
+            64.41420412702342
+          ],
+          "mean": 51.22503880444167,
+          "se": 5.114441445672132,
+          "n": 5
+        },
+        "return_mean": {
+          "iqm": -88.52161661783855,
+          "ci": [
+            -95.01891835530598,
+            -84.4328384399414
+          ],
+          "mean": -89.16293792724609,
+          "se": 2.323941367762245,
+          "n": 5
+        }
+      }
+    },
+    "oracle_p": {
+      "random": {
+        "time_closed_gt10s": {
+          "iqm": 0.00017780841858966757,
+          "ci": [
+            0.0,
+            0.00026671262788450134
+          ],
+          "mean": 0.0001600275767307008,
+          "se": 6.533098462738326e-05,
+          "n": 5
+        },
+        "time_closed_gt30s": {
+          "iqm": 0.00017780841858966757,
+          "ci": [
+            0.0,
+            0.00026671262788450134
+          ],
+          "mean": 0.0001600275767307008,
+          "se": 6.533098462738326e-05,
+          "n": 5
+        },
+        "opening_ratio": {
+          "iqm": 0.8650678168402778,
+          "ci": [
+            0.8473345269097222,
+            0.8849853515624999
+          ],
+          "mean": 0.8658361002604167,
+          "se": 0.008131923576876194,
+          "n": 5
+        },
+        "max_closure_s": {
+          "iqm": 0.8340739575990787,
+          "ci": [
+            0.730472136521712,
+            0.9466944474067228
+          ],
+          "mean": 0.8368509959429502,
+          "se": 0.047007938810594466,
+          "n": 5
+        },
+        "violations_per_hour": {
+          "iqm": 0.32448659502390215,
+          "ci": [
+            0.032712206747414395,
+            0.4376615824147316
+          ],
+          "mean": 0.2822242734972876,
+          "se": 0.09644197106097323,
+          "n": 5
+        },
+        "suction_per_hour": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 5
+        },
+        "back_frac": {
+          "iqm": 0.2893891059027778,
+          "ci": [
+            0.18418972439236111,
+            0.32096923828125
+          ],
+          "mean": 0.2702713216145833,
+          "se": 0.032330183588761614,
+          "n": 5
+        },
+        "congestion_frac": {
+          "iqm": 0.008546549479166667,
+          "ci": [
+            0.005242784288194444,
+            0.009674479166666666
+          ],
+          "mean": 0.007959635416666666,
+          "se": 0.001031210824755364,
+          "n": 5
+        },
+        "co_abs_err": {
+          "iqm": 1.0967475573221843,
+          "ci": [
+            1.0736910899480183,
+            1.1748064756393433
+          ],
+          "mean": 1.112766647338867,
+          "se": 0.024860542381409466,
+          "n": 5
+        },
+        "speed_changes_per_min": {
+          "iqm": 61.42822605289499,
+          "ci": [
+            53.03488552121263,
+            67.1520317362177
+          ],
+          "mean": 60.53786644568861,
+          "se": 3.190992558571992,
+          "n": 5
+        },
+        "return_mean": {
+          "iqm": -130.77391560872397,
+          "ci": [
+            -141.99002075195312,
+            -95.31223042805989
+          ],
+          "mean": -124.52549591064454,
+          "se": 10.981028419766934,
+          "n": 5
+        }
+      },
+      "hypertension": {
+        "time_closed_gt10s": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 5
+        },
+        "time_closed_gt30s": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 5
+        },
+        "opening_ratio": {
+          "iqm": 0.9299638310185184,
+          "ci": [
+            0.8179644097222223,
+            0.9612760416666667
+          ],
+          "mean": 0.9073723958333332,
+          "se": 0.033726941893753214,
+          "n": 5
+        },
+        "max_closure_s": {
+          "iqm": 0.421963623414437,
+          "ci": [
+            0.19356079896291098,
+            0.658001438404123
+          ],
+          "mean": 0.4309719905257225,
+          "se": 0.10150825449687914,
+          "n": 5
+        },
+        "violations_per_hour": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 5
+        },
+        "suction_per_hour": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 5
+        },
+        "back_frac": {
+          "iqm": 0.7995428240740741,
+          "ci": [
+            0.6943156828703704,
+            0.8463107638888889
+          ],
+          "mean": 0.7826197916666666,
+          "se": 0.033916349492320065,
+          "n": 5
+        },
+        "congestion_frac": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 5
+        },
+        "co_abs_err": {
+          "iqm": 1.3731542825698853,
+          "ci": [
+            1.2154806852340698,
+            1.4621059497197468
+          ],
+          "mean": 1.3533920526504517,
+          "se": 0.054127072722901536,
+          "n": 5
+        },
+        "speed_changes_per_min": {
+          "iqm": 56.535693827271736,
+          "ci": [
+            53.57267266966085,
+            60.31030652635013
+          ],
+          "mean": 56.76218280364748,
+          "se": 1.4976241601125153,
+          "n": 5
+        },
+        "return_mean": {
+          "iqm": -241.01463317871094,
+          "ci": [
+            -254.96831258138022,
+            -210.16205851236978
+          ],
+          "mean": -236.12949829101564,
+          "se": 9.981277904315622,
+          "n": 5
+        }
+      },
+      "exercise": {
+        "time_closed_gt10s": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 5
+        },
+        "time_closed_gt30s": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 5
+        },
+        "opening_ratio": {
+          "iqm": 0.9938093171296297,
+          "ci": [
+            0.9734780092592592,
+            0.9982407407407408
+          ],
+          "mean": 0.9890616319444444,
+          "se": 0.00609564925565519,
+          "n": 5
+        },
+        "max_closure_s": {
+          "iqm": 0.23037745500914752,
+          "ci": [
+            0.03340884173909823,
+            0.5115727519150823
+          ],
+          "mean": 0.2599093183409423,
+          "se": 0.10415493100380635,
+          "n": 5
+        },
+        "violations_per_hour": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 5
+        },
+        "suction_per_hour": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 5
+        },
+        "back_frac": {
+          "iqm": 0.24736400462962962,
+          "ci": [
+            0.045347222222222226,
+            0.4170891203703704
+          ],
+          "mean": 0.24384375000000005,
+          "se": 0.08071990395449405,
+          "n": 5
+        },
+        "congestion_frac": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 5
+        },
+        "co_abs_err": {
+          "iqm": 1.0560786724090576,
+          "ci": [
+            0.9492032527923584,
+            1.3428115447362263
+          ],
+          "mean": 1.1074655532836915,
+          "se": 0.09291183760694849,
+          "n": 5
+        },
+        "speed_changes_per_min": {
+          "iqm": 94.00872979531697,
+          "ci": [
+            89.49869836728114,
+            99.0639106491336
+          ],
+          "mean": 94.36560604999143,
+          "se": 2.116830812885509,
+          "n": 5
+        },
+        "return_mean": {
+          "iqm": -84.975341796875,
+          "ci": [
+            -128.9597193400065,
+            -35.91748301188151
+          ],
+          "mean": -85.06739349365235,
+          "se": 20.227959368477187,
+          "n": 5
+        }
+      },
+      "hypovolemia": {
+        "time_closed_gt10s": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 5
+        },
+        "time_closed_gt30s": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 5
+        },
+        "opening_ratio": {
+          "iqm": 0.7700925925925927,
+          "ci": [
+            0.7587745949074075,
+            0.7854846643518519
+          ],
+          "mean": 0.7709270833333333,
+          "se": 0.0057895569672701775,
+          "n": 5
+        },
+        "max_closure_s": {
+          "iqm": 1.401726810572048,
+          "ci": [
+            1.307831217845281,
+            1.4540656491493185
+          ],
+          "mean": 1.3916143795475364,
+          "se": 0.03269441930145778,
+          "n": 5
+        },
+        "violations_per_hour": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.1935077880384728
+          ],
+          "mean": 0.05805233641154184,
+          "se": 0.05805233641154183,
+          "n": 5
+        },
+        "suction_per_hour": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 5
+        },
+        "back_frac": {
+          "iqm": 0.07995225694444445,
+          "ci": [
+            0.022961516203703704,
+            0.10928819444444444
+          ],
+          "mean": 0.07173177083333335,
+          "se": 0.01899316138424584,
+          "n": 5
+        },
+        "congestion_frac": {
+          "iqm": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "mean": 0.0,
+          "se": 0.0,
+          "n": 5
+        },
+        "co_abs_err": {
+          "iqm": 0.4825473328431447,
+          "ci": [
+            0.4809023439884186,
+            0.4844790498415629
+          ],
+          "mean": 0.4825803577899933,
+          "se": 0.0008089736653610427,
+          "n": 5
+        },
+        "speed_changes_per_min": {
+          "iqm": 57.06595128328049,
+          "ci": [
+            51.86647964709349,
+            62.0419965268234
+          ],
+          "mean": 57.047880561569414,
+          "se": 2.2720490533575193,
+          "n": 5
+        },
+        "return_mean": {
+          "iqm": -31.895662307739258,
+          "ci": [
+            -39.70008087158203,
+            -16.517192204793293
+          ],
+          "mean": -29.644083786010743,
+          "se": 5.1078188950708565,
+          "n": 5
+        }
+      }
+    }
+  },
+  "primary": [
+    {
+      "test": "P1-hypertension",
+      "a": "tdm_v2_mlp",
+      "b": "ibu_v2_mlp",
+      "set": "hypertension",
+      "diff_mean": 0.10493445822963993,
+      "p": 1.6851223728645993e-07,
+      "prob_improvement": 0.0,
+      "n": [
+        10,
+        10
+      ],
+      "p_holm": 5.055367118593798e-07
+    },
+    {
+      "test": "P1-random",
+      "a": "tdm_v2_mlp",
+      "b": "ibu_v2_mlp",
+      "set": "random",
+      "diff_mean": 0.044634644749712904,
+      "p": 6.489888527216661e-06,
+      "prob_improvement": 0.01,
+      "n": [
+        10,
+        10
+      ],
+      "p_holm": 1.2979777054433322e-05
+    },
+    {
+      "test": "P2",
+      "a": "oracle",
+      "b": "rnn",
+      "set": "random",
+      "diff_mean": -0.22684088387819587,
+      "p": 0.01535200565226919,
+      "prob_improvement": 1.0,
+      "n": [
+        10,
+        10
+      ],
+      "p_holm": 0.01535200565226919
+    }
+  ],
+  "secondary": [
+    {
+      "test": "TDM-prop vs IBU",
+      "a": "tdm_det_v2_mlp",
+      "b": "ibu_v2_mlp",
+      "set": "random",
+      "diff_mean": 0.02719906656508375,
+      "p": 0.06316530256324582,
+      "prob_improvement": 0.16,
+      "n": [
+        5,
+        10
+      ]
+    },
+    {
+      "test": "TDM-prop vs IBU",
+      "a": "tdm_det_v2_mlp",
+      "b": "ibu_v2_mlp",
+      "set": "hypertension",
+      "diff_mean": 0.04326865000757478,
+      "p": 0.0674648368315536,
+      "prob_improvement": 0.18,
+      "n": [
+        5,
+        10
+      ]
+    },
+    {
+      "test": "TDM vs IBU-hist",
+      "a": "tdm_v2_mlp",
+      "b": "ibu_hist_v2_mlp",
+      "set": "random",
+      "diff_mean": 0.0066715506073946745,
+      "p": 0.4895431693540807,
+      "prob_improvement": 0.38,
+      "n": [
+        10,
+        5
+      ]
+    },
+    {
+      "test": "TDM vs IBU-hist",
+      "a": "tdm_v2_mlp",
+      "b": "ibu_hist_v2_mlp",
+      "set": "hypertension",
+      "diff_mean": 0.06415017077497703,
+      "p": 8.873448819125063e-05,
+      "prob_improvement": 0.0,
+      "n": [
+        10,
+        5
+      ]
+    },
+    {
+      "test": "IBU-hist vs IBU",
+      "a": "ibu_hist_v2_mlp",
+      "b": "ibu_v2_mlp",
+      "set": "random",
+      "diff_mean": 0.03796309414231823,
+      "p": 0.003562988137384796,
+      "prob_improvement": 0.02,
+      "n": [
+        5,
+        10
+      ]
+    },
+    {
+      "test": "IBU-hist vs IBU",
+      "a": "ibu_hist_v2_mlp",
+      "b": "ibu_v2_mlp",
+      "set": "hypertension",
+      "diff_mean": 0.04078428745466289,
+      "p": 0.000514134812464249,
+      "prob_improvement": 0.04,
+      "n": [
+        5,
+        10
+      ]
+    },
+    {
+      "test": "TDM vs Naive",
+      "a": "tdm_v2_mlp",
+      "b": "naive_v2_mlp",
+      "set": "random",
+      "diff_mean": 0.0057099777200538965,
+      "p": 0.42565382486275616,
+      "prob_improvement": 0.4,
+      "n": [
+        10,
+        5
+      ]
+    },
+    {
+      "test": "TDM vs Naive",
+      "a": "tdm_v2_mlp",
+      "b": "naive_v2_mlp",
+      "set": "hypertension",
+      "diff_mean": 0.03777688709772492,
+      "p": 0.009483243098126507,
+      "prob_improvement": 0.1,
+      "n": [
+        10,
+        5
+      ]
+    },
+    {
+      "test": "TDM vs oracle",
+      "a": "tdm_v2_mlp",
+      "b": "oracle",
+      "set": "random",
+      "diff_mean": 0.07326335662505887,
+      "p": 3.7901321715330023e-07,
+      "prob_improvement": 0.0,
+      "n": [
+        10,
+        10
+      ]
+    },
+    {
+      "test": "TDM vs oracle",
+      "a": "tdm_v2_mlp",
+      "b": "oracle",
+      "set": "hypertension",
+      "diff_mean": 0.17243576180625816,
+      "p": 2.7589517286836566e-08,
+      "prob_improvement": 0.0,
+      "n": [
+        10,
+        10
+      ]
+    },
+    {
+      "test": "oracle_p vs oracle",
+      "a": "oracle_p",
+      "b": "oracle",
+      "set": "random",
+      "diff_mean": -0.0002342704015196842,
+      "p": 0.020719515939002373,
+      "prob_improvement": 1.0,
+      "n": [
+        5,
+        10
+      ]
+    },
+    {
+      "test": "oracle_p vs oracle",
+      "a": "oracle_p",
+      "b": "oracle",
+      "set": "hypertension",
+      "diff_mean": 0.0,
+      "p": NaN,
+      "prob_improvement": 0.5,
+      "n": [
+        5,
+        10
+      ]
+    }
+  ]
+}
