@@ -1,6 +1,6 @@
 # Fase 2: decisiones, supuestos y discrepancias
 
-Complementa [HANDOFF.md](../HANDOFF.md) y [results/phase2/summary.md](../results/phase2/summary.md).
+Complementa [results/phase2/summary.md](../results/phase2/summary.md).
 
 ## Decisiones tomadas
 
