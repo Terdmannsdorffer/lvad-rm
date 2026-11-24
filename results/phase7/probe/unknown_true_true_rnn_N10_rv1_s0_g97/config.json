@@ -1,0 +1,1 @@
+{"regime": "unknown", "lam": null, "kind": "true_rnn", "n": 10, "rv": 1.0, "seed": 0, "beats": 15000000.0, "ppo": {"ent_coef": 0.01, "gamma": 0.97}}

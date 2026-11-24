@@ -1,0 +1,6 @@
+fixed scale 1.0 gain 0.01: min dev 0.110 [5.0, 4.0, 0.5] viol 0.00% open 0.24 CO 4.76 | max CO 4.81 [6.5, 4.0, 0.5]
+fixed scale 1.0 gain 0.04: min dev 0.111 [5.0, 4.0, 0.5] viol 0.00% open 0.23 CO 4.76 | max CO 4.82 [6.0, 4.0, 0.5]
+fixed scale 0.3 gain 0.01: min dev 0.091 [4.5, 7.0, 0.5] viol 0.00% open 0.21 CO 4.56 | max CO 4.81 [5.5, 4.0, 0.5]
+fixed scale 0.3 gain 0.04: min dev 0.091 [4.5, 7.0, 0.5] viol 0.05% open 0.22 CO 4.57 | max CO 4.82 [5.5, 4.0, 0.5]
+fixed scale 0.0 gain 0.01: min dev 0.090 [4.5, 5.0, 0.5] viol 0.00% open 0.25 CO 4.55 | max CO 4.81 [5.5, 4.0, 0.5]
+fixed scale 0.0 gain 0.04: min dev 0.090 [4.5, 6.0, 0.5] viol 0.00% open 0.22 CO 4.55 | max CO 4.82 [5.0, 4.0, 0.5]

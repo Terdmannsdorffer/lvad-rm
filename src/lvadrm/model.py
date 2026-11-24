@@ -26,7 +26,7 @@ from lvadrm.params import Params, PumpParams
 STATE_NAMES = ("lvv", "lap", "ap", "aop", "qt", "qp")
 LVV, LAP, AP, AOP, QT, QP = range(len(STATE_NAMES))
 
-G_NAMES = ("qa", "qm", "qp", "qt", "lap", "ap", "aop", "lvp", "suction", "qs", "qp_back")
+G_NAMES = ("qa", "qm", "qp", "qt", "lap", "ap", "aop", "lvp", "suction", "qs", "qp_back", "av_open")
 G = {name: i for i, name in enumerate(G_NAMES)}
 
 PUMP_FORMS = ("consistent", "literal")
@@ -95,7 +95,7 @@ def rhs(t, y, omega, p: Params, pump_on: bool = True, pump_form: str = "consiste
             dqp,
         ]
     )
-    g = jnp.stack([qa, qm, qp, qt, lap, ap, aop, lvp, suction, qs, _relu(-qp)])
+    g = jnp.stack([qa, qm, qp, qt, lap, ap, aop, lvp, suction, qs, _relu(-qp), (qa > 0.0).astype(y.dtype)])
     return dy, g
 
 

@@ -64,3 +64,32 @@ def env_for_preset(preset: str | None, episode_beats: int = 300, n: int = 5) -> 
     if preset == "v2":
         return env_v2(episode_beats=episode_beats, n=n)
     raise ValueError(f"unknown env preset {preset!r}")
+
+
+# ------------------------------------------------------------------------------------------ Phase 7
+# v3: the environment of the information ladder (docs/phase7_decisions.md). A weaker heart than HF_PATIENT, so
+# that the 5 l/min target cannot be reached with the valve opening in every beat; saturating RM; the policy
+# sees the estimated mean pump flow, the speed, the heart rate and its last actions (no waveform statistics).
+WEAK_PATIENT = replace(HF_PATIENT, emax=0.7 * HF_PATIENT.emax, omega=8000.0)
+
+V3_SCENARIOS = {
+    "fixed": ScenarioConfig(rs_scale=(1.0, 1.0), hr_range=(80.0, 80.0), hr0_range=(80.0, 80.0), emax_scale=(1.0, 1.0),
+                            vtot_scale=(1.0, 1.0), n_events_max=1),
+    "unknown": ScenarioConfig(rs_scale=(0.8, 1.3), hr_range=(65.0, 100.0), hr0_range=(65.0, 100.0), emax_scale=(0.75, 1.25),
+                              vtot_scale=(0.88, 1.05), n_events_max=3),
+}
+
+
+def env_v3(n: int = 10, regime: str = "unknown", r_viol: float = 1.0, episode_beats: int = 300, **overrides) -> EnvConfig:
+    cfg = EnvConfig(
+        patient=WEAK_PATIENT,
+        scenario=V3_SCENARIOS[regime],
+        rm=RMConfig(n=n, r_viol=-r_viol, r_back=-0.3, w_perf=1.0, w_act=0.01, co_target=5.0, saturate=True),
+        episode_beats=episode_beats,
+        omega_min=5000.0,
+        omega_max=13000.0,
+        obs_mode="reduced",
+        obs_model="estimated",
+        flow_noise_scale=1.0,
+    )
+    return replace(cfg, **overrides)

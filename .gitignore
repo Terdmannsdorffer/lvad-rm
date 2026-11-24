@@ -13,3 +13,11 @@ results/phase6_5/data/
 
 # run logs
 logs/
+manuscripts/**/*.aux
+manuscripts/**/*.bbl
+manuscripts/**/*.blg
+manuscripts/**/*.fdb_latexmk
+manuscripts/**/*.fls
+manuscripts/**/*.log
+manuscripts/**/*.out
+results/phase7/data/

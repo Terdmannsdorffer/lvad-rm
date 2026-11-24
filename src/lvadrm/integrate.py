@@ -57,6 +57,7 @@ class BeatStats(NamedTuple):
     v_aortic: jax.Array  # volume ejected through the aortic valve, integral of Qa [ml]
     suction_frac: jax.Array  # fraction of the beat with x1 <= x1_bar
     vtot: jax.Array  # total volume at the end of the beat [ml]
+    t_open: jax.Array  # time the aortic valve was open during the beat [s]
 
 
 def rk4_step(f, t, y, dt):
@@ -171,6 +172,7 @@ def simulate_beat(
         v_aortic=ints[G["qa"]],
         suction_frac=ints[G["suction"]] / tc,
         vtot=total_volume(y_end, p),
+        t_open=ints[G["av_open"]],
     )
     stats = jax.tree.map(lambda x: jnp.asarray(x, dtype), stats)
     return y_end, stats, samples

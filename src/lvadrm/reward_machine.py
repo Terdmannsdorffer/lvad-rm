@@ -37,6 +37,9 @@ class RMConfig:
     w_act: float = 0.01
     co_target: float = 5.0  # [l/min], Fernandez-Zapico et al. 2024
     terminal_on_violation: bool = False
+    # Phase 7: stay in u_{N-1} after a violation and pay r_viol in every further closed beat. With the reset
+    # variant a valve that never opens pays only r_viol / N per beat, so N changes constraint and price at once.
+    saturate: bool = False
 
 
 class RewardComponents(NamedTuple):
@@ -55,17 +58,20 @@ def sigma_from_labels(avo, suc, back, low):
     return avo.astype(jnp.int32) + 2 * suc.astype(jnp.int32) + 4 * back.astype(jnp.int32) + 8 * low.astype(jnp.int32)
 
 
-def rm_transition(u, avo, n: int):
+def rm_transition(u, avo, n: int, saturate: bool = False):
     """delta_u for the counting RM. Returns (u_next, violation)."""
     violation = (~avo) & (u == n - 1)
-    u_next = jnp.where(avo | violation, 0, u + 1)
+    if saturate:
+        u_next = jnp.where(avo, 0, jnp.minimum(u + 1, n - 1))
+    else:
+        u_next = jnp.where(avo | violation, 0, u + 1)
     return u_next, violation
 
 
 def rm_rewards(u, avo, suc, back, co, omega_prev, omega, cfg: RMConfig, co_target=None):
     """Next RM state and reward components for one beat. ``co_target`` overrides the fixed
     cfg.co_target (e.g. a Starling-like target that depends on the preload, Phase 6.5)."""
-    u_next, violation = rm_transition(u, avo, cfg.n)
+    u_next, violation = rm_transition(u, avo, cfg.n, cfg.saturate)
     dtype = jnp.result_type(co)
     target = cfg.co_target if co_target is None else co_target
     comps = RewardComponents(

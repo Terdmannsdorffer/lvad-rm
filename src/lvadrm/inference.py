@@ -24,13 +24,17 @@ from lvadrm.reward_machine import rm_transition
 LL_FLOOR = 0.01
 
 
-def naive_update(u_hat, d, n: int):
-    return rm_transition(u_hat, d, n)[0]
+def naive_update(u_hat, d, n: int, saturate: bool = False):
+    return rm_transition(u_hat, d, n, saturate)[0]
 
 
-def ibu_update(b, p, n: int):
+def ibu_update(b, p, n: int, saturate: bool = False):
     """One belief update for the counting RM with P(AVO) = p. b has shape [..., n]."""
     p = jnp.asarray(p)[..., None]
+    if saturate:
+        shifted = b[..., : n - 1] * (1.0 - p)
+        shifted = shifted.at[..., -1].add(b[..., n - 1] * (1.0 - p[..., 0]))
+        return jnp.concatenate([(b * p).sum(-1, keepdims=True), shifted], axis=-1)
     to_zero = (b * p).sum(-1, keepdims=True) + b[..., n - 1 :] * (1.0 - p)  # opening, or violation reset
     shifted = b[..., : n - 1] * (1.0 - p)  # no opening: u -> u + 1
     return jnp.concatenate([to_zero, shifted], axis=-1)
@@ -40,13 +44,13 @@ def initial_belief(n: int, dtype=jnp.float32):
     return jax.nn.one_hot(0, n, dtype=dtype)
 
 
-def rm_state_sequence(avo: np.ndarray, n: int) -> np.ndarray:
+def rm_state_sequence(avo: np.ndarray, n: int, saturate: bool = False) -> np.ndarray:
     """True counting-RM state after each beat for AVO sequences [E, T] (start in u_0)."""
     u = np.zeros(avo.shape[0], dtype=np.int32)
     out = np.zeros(avo.shape, dtype=np.int32)
     for t in range(avo.shape[1]):
         viol = ~avo[:, t] & (u == n - 1)
-        u = np.where(avo[:, t] | viol, 0, u + 1)
+        u = np.where(avo[:, t], 0, np.minimum(u + 1, n - 1)) if saturate else np.where(avo[:, t] | viol, 0, u + 1)
         out[:, t] = u
     return out
 

@@ -50,7 +50,7 @@ class EnvConfig:
     unroll: int = 8
     snr_db: float | None = 25.0  # uniform noise on the measured pump flow (None: noiseless)
     n_last_actions: int = 4
-    obs_mode: str = "pump"  # "pump", "pressure" (Fernandez-Zapico MDP) or "pressure_plus" (see _observation)
+    obs_mode: str = "pump"  # "pump", "pressure" (Fernandez-Zapico MDP), "pressure_plus", "reduced", "reduced_pressure"
     eps_avo: float = 0.5  # [ml] aortic valve opening if the ejected volume exceeds it
     back_ml: float = 1.0  # [ml] BACK if the volume regurgitated through the pump in a beat exceeds it
     co_low: float = 4.4  # [l/min] LOW label (cardiac index 2.2 l/min/m2 with BSA 2 m2)
@@ -131,9 +131,13 @@ def _observation(key, state: EnvState, stats, samples, cfg: EnvConfig):
     mode (it is what the AVO detectors use) but only the "pump" observation is built from it."""
     qf, qp = _qp_features(key, samples, stats.tc, cfg, state.flow_err)
     speed = jnp.stack([(state.omega - 10000.0) / 2000.0, 60.0 / stats.tc / 100.0])
+    if cfg.obs_mode == "reduced":  # Phase 7: mean flow only, so that the AVO information comes from the detector
+        return jnp.concatenate([qf[:1], speed, state.last_actions * 20.0]), qp / 100.0
     if cfg.obs_mode == "pump":
         return jnp.concatenate([qf, speed, state.last_actions * 20.0]), qp / 100.0
     cur = jnp.stack([stats.edp - cfg.edp_ref, stats.lvp_max - stats.aop_max]) / 10.0
+    if cfg.obs_mode == "reduced_pressure":  # "reduced" plus the pressures of the last two beats (invasive reference)
+        return jnp.concatenate([qf[:1], speed, state.last_actions * 20.0, cur, state.prev_pressure]), qp / 100.0
     if cfg.obs_mode == "pressure":
         return jnp.concatenate([cur, state.prev_pressure]), qp / 100.0
     if cfg.obs_mode == "pressure_plus":  # the "pump" observation with pressures instead of flow features
@@ -142,7 +146,8 @@ def _observation(key, state: EnvState, stats, samples, cfg: EnvConfig):
 
 
 def obs_size(cfg: EnvConfig) -> int:
-    return {"pump": 9 + cfg.n_last_actions, "pressure": 4, "pressure_plus": 6 + cfg.n_last_actions}[cfg.obs_mode]
+    n = cfg.n_last_actions
+    return {"reduced": 3 + n, "reduced_pressure": 7 + n, "pump": 9 + n, "pressure": 4, "pressure_plus": 6 + n}[cfg.obs_mode]
 
 
 def _run_beat(state: EnvState, omega0, omega_rate, omega_hold, cfg: EnvConfig):
@@ -242,6 +247,7 @@ def step_speed(key, state: EnvState, omega0, cfg: EnvConfig, omega_rate=0.0, ome
         "co_target": co_target,
         "qlv": stats.qlv,
         "v_aortic": stats.v_aortic,
+        "t_open": stats.t_open,
         "v_back": stats.v_back,
         "edv": stats.edv,
         "edp": stats.edp,

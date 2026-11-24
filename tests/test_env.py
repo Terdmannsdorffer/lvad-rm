@@ -72,7 +72,7 @@ def test_protocol_scenario_runs():
 
 
 def test_observation_modes():
-    for mode in ("pump", "pressure", "pressure_plus"):
+    for mode in ("pump", "pressure", "pressure_plus", "reduced", "reduced_pressure"):
         cfg = EnvConfig(patient=HF_PATIENT, episode_beats=2, warmup_beats=2, n_inner=20, unroll=1, obs_mode=mode)
         obs, st = reset(jax.random.PRNGKey(0), cfg)
         obs2, *_ = step(jax.random.PRNGKey(1), st, 0, cfg)
