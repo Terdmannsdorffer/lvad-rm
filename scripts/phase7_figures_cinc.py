@@ -42,7 +42,7 @@ def legend(fig, axes, ncol, y=0.0):
         for a, b in relabel(ax):
             seen.setdefault(b, a)
     fig.legend(seen.values(), seen.keys(), loc="lower center", ncol=ncol, bbox_to_anchor=(0.5, y), columnspacing=1.0, handlelength=1.6, handletextpad=0.5,
-               borderaxespad=0.1)
+               borderaxespad=0.1, labelspacing=0.25)
 
 
 def viol_axis(ax, hi):
@@ -56,8 +56,8 @@ def fig1():
     """Counting pays, and so does feedback when the patient changes."""
     m, r = load("map.json"), load("monitor/reference_N10_ramp.json")
     b = m["named"]["base"]
-    fig, ax = plt.subplots(1, 3, figsize=(WIDTH, 2.25))
-    fig.subplots_adjust(left=0.065, right=0.995, top=0.91, bottom=0.31, wspace=0.36)
+    fig, ax = plt.subplots(1, 3, figsize=(WIDTH, 2.0))
+    fig.subplots_adjust(left=0.065, right=0.995, top=0.90, bottom=0.345, wspace=0.36)
     sp, co, op = np.array(b["speeds"]) / 1000, np.array(b["co"]), np.array(b["open"])
     ax[0].plot(sp[op], co[op], color="#2a78d6", lw=2)
     ax[0].plot(sp[~op], co[~op], color="#8a877f", lw=2, ls="--")
@@ -112,7 +112,7 @@ def fig2():
     """Where the violations are, what calibration and memory buy for every lambda, and how long a calibration lasts."""
     rows, r, tuned = load("mechanism_ramp.json"), load("monitor/reference_N10_ramp.json"), load("robust/tuned.json") or {}
     fig, ax = plt.subplots(1, 3, figsize=(WIDTH, 2.6), gridspec_kw={"width_ratios": [1, 1.25, 1.1]})
-    fig.subplots_adjust(left=0.06, right=0.995, top=0.92, bottom=0.36, wspace=0.33)
+    fig.subplots_adjust(left=0.065, right=0.995, top=0.925, bottom=0.425, wspace=0.33)
     by_bias(ax[0], rows, 0.9, ("naive", "ibu_d", "ibu_hist", "tdm"))
     ax[0].set(xlabel="Detector bias [SD]", ylabel=XVIOL, title=r"(a) Not calibrated, $\lambda$ = 0.9")
     bl, tr = chosen(r["unknown"]["blind"])[1], chosen(r["unknown"]["true"])[1]
@@ -123,7 +123,7 @@ def fig2():
         curve(ax[1], "naive", sb, AMBER[sb], "v", f"Naive, calibrated ({sb:g} ms)")
     curve(ax[1], "tdm", None, STYLE["tdm"][0], "o", "TDM")
     curve(ax[1], "ibu_hist", None, STYLE["ibu_hist"][0], "P", "IBU recurrent")
-    ax[1].set(xlabel=r"Systematic fraction of the error, $\lambda$", ylabel="Deviation [%]", title="(b) Calibrate or remember", ylim=(16.8, 24))
+    ax[1].set(xlabel=r"Systematic fraction of the error, $\lambda$", ylabel="Deviation [%]", title="(b) Calibrate or remember", ylim=(16.8, 24), xticks=[0, 0.5, 1])
     sig2 = 0.9 * 36.0**2
     if cal := json.loads((OUT / "calibration.json").read_text()):
         sig2 = 0.9 * cal["sigma"] ** 2
@@ -139,7 +139,7 @@ def fig2():
     stat = [(sb, chosen(e)[1]) for sb in (0.0, 5.0, 10.0, 20.0) if (e := lookup("naive", 0.9, sb)) is not None]
     ax[2].plot(*zip(*stat), color=AMBER[0.0], marker="v", label="Constant bias")
     ax[2].set(xlabel="RMS residual bias [ms]", ylabel="Deviation [%]", title=r"(c) Ageing calibration, $\lambda$ = 0.9", ylim=(16.8, 24))
-    legend(fig, ax, 4)
+    legend(fig, ax, 4, y=-0.02)
     save(fig, "cinc2")
 
 

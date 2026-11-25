@@ -10,6 +10,7 @@ Design and predictions: docs/phase7_decisions.md, section 7 (written before the 
     seeds     TDM and recurrent IBU with other training seeds
     mismatch  TDM and recurrent IBU with a detector of another lambda than in training (configurations are not tuned again)
     shift     patients outside the training ranges (configurations are not tuned again)
+    shift_combined  the same for TDM trained for a calibrated detector (added after seeing combine and shift)
 
     python scripts/phase7_robust.py --part naive vote drift
 Writes results/phase7/robust/{tuned,fixed}.json. Finished entries are skipped, and the PAUSE file is honoured.
@@ -184,25 +185,26 @@ def fixed_parts(parts):
                         c = episodes(lookup(kind, train))[3]
                         fns = monitor_fns(make_estimator(kind, detector(test), N, load_models(train, N)), CFG, N)
                         fixed(f"mismatch_{kind}_train{train:g}_test{test:g}", fns, mon, c, CFG, TEST_SEED, res, path)
-    if "shift" in parts:
+    policies = (SHIFT_POLICIES if "shift" in parts else ()) + (tuple(("tdm", *c) for c in COMBINE) if "shift_combined" in parts else ())
+    if policies:
         ref = read(OUT / f"monitor/reference_N{N}_ramp.json")["unknown"]
         for shift, kw in SHIFTS.items():
             cfg = replace(CFG, scenario=replace(V3_SCENARIOS["unknown"], **kw))
-            for kind, lam, sb in SHIFT_POLICIES:
+            for kind, lam, sb in policies:
                 name = f"{shift}_{kind}" if lam is None else f"{shift}_{key(kind, lam, sb)}"
                 c = episodes(ref[kind] if lam is None else lookup(kind, lam, sb))[3]
                 if kind == "blind":
                     fixed(name, blind_fns(cfg), bli, c, cfg, SHIFT_SEED, res, path)
                     continue
                 det = detector(0.0, perfect=True) if kind == "true" else detector(lam) if sb is None else calibrated_detector(detector(lam), sb)
-                models = load_models(lam, N) if kind in ("tdm", "ibu_hist") else None
+                models = load_models(lam, N, 2, sb) if kind in ("tdm", "ibu_hist") else None
                 fixed(name, monitor_fns(make_estimator(kind, det, N, models), cfg, N), mon, c, cfg, SHIFT_SEED, res, path)
 
 
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--part", nargs="+", required=True,
-                    choices=["naive", "vote", "drift", "learned", "combine", "window", "seeds", "mismatch", "shift"])
+                    choices=["naive", "vote", "drift", "learned", "combine", "window", "seeds", "mismatch", "shift", "shift_combined"])
     parts = ap.parse_args().part
     tuned_parts(parts)
     fixed_parts(parts)
