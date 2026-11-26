@@ -1,0 +1,1 @@
+{"regime": "unknown", "lam": 0.5, "kind": "ibu_hist", "n": 10, "rv": 0.3, "seed": 2, "beats": 20000000.0, "ppo": {"ent_coef": 0.003, "gamma": 0.95}}
