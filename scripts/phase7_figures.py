@@ -235,7 +235,7 @@ def fig_agents():
             for k in ("true", "none"):
                 if k in tr:
                     agent_curve(a, tr[k], k, key)
-            for k in ("naive", "ibu", "tdm", "filter", "window", "last"):
+            for k in ("naive", "ibu", "ibu_hist", "tdm", "filter", "window", "last"):
                 if k in ag:
                     agent_curve(a, ag[k], k, key)
                     drew = True
@@ -245,7 +245,7 @@ def fig_agents():
                 a.set_title(rf"$\lambda$ = {lam:g}" + (" (independent errors)" if lam < 0.1 else " (mostly systematic)" if lam > 0.8 else ""))
         ax[0].set_ylabel(YDEV)
     h = {lab: q for a in axs.flat for q, lab in zip(*a.get_legend_handles_labels())}
-    fig.legend(h.values(), h.keys(), loc="lower center", ncol=4, bbox_to_anchor=(0.5, -0.07))
+    fig.legend(h.values(), h.keys(), loc="lower center", ncol=5, bbox_to_anchor=(0.5, -0.1), columnspacing=1.0)
     if drew:
         save(fig, "fig4_agents")
     plt.close(fig)
@@ -334,7 +334,7 @@ def fig_bias(lam="0.5"):
     h, lab = axs[0].get_legend_handles_labels()
     fig.legend(h, lab, loc="lower center", ncol=5, bbox_to_anchor=(0.5, -0.17), columnspacing=1.0, handlelength=1.6)
     save(fig, "figA_bias")
-    numbers["bias"] = {p: {"truth9": b[f"{p}_lam{lam_}"]["truth"][-1], **{e: b[f"{p}_lam{lam_}"][e][-1] / b[f"{p}_lam{lam_}"]["truth"][-1] for e in KINDS}}
+    numbers["bias"] = {f"{p}_lam{lam_}": {"truth9": b[f"{p}_lam{lam_}"]["truth"][-1], **{e: b[f"{p}_lam{lam_}"][e][-1] / b[f"{p}_lam{lam_}"]["truth"][-1] for e in KINDS}}
                        for lam_ in ("0", "0.5", "0.9") for p in ("blind", "tdm", "ibu_d")}
 
 
